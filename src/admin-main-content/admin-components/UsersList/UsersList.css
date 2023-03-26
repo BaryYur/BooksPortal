@@ -1,0 +1,77 @@
+.users-list-container {
+    width: 900px;
+    min-height: 700px;
+    background-color: white;
+    margin: 25px auto;
+    padding: 10px 10px 7px 10px;
+    border-radius: 5px;
+    box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 20%), 0px 0px 1px 0px rgb(0 0 0 / 20%);
+}
+
+.users-list-container li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid grey;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+.users-list-container__head {
+    display: flex;
+    padding: 0 50px 10px 10px;
+}
+
+.users-list-container__head div {
+    flex: 1;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.user-info-item-box div {
+    flex: 1;
+}
+
+.users-list-container li button {
+    color: orange;
+    border: 1px solid;
+    background-color: white;
+    padding: 6px 10px 0 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.users-list-container li button:hover {
+    background-color: rgba(255, 69, 0, 0.13);
+}
+
+.users-list-container li .not-blocked-user span {
+    padding: 5px;
+    border: 1px solid limegreen;
+    color: forestgreen;
+    background-color: rgba(144, 238, 144, 0.34);
+    border-radius: 4px;
+}
+
+.users-list-container li .blocked-user span {
+    padding: 5px;
+    border: 1px solid orange;
+    color: orange;
+    background-color: rgba(255, 69, 0, 0.21);
+    border-radius: 4px;
+}
+
+/*.user-info-item-box div span:first-child {*/
+/*    font-weight: 600;*/
+/*}*/
+
+.user-info-item-box div span {
+    color: #2c2c2c;
+}
+
+@media screen and (max-width: 1222px) {
+    .users-list-container {
+        width: 100% ;
+    }
+}

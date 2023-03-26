@@ -1,0 +1,60 @@
+.adding-category-form-container {
+    width: 450px;
+    margin: 30px auto;
+}
+
+.adding-category-form-container form {
+    background-color: white;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 20%), 0px 0px 1px 0px rgb(0 0 0 / 20%);
+}
+
+.adding-category-form-container form h2,
+.change-category-modal form h3 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.adding-category-form-container form input,
+.change-category-modal form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 17px;
+    border-radius: 3px;
+    margin: 7px 0 15px 0;
+    background-color: whitesmoke;
+    border: 1px solid lightgrey;
+}
+
+.adding-category-form-container form input:focus,
+.change-category-modal form input:focus {
+    border: 1px solid #1976d2;
+}
+
+.image-input {
+    background-color: whitesmoke;
+    font-family: sans-serif;
+    color: #1976d2;
+}
+
+input::file-selector-button {
+    background-color: royalblue;
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-bottom {
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid lightgrey;
+    padding-top: 10px;
+}
+
+.adding-category-form-container button {
+    display: block;
+}

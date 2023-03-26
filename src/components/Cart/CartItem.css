@@ -1,0 +1,115 @@
+.cart-items-container li .cart-item-box {
+    display: flex;
+}
+
+.cart-items-container li a img {
+    object-fit: cover;
+    width: 95px;
+    height: 75px;
+    background-color: #a6a6a6;
+    margin-right: 8px;
+    border: 1px solid grey;
+    border-radius: 4px;
+}
+
+.book-card {
+    margin: 8px 0;
+    padding: 7px;
+    min-height: 140px;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid rgb(0 0 0 / 20%);
+    boxShadow: none;
+}
+
+.price-and-delete-container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.price-box {
+    display: flex;
+    align-items: center;
+}
+
+.price-box div {
+    margin: 0 10px;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.price-box div span {
+    color: #1976d2;
+}
+
+.price-box button {
+    padding: 5px;
+    border: 1px solid #1976d2;
+    background-color: white;
+    color: #1976d2;
+    font-size: 20px;
+    padding: 0;
+    box-shadow: none;
+    padding:4px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.price-box button:hover {
+    background-color: #1976d2;
+    color: white;
+}
+
+.price-box .price-box__delete-btn {
+    color: grey;
+    border: 1px solid;
+    margin-left: 10px;
+    padding: 3px 7px 0px 7px;
+    border-radius: 4px;
+    align-self: flex-start;
+}
+
+.price-box .price-box__delete-btn:hover {
+    color: #E62020;
+    border: 1px solid #E62020;
+    background-color: white;
+}
+
+.delete-cart-item-box {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.order-cart-item-box {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.order-cart-item-box button {
+    padding: 3px 5px;
+    background-color: indianred;
+    font-size: 12px;
+}
+
+.order-cart-item-box button:hover {
+    background-color: #b23c3c;
+}
+
+.delete-cart-item-box button {
+    color: indianred;
+    border: 1px solid indianred;
+}
+
+.delete-cart-item-box button:hover {
+    background-color: rgba(205, 92, 92, 0.07);
+}
+
+.price-and-delete-container .order-box {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.price-and-delete-container a {
+    width: 65px;
+}

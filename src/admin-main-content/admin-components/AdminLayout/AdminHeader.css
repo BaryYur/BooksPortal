@@ -1,0 +1,49 @@
+.admin-header {
+    background-color: #1976d2;
+    /*background-color: royalblue;*/
+    /*position: fixed;*/
+    /*width: 100%;*/
+    /*right: 0;*/
+    /*top: 0;*/
+    /*z-index: 8;*/
+    /*padding-left: 80px;*/
+    /*padding-right: 20px;*/
+}
+
+.admin-header__toolbar {
+    padding: 15px;
+    justify-content: space-between;
+}
+
+.not-active-admin-header__toolbar {
+    padding: 15px;
+    justify-content: flex-end;
+}
+
+.admin-header .invisible {
+    display: none;
+}
+
+.admin-header a {
+    color: white;
+}
+
+.admin-header a button {
+    padding: 5px;
+}
+
+.admin-header a.active button {
+    border: 1px solid;
+}
+
+.admin-header__logo-box,
+.admin-header__menu-box {
+    display: flex;
+    align-items: center;
+    color: white;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}

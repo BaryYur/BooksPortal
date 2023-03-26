@@ -1,0 +1,93 @@
+.admin-nav-bar {
+    width: 75px;
+    padding: 10px;
+    background-color: #1976d2;
+    transition: all 0.2s;
+    height: 100vh;
+
+    /*position: relative;*/
+    /*z-index: 90;*/
+}
+
+.admin-nav-bar .admin-nav-bar-head .admin-header__logo-box {
+    display: none;
+}
+
+.active-admin-nav-bar-container .admin-nav-bar-head .admin-header__logo-box {
+    display: flex;
+    position: absolute;
+    left: 70px;
+    top: 15px;
+}
+
+.admin-nav-bar-container ul li a {
+    justify-content: center;
+}
+
+.admin-nav-bar ul li:nth-child(5) {
+    position: relative;
+    margin-top: 8px;
+}
+
+.admin-nav-bar ul li:nth-child(5):before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -5px;
+    width: 100%;
+    height: 1px;
+    background-color: whitesmoke;
+}
+
+.admin-nav-bar-container ul li a span:last-child {
+    display: none;
+}
+
+.active-admin-nav-bar-container {
+    opacity: 1;
+    visibility: visible;
+    margin-left: 0;
+    width: 330px;
+}
+
+.admin-nav-bar ul li a {
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 3px;
+    cursor: pointer;
+    border: 1px solid #1976d2;
+    transition: all 0.2s;
+}
+
+.admin-nav-bar ul li:hover a {
+    /*background-color: #52a8ff;*/
+    border: 1px solid white;
+    transition: all 0.2s;
+}
+
+/*.admin-nav-bar ul li a span span:first-child {*/
+/*    display: none;*/
+/*}*/
+
+/*.admin-nav-bar ul li a.active span span:last-child {*/
+/*    display: none;*/
+/*}*/
+
+/*.admin-nav-bar ul li a.active span span:first-child {*/
+/*    display: block;*/
+/*}*/
+
+/*.admin-nav-bar ul li a span span:last-child {*/
+/*    display: block;*/
+/*}*/
+
+.admin-nav-bar ul li a span svg {
+    margin-top: 5px;
+}
+
+.admin-nav-bar ul li a .link-text {
+    margin-left: 10px;
+}

@@ -1,0 +1,84 @@
+.list-of-book-items-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.list-of-book-items-container ul {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-left: 10px;
+}
+
+.list-of-book-items-container ul li {
+    width: 24%;
+}
+
+.book-card__head img {
+    display: block;
+    width: 100%;
+    height: 230px;
+    background-color: grey;
+}
+
+.book-card__head p {
+    text-align: center;
+    font-size: 17px;
+    color: #464646;
+    margin-top: 8px;
+    font-weight: 600;
+    padding: 0 5px;
+}
+
+.book-card__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 0 10px 10px 10px;
+}
+
+.book-card__bottom div {
+    display: flex;
+    align-items: flex-end;
+}
+
+.book-card__bottom div h3 {
+    margin-right: 4px;
+}
+
+.book-card__bottom div span {
+    /*color: cadetblue;*/
+    font-weight: 600;
+}
+
+.book-card__bottom .adding-to-cart-btn {
+    padding: 5px 0;
+    background-color: rgb(82, 168, 255);
+}
+
+.book-card__bottom .adding-to-cart-btn:disabled,
+.book-card__bottom .adding-to-cart-btn:disabled:hover,
+.book-card__bottom .adding-to-cart-btn:disabled:active {
+    background-color: #ccc;
+    color: white;
+    border-color: #ccc;
+    cursor: not-allowed;
+    transition: all 0.2s ease-in-out;
+}
+
+.book-card__bottom .adding-to-cart-btn:hover {
+    /*background-color: #76a976;*/
+}
+
+@media screen and (max-width: 1200px) {
+    .list-of-book-items-container ul {
+        width: 100%;
+    }
+
+    .list-of-book-items-container ul li {
+        width: 250px;
+    }
+}

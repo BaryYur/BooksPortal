@@ -1,0 +1,164 @@
+.admin-categories-container {
+    padding: 15px 0;
+}
+
+.category-box h1 span {
+    color: royalblue;
+}
+
+.admin-categories-container h2 {
+    margin-bottom: 10px;
+}
+
+.adding-category-box a {
+    padding: 10px;
+    background-color: rgb(82, 168, 255);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    min-height: 200px;
+    color: white;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 20%), 0px 0px 1px 0px rgb(0 0 0 / 20%);
+}
+
+.adding-category-box a:hover {
+    background-color: #1976d2;
+    box-shadow: 0px 0px 6px 2px rgba(0,0,0,0.3);
+    transition: all 0.2s ease-in-out;
+}
+
+.adding-category-box a span {
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.admin-categories-container__categories {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-categories-container__categories ul {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-categories-container__categories ul li {
+    display: block;
+    border-radius: 5px;
+    width: 200px;
+    min-height: 200px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 20%), 0px 0px 1px 0px rgb(0 0 0 / 20%);
+}
+
+.admin-categories-container__categories ul li .edit-btn,
+.admin-categories-container__categories ul li .delete-btn {
+    position: absolute;
+    padding: 5px 5px 0 5px;
+    border: 1px solid white;
+    color: white;
+    background-color: transparent;
+    cursor: pointer;
+    z-index: 6;
+}
+
+.admin-categories-container__categories ul li .edit-btn {
+    right: 5px;
+    bottom: 35px;
+    border: 1px solid white;
+    color: white;
+    border-radius: 50%;
+}
+
+.admin-categories-container__categories ul li .delete-btn {
+    right: 5px;
+    top: 5px;
+    color: indianred;
+    border: none;
+}
+
+.admin-categories-container__categories ul li .edit-btn:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.admin-categories-container__categories ul li .category-card-wrapper {
+    background-color: rgba(0, 0, 0, 0.18);
+    width: 100px;
+    height: 100px;
+    z-index: 5;
+}
+
+.admin-categories-container__categories ul li img,
+.admin-categories-container__categories ul li .category-card-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-categories-container__categories ul li .category-card-bottom {
+    width: 100%;
+    position: absolute;
+    background-color: white;
+    color: #2c2c2c;
+    font-size: 17px;
+    bottom: 0;
+    left: 0;
+    padding: 3px;
+    text-align: center;
+    z-index: 6;
+}
+
+.delete-modal-btns {
+    padding: 10px 0 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.delete-category-modal,
+.change-category-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    boxShadow: 10;
+    width: 450px;
+}
+
+.change-category-modal form .form-bottom button:first-child {
+    margin-right: 10px;
+}
+
+.delete-category-modal {
+    padding: 10px;
+}
+
+.change-category-modal {
+    padding: 20px;
+}
+
+.delete-category-modal h3,
+.change-category-modal h3 {
+    text-align: center;
+    margin: 0 0 15px 0;
+}
+
+.delete-category-modal h3 {
+    font-size: 25px;
+}

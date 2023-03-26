@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css?family=Heebo:100,200,300,regular,500,600,700,800,900");
+@import url("https://fonts.googleapis.com/css?family=Inter:100,200,300,regular,500,600,700,800,900");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Heebo;
+  outline: none;
+}
+
+:root {
+  --main-shadow: 0px 1px 2px 0px rgb(0 0 0 / 20%), 0px 0px 1px 0px rgb(0 0 0 / 20%);
+}
+
+
+h1 {
+  font-family: Inter;
+  font-weight: 800;
+  font-size: 35px;
+  color: #2c2c2c;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  text-align: center;
+}
+
+h2 {
+  color: #2c2c2c;
+}
+
+body {
+  background-color: whitesmoke;
+}
+
+ul, li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.main-wrapper {
+  width: 1200px;
+  margin: 80px auto;
+}
+
+@media screen and (max-width: 1200px) {
+  .main-wrapper {
+    width: 100%;
+    padding: 0 20px;
+  }
+}

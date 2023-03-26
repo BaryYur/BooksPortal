@@ -1,0 +1,9 @@
+.pagination-stack {
+    width: 350px;
+    margin: 15px auto;
+}
+
+.pagination-stack ul {
+    display: flex;
+    justify-content: center;
+}

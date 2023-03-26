@@ -1,0 +1,94 @@
+.adding-item-form-container {
+    margin: 20px auto;
+    width: 660px;
+    min-height: 500px;
+}
+
+.adding-item-form-container form {
+    background-color: white;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 20%), 0px 0px 1px 0px rgb(0 0 0 / 20%);
+}
+
+.adding-item-form-container form h2 {
+    margin-bottom: 20px;
+}
+
+/* .adding-item-form-container form ul {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+} */
+
+.adding-item-form-container form .control {
+    width: 300px;
+}
+
+.adding-item-form-container__controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.adding-item-form-container form ul label {
+    padding: 5px 15px;
+    border-radius: 4px;
+    border: 1px solid royalblue;
+    cursor: pointer;
+    color: royalblue;
+}
+
+.adding-item-form-container form ul li input {
+    display: none;
+}
+
+.adding-item-form-container form ul li input:checked + label {
+    background-color: royalblue;
+    color: white;
+}
+
+.adding-item-form-container form .control label {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.adding-item-form-container form .control input {
+    width: 100%;
+    padding: 10px;
+    font-size: 17px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    background-color: whitesmoke;
+    border: 1px solid lightgrey;
+}
+
+.adding-item-form-container form .control textarea {
+    max-width: 620px;
+    min-height: 250px;
+    min-width: 620px;
+    padding: 10px;
+    font-size: 17px;
+    border-radius: 3px;
+    background-color: whitesmoke;
+    border: 1px solid lightgrey;
+    margin-bottom: 10px;
+}
+
+.adding-item-form-container form input:focus,
+.adding-item-form-container form textarea:focus{
+    border: 1px solid #1976d2;
+}
+
+.adding-item-form-container form .number-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 300px;
+}
+
+.adding-item-form-container form .number-inputs .control {
+    width: 100px;
+}
