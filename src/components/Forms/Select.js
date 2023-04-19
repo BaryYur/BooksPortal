@@ -49,8 +49,8 @@ export const Select = ({ multiple, value, onChange, options }) => {
             tabIndex={0}
             className="select-container"
         >
-            <span className="value">{
-                multiple ? value.map(v => (
+            <span className="value">
+                {multiple ? value.map(v => (
                     <button
                         key={v.value}
                         onClick={e => {
@@ -65,6 +65,7 @@ export const Select = ({ multiple, value, onChange, options }) => {
                 )) : value?.label}
             </span>
             <button
+                type="button"
                 onClick={e => {
                     e.stopPropagation();
                     clearOptions();
@@ -76,13 +77,13 @@ export const Select = ({ multiple, value, onChange, options }) => {
             <ul className={isOpen ? "show" : "options"}>
                 {options.map((option, index) => (
                     <li
+                        key={option.value}
                         onClick={(e) => {
                             e.stopPropagation();
                             selectOption(option);
                             setIsOpen(false);
                         }}
                         onMouseEnter={() => setHighlightedIndex(index)}
-                        key={option.value}
                         className={
                             isOptionSelected(option) ? "selected" : "option" &&
                             index === highlightedIndex ? "highlighted" : "option"
@@ -93,5 +94,5 @@ export const Select = ({ multiple, value, onChange, options }) => {
                 ))}
             </ul>
         </div>
-    )
+    );
 }

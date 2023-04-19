@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { Link } from "react-router-dom";
+
+import AuthContext from "../../context/auth-context";
 
 import HomePageSlider from "./HomePageSlider";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import EastIcon from "@mui/icons-material/East";
 import FeedIcon from "@mui/icons-material/Feed";
+import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
 import "./HomePage.css";
-import shopCardBackground from "../../images/books-stack-3d-paper-literature-textbooks.jpg";
+// import shopCardBackground from "../../images/books-stack-3d-paper-literature-textbooks.jpg";
+// import newsCardBackground from "../../images/news-background.jpg";
 import heroImg from "../../images/hero-image.png";
 
 const HomePage = () => {
+    const authCtx = useContext(AuthContext);
+
     const scrollToTop = () => {
         document.querySelector(".main-wrapper").scrollTop = 0;
         document.documentElement.scrollTop = 0;
@@ -49,25 +56,46 @@ const HomePage = () => {
                         </span>
                         <span>Shop</span>
                     </p>
-                    <img src={shopCardBackground} alt="shop" />
+                    {/* <img src={shopCardBackground} alt="shop" /> */}
                     <div className="card-wrapper"></div>
                 </Link>
                 <Link
-                    to="/home/shop"
+                    to="/home/news"
                     className="home-page-card"
                     onClick={scrollToTop}
                 >
                     <p>
                         <span>
-                            <FeedIcon />
+                            <NewspaperIcon />
                         </span>
                         <span>News</span>
                     </p>
                     {/* <img src={newsCardBackground} alt="news" /> */}
                     <div className="card-wrapper"></div>
                 </Link>
-                <Link
-                    to="/home/shop"
+                {authCtx.isUserIsAuthor && <Link
+                    to="/home/author"
+                    className="home-page-card"
+                    onClick={scrollToTop}
+                >
+                    <p>
+                        <span>
+                            <AccountBoxIcon />
+                        </span>
+                        <span>Author</span>
+                    </p>
+                    <div className="card-wrapper"></div>
+                </Link>}
+                {!authCtx.isUserIsAuthor && <div className="inactive-home-page-card">
+                    <p>
+                        <span>
+                            <AccountBoxIcon />
+                        </span>
+                        <span>Author</span>
+                    </p>
+                </div>}
+                {authCtx.isUserIsPublisher && <Link
+                    to="/home/publishing"
                     className="home-page-card"
                     onClick={scrollToTop}
                 >
@@ -75,23 +103,18 @@ const HomePage = () => {
                         <span>
                             <FeedIcon />
                         </span>
-                        <span>Info</span>
+                        <span>Publishing</span>
                     </p>
                     <div className="card-wrapper"></div>
-                </Link>
-                <Link
-                    to="/home/shop"
-                    className="home-page-card"
-                    onClick={scrollToTop}
-                >
+                </Link>}
+                {!authCtx.isUserIsPublisher && <div className="inactive-home-page-card">
                     <p>
                         <span>
                             <FeedIcon />
                         </span>
-                        <span>Another</span>
+                        <span>Publishing</span>
                     </p>
-                    <div className="card-wrapper"></div>
-                </Link>
+                </div>}
             </div>
             <div className="home-page-slider-container">
                 <HomePageSlider /> 

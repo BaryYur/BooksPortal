@@ -31,6 +31,12 @@
     margin-top: 8px;
     font-weight: 600;
     padding: 0 5px;
+    transition: all 0.2s ease-in-out;
+}
+
+.book-card__head p:hover {
+    color: #318CE7;
+    transition: all 0.2s ease-in-out;
 }
 
 .book-card__bottom {
@@ -71,6 +77,31 @@
 
 .book-card__bottom .adding-to-cart-btn:hover {
     /*background-color: #76a976;*/
+}
+
+.delete-book-btn {
+    background-color: indianred;
+    color: white;
+    padding: 4px 8px 2px 5px;
+    border-radius: 4px;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    /*position: absolute;*/
+    transition: all 0.2s ease-in-out;
+}
+
+.delete-book-btn:hover {
+    background-color: #be4040;
+    transition: all 0.2s ease-in-out;
+}
+
+.delete-book-btn span:last-child {
+    margin-top: 3px;
+    margin-left: 3px;
+    text-transform: uppercase;
 }
 
 @media screen and (max-width: 1200px) {

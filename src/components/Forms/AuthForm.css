@@ -1,5 +1,5 @@
 .login-form-container {
-    width: 500px;
+    width: 430px;
     box-shadow: var(--main-shadow);
     border-radius: 5px;
     background-color: white;
@@ -15,17 +15,27 @@
 
 .login-form-container form label {
     display: block;
+    font-size: 15px;
 }
 
 .login-form-container form .control input {
     width: 100%;
-    padding: 10px;
-    font-size: 18px;
+    padding: 7px;
     border: 1px solid lightgrey;
     border-radius: 3px;
     margin: 7px 0 15px 0;
     background-color: whitesmoke;
 }
+
+/* .login-form-container form .control:has(:invalid) input,
+.login-form-container form .control:has(:invalid) input:focus {
+    border: 1px solid indianred;
+}
+
+.login-form-container form .control:has(:valid) input,
+.login-form-container form .control:has(:valid) input:focus {
+    border: 1px solid green;
+} */
 
 .login-form-container form .control-phone {
     padding: 10px 0;
@@ -44,11 +54,6 @@
     border: none;
 }
 
-.login-form-container form .control-phone div input {
-    padding: 12px;
-    background-color: whitesmoke;
-}
-
 .css-1q6at85-MuiInputBase-root-MuiOutlinedInput-root {
     width: 460px;
     font-size: 18px;
@@ -60,7 +65,8 @@
 
 .login-form-container form .control input:focus {
     transition: all 0.2s ease-in;
-    border: 1px solid royalblue;
+    border-color: var(--main-input-border);
+    box-shadow: var(--main-input-box-shadow);
 }
 
 .login-form-container form .login-btns-box {
@@ -78,6 +84,10 @@
 .login-form-container form .login-btns-box button:last-child:hover {
     background-color: rgba(65, 105, 225, 0.16);
 }
+
+/*form .checkbox-control {*/
+/*    display: flex;*/
+/*}*/
 
 .warning-form-p {
     color: indianred;

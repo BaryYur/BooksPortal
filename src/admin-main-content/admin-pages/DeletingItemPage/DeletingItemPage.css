@@ -1,0 +1,38 @@
+.admin-deleting-page-container .list-of-book-items-container ul {
+    padding: 20px 0 0 0;
+}
+
+.admin-deleting-page-container .list-of-book-items-container ul li {
+    width: 220px;
+}
+
+.admin-searching-box form input {
+    background-color: rgba(128, 128, 128, 0.4);
+    padding: 5px 10px 5px 40px;
+    border: none;
+    border-radius: 5px;
+    font-size: 17px;
+    transition: all 0.2s;
+    width: 270px;
+}
+
+.admin-searching-box form input:focus {
+    width: 380px;
+    background-color: rgba(211, 211, 211, 0.85);
+    transition: all 0.2s;
+}
+
+.admin-searching-box form .searching-control {
+    position: relative;
+}
+
+.admin-searching-box form .searching-icon {
+    position: absolute;
+    left: 10px;
+    top: 5px;
+    color: grey;
+}
+
+.admin-searching-box form input::placeholder {
+    color: grey;
+}

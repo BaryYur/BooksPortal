@@ -1,30 +1,36 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 
+import { useCutText } from "../../hooks/useCutText";
+
 import { Link, useNavigate } from "react-router-dom";
 
 import CartContext from "../../context/cart-context";
 import AuthContext from "../../context/auth-context";
+import ItemsContext from "../../context/items-context";
 
 import { Button, Card } from "@mui/material";
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-const BookItemCard = ({ id, name, price, link }) => {
+const BookItemCard = ({ id, name, price, link, adminItems }) => {
     const navigate = useNavigate();
     const cartCtx = useContext(CartContext);
     const authCtx = useContext(AuthContext);
+    const { searchingItemsFetch } = useContext(ItemsContext);
     const [activeAddingBtn, setActiveAddingBtn] = useState(false);
+    const [openDeletingModal, setOpenDeletingModal] = useState(false);
+    const { changeText } = useCutText();
 
     const addToCartHandler = () => {
-        if (authCtx.isLoggedIn) {
-            cartCtx.addToCart(id, {
-                name: name,
-                category: "cat 1",
-                price: 20,
-            });
+        cartCtx.addToCart(id, {
+            name: name,
+            category: "cat 1",
+            price: 20,
+        });
 
-            setActiveAddingBtn(true);   
-        } else {
-            navigate("/home/auth");
-        }
+        setActiveAddingBtn(true);
     }
 
     const btnIsActive = () => {
@@ -45,6 +51,17 @@ const BookItemCard = ({ id, name, price, link }) => {
         return activeAddingBtn;
     }
 
+    const changedName = useMemo(() => changeText(name, 40), []);
+
+    const closeDeletingModalHandler = () => setOpenDeletingModal(false);
+    const openDeletingModalHandler = () => setOpenDeletingModal(true);
+
+    const deleteItemHandler = (id) => {
+        searchingItemsFetch(id);
+
+        setOpenDeletingModal(false);
+    }
+
     useEffect(() => {
         btnIsActive();
     }, [activeAddingBtn, cartCtx.cartItems])
@@ -62,25 +79,52 @@ const BookItemCard = ({ id, name, price, link }) => {
                 <Link to={link} title={name}>
                     <div className="book-card__head">
                         {/*<img src={img} alt={name} />*/}
-                        {name.length > 50 ?
-                            <p>{name.split("").splice(0, 40).join("")}...</p> :
-                            <p>{name}</p>
-                        }
+                        <p>{changedName}</p>
                     </div>
                 </Link>
                 <div className="book-card__bottom">
-                    <div>
+                    {!adminItems && <div>
                         <h3>{price}</h3>
                         <span>hrn</span>
-                    </div>
-                    <Button
+                    </div>}
+                    {!adminItems && <Button
                         variant="contained"
                         disabled={activeAddingBtn}
                         className="adding-to-cart-btn"
                         onClick={addToCartHandler}
-                    >Add</Button>
+                    >Add</Button>}
+                    {adminItems && <button
+                        alt="Delete this book"
+                        className="delete-book-btn"
+                        onClick={openDeletingModalHandler}
+                    >
+                        <span>
+                            <DeleteIcon />
+                        </span>
+                    </button>}
                 </div>
             </Card>
+
+            <Modal open={openDeletingModal}>
+                <Box className="delete-modal">
+                    <h3>You really want to delete this book?</h3>
+                    <div className="delete-modal-btns">
+                        <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => deleteItemHandler(id)}
+                        >Delete</Button>
+                        <button
+                            className="close-btn"
+                            variant="contained"
+                            color="secondary"
+                            onClick={closeDeletingModalHandler}
+                        >
+                            <CloseIcon />
+                        </button>
+                    </div>
+                </Box>
+            </Modal>
         </li>
     );
 }

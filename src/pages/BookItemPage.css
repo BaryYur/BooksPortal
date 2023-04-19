@@ -1,9 +1,116 @@
 .book-item-page-container {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
     width: 1000px;
     background-color: white;
     border-radius: 5px;
-    min-height: 600px;
+    min-height: 650px;
     padding: 10px;
     margin: 0 auto;
     box-shadow: var(--main-shadow);
+}
+
+.book-item-main-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.table-panel-container {
+    margin-top: 30px;
+}
+
+.book-item__image-container {
+    width: 220px;
+    min-height: 380px;
+    border: 1px solid lightgrey;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 4px;
+}
+
+.book-cover-wrapper {
+    width: 100%;
+    height: 300px;
+}
+
+.book-item__image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.book-item__image-container p {
+    text-align: center;
+}
+
+.book-item__image-container button {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.book-item__image-container button span {
+    margin-left: 10px;
+    font-weight: normal;
+}
+
+.book-item__main-info {
+    width: 75%;
+}
+
+.book-item__main-info .main-info__top ul {
+    display: flex;
+    gap: 10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.book-item__main-info .main-info__top ul li {
+    padding: 9px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: .8em;
+    word-break: break-word;
+    text-align: center;
+    min-width: 100px;
+    flex: 1;
+}
+
+.book-item__main-info .main-info__top ul li p:first-child {
+    color: #666666;
+}
+
+.book-item__main-info .main-info__top ul li p:last-child {
+    color: #333333;
+}
+
+.book-item-page-container h1 {
+    font-family: Georgia;
+    color: #333333;
+    font-size: 32px;
+    text-align: left;
+    -webkit-user-select: auto;
+}
+
+.book-item-details-container {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    clear: both;
+    margin-top: 20px;
+    min-height: 300px;
+}
+
+.book-item-details-container hr {
+    height: 1px;
+    border: none;
+    margin: 10px 0;
+    background-color: hsla(48,33%,83%,.66);
+}
+
+.book-item-details-container h2 {
+    font-size: 22px;
+    color: #666666;
 }

@@ -1,18 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo, memo } from "react";
+
+import { useCutText } from "../../../hooks/useCutText";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const AdminCategoryCard = ({ name, img, openChangeModal, openDeleteModal, onDeleteCategory, onChangeCategory }) => {
-    const changeName = () => {
-        if (name.length < 23) {
-            return name.charAt(0).toUpperCase() + name.slice(1);
-        } else {
-            return name.charAt(0).toUpperCase() + name.split("").splice(1, 20).join("") + "...";
-        }
-    }
+const AdminCategoryCard = ({ id, name, img, openChangeModal, openDeleteModal, onDeleteCategory, onChangeCategory }) => {
+    const { changeText } = useCutText();
 
-    const changedName = useMemo(() => changeName(),[name]);
+    const changedName = useMemo(() => changeText(name, 14),[name]);
 
     return (
         <li>
@@ -26,7 +22,7 @@ const AdminCategoryCard = ({ name, img, openChangeModal, openDeleteModal, onDele
                 title="Change category"
                 onClick={() => {
                     openChangeModal();
-                    onChangeCategory(name);
+                    onChangeCategory(id, name);
                 }}
             >
                 <EditIcon />
@@ -36,7 +32,7 @@ const AdminCategoryCard = ({ name, img, openChangeModal, openDeleteModal, onDele
                 title="Delete category"
                 onClick={() => {
                     openDeleteModal();
-                    onDeleteCategory(name);
+                    onDeleteCategory(name, id);
                 }}
             >
                 <DeleteIcon />
@@ -45,4 +41,4 @@ const AdminCategoryCard = ({ name, img, openChangeModal, openDeleteModal, onDele
     );
 }
 
-export default AdminCategoryCard;
+export default memo(AdminCategoryCard);

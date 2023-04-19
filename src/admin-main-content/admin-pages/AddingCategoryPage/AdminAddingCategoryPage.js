@@ -1,4 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState, memo } from "react";
+
+import { useGetImage } from "../../../hooks/useGetImage";
 
 import AdminMainContext from "../../admin-context/admin-main-context";
 
@@ -9,15 +11,20 @@ import "./AdminAddingCategoryPage.css";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
 import AdminCategoryCard from "./AdminCategoryCard";
+import CloseIcon from "@mui/icons-material/Close";
 
 const AdminAddingCategoryPage = () => {
-    const mainAdminCtx = useContext(AdminMainContext);
+    const { categories, adminLoading, fetchingCategories, fetchingChangingCategory, fetchingDeleteCategory } = useContext(AdminMainContext);
     const [openChangeModal, setChangeOpenModal] = useState(false);
     const [openDeleteModal, setDeleteOpenModal] = useState(false);
     const [categoryName, setCategoryName] = useState("");
+    const [categoryNameId, setCategoryNameId] = useState("");
     const [categoryNameInput, setCategoryNameInput] = useState("");
+    const { image, changeImage } = useGetImage();
+    const [categoryImageInput, setCategoryImageInput] = useState("");
 
     const openChangeModalHandler = () => setChangeOpenModal(true);
     const closeChangeModalHandler = () => setChangeOpenModal(false);
@@ -28,7 +35,7 @@ const AdminAddingCategoryPage = () => {
     const getCategoryName = (name) => setCategoryName(name);
 
     const deleteCategoryHandler = (category) => {
-        mainAdminCtx.fetchingDeleteCategory("", category);
+        fetchingDeleteCategory(categoryNameId, category);
 
         closeDeleteModalHandler();
     }
@@ -36,34 +43,59 @@ const AdminAddingCategoryPage = () => {
     const changeCategoryHandler = (event) => {
         event.preventDefault();
 
-        mainAdminCtx.fetchingChangingCategory("", categoryName, categoryNameInput);
+        if (categoryNameInput.length < 3) {
+            alert("Category name is to short");
+
+            return;
+        }
+
+        fetchingChangingCategory(categoryNameId, categoryName, categoryNameInput, categoryImageInput);
         closeChangeModalHandler();
     }
 
+    useEffect(() => {
+        fetchingCategories();
+        setCategoryImageInput(image);
+    }, [image]);
+
     return (
         <div className="admin-page-wrapper category-box">
-            <h1>Here you can <span>add</span> or <span>delete</span> category</h1>
+            <h1>Here you can <span>add</span>, <span>change</span> or <span>delete</span> category</h1>
             <div className="admin-categories-container">
                 <h2>Existing categories:</h2>
                 <div className="admin-categories-container__categories">
                     <div className="adding-category-box">
                         <Link to="/admin/adding-category/new">
-                            <AddIcon style={{ fontSize: "60px" }} />
+                            <AddIcon />
                             <span>Add category</span>
                         </Link>
                     </div>
                     <ul>
-                        {mainAdminCtx.categories.map(categoryItem => (
+                        {categories.map(categoryItem => (
                             <AdminCategoryCard
-                                key={Math.random()}
+                                key={categoryItem.id}
+                                id={categoryItem.id}
                                 name={categoryItem.name}
-                                img={categoryItem.img}
+                                img={categoryItem.file}
                                 openChangeModal={openChangeModalHandler}
                                 openDeleteModal={openDeleteModalHandler}
-                                onDeleteCategory={() => getCategoryName(categoryItem.name)}
-                                onChangeCategory={() => getCategoryName(categoryItem.name)}
+                                onDeleteCategory={() => {
+                                    getCategoryName(categoryItem.name);
+                                    setCategoryNameId(categoryItem.id);
+                                }}
+                                onChangeCategory={() => {
+                                    getCategoryName(categoryItem.name);
+                                    setCategoryNameId(categoryItem.id);
+                                    setCategoryNameInput(categoryItem.name);
+                                    setCategoryImageInput(categoryItem.file);
+                                }}
                             />
                         ))}
+                        {adminLoading &&
+                            <div className="loading-box">
+                                <CircularProgress />
+                            </div>
+                        }
                     </ul>
                 </div>
             </div>
@@ -91,7 +123,7 @@ const AdminAddingCategoryPage = () => {
                             <input
                                 id="category-image-input"
                                 type="file"
-                                // onChange={imageUploadedHandler}
+                                onChange={changeImage}
                                 className="image-input"
                             />
                         </div>
@@ -120,7 +152,7 @@ const AdminAddingCategoryPage = () => {
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box className="delete-category-modal" >
+                <Box className="delete-modal">
                     <h3>You really want to delete this category?</h3>
                     <div className="delete-modal-btns">
                         <Button
@@ -128,11 +160,14 @@ const AdminAddingCategoryPage = () => {
                             color="error"
                             onClick={() => deleteCategoryHandler(categoryName)}
                         >Delete</Button>
-                        <Button
+                        <button
+                            className="close-btn"
                             variant="contained"
                             color="secondary"
                             onClick={closeDeleteModalHandler}
-                        >Close</Button>
+                        >
+                            <CloseIcon />
+                        </button>
                     </div>
                 </Box>
             </Modal>
@@ -140,4 +175,4 @@ const AdminAddingCategoryPage = () => {
     );
 }
 
-export default AdminAddingCategoryPage;
+export default memo(AdminAddingCategoryPage);

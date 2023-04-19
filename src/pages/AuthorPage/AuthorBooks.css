@@ -1,0 +1,15 @@
+.author-books-container ul {
+    width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.author-books-container ul li {
+    min-height: 100px;
+    box-shadow: var(--main-shadow);
+    border-radius: 4px;
+    padding: 10px;
+    background-color: white;
+}

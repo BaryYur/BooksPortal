@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import { useNavigate } from "react-router-dom";
 
+import jwt_decode from "jwt-decode";
+
 import Swal from "sweetalert2";
 
 let logoutTimer;
@@ -11,7 +13,6 @@ const AuthContext = React.createContext({
     isLoggedIn: false,
     login: (token, id) => {},
     logout: () => {},
-    userInfoHandler: (id) => {},
     fetchingUser: (url, body) => {},
 });
 
@@ -22,7 +23,7 @@ const calculateRemainingTime = (expirationTime) => {
     const remainingDuration = adjExpirationTime - currentTime;
 
     return remainingDuration;
-};
+}
 
 const retrieveStoredToken = () => {
     const storedToken = localStorage.getItem("token");
@@ -43,22 +44,21 @@ const retrieveStoredToken = () => {
         token: storedToken,
         duration: remainingTime,
         storedId: storedId,
-    };
-};
+    }
+}
 
 export const AuthContextProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState({});
-    const [userId, setUserId] = useState(localStorage.getItem("userId") || "");
     const [isUserIsAdmin, setIsUserIsAdmin] = useState(false);
+    const [isUserIsAuthor, setIsUserIsAuthor] = useState(false);
+    const [isUserIsPublisher, setIsUserIsPublisher] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const tokenData = retrieveStoredToken();
     const navigate = useNavigate();
 
     let initialToken;
 
-    if (tokenData) {
-        initialToken = tokenData.token;
-    }
+    if (tokenData) initialToken = tokenData.token;
 
     const [token, setToken] = useState(initialToken);
 
@@ -66,7 +66,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const logoutHandler = useCallback(() => {
         setToken(null);
-        setUserId("");
+
         localStorage.removeItem("token");
         localStorage.removeItem("expirationTime");
         localStorage.removeItem("userId");
@@ -76,38 +76,15 @@ export const AuthContextProvider = ({ children }) => {
         }
     }, []);
 
-    const fetchingUserData = (id) => {
-        fetch(`https://.../user/${id}`, {
-            method: "GET",
-            headers: {
-                Authorization: localStorage.getItem("token"),
-            }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.admin === true) {
-                    setIsUserIsAdmin(true);
-                }
-
-                setUserInfo(data);
-            })
-    }
-
-    const loginHandler = (token, expirationTime, id) => {
+    const loginHandler = (token, expirationTime) => {
         setToken(token);
-        setUserId(id);
+
         localStorage.setItem("token", token);
         localStorage.setItem("expirationTime", expirationTime);
-        localStorage.setItem("userId", id);
 
         const remainingTime = calculateRemainingTime(expirationTime);
 
         logoutTimer = setTimeout(logoutHandler, remainingTime);
-        userInfoHandler(userId);
-    };
-
-    const userInfoHandler = (id) => {
-       fetchingUserData(id);
     }
 
     const fetchingUser = (url, body) => {
@@ -125,20 +102,29 @@ export const AuthContextProvider = ({ children }) => {
                 if (res.ok) {
                     return res.json();
                 } else {
-                    return res.json().then((data) => {
+                    return res.json().then(() => {
                         let errorMessage = "Authentication failed!";
 
-                        throw new Error(errorMessage);
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: errorMessage,
+                            width: 460,
+                            height: 400,
+                        })
                     });
                 }
             })
             .then((data) => {
                 const expirationTime = new Date(new Date().getTime() + +"10048000");
+                const decodedToken = jwt_decode(token);
 
-                loginHandler(data.token, expirationTime.toISOString(), data.id);
-                userInfoHandler(data.id);
+                loginHandler(data.token, expirationTime.toISOString());
+    
+                setUserInfo(decodedToken);
+                console.log(decodedToken); 
 
-                if (data.admin === true) {
+                if (userInfo.role === "admin") {
                     navigate("/admin");
                 } else {
                     navigate("/");
@@ -151,7 +137,7 @@ export const AuthContextProvider = ({ children }) => {
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: "Incorrect email or password",
+                    text: "Authentication failed",
                     width: 460,
                     height: 400,
                 })
@@ -165,8 +151,12 @@ export const AuthContextProvider = ({ children }) => {
     }, [tokenData, logoutHandler, userInfo]);
 
     useEffect(() => {
-        if (tokenData) {
-            userInfoHandler(userId);
+        if (userInfo.role === "admin") {
+            setIsUserIsAdmin(true);
+        } else if (userInfo.role === "author") {
+            setIsUserIsAuthor(true);
+        } else if (userInfo.role === "publishing") {
+            setIsUserIsPublisher(true);
         }
     }, [])
 
@@ -174,10 +164,11 @@ export const AuthContextProvider = ({ children }) => {
         token: token,
         isLoggedIn: userIsLoggedIn,
         isUserIsAdmin: isUserIsAdmin,
+        isUserIsAuthor: isUserIsAuthor,
+        isUserIsPublisher: isUserIsPublisher,
         login: loginHandler,
         logout: logoutHandler,
         userInfo: userInfo,
-        userInfoHandler: userInfoHandler,
         fetchingUser: fetchingUser,
         authLoading: isLoading,
     };

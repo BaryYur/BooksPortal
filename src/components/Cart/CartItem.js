@@ -12,20 +12,6 @@ const CartItem = ({ name, id, price, category, img }) => {
 
     const deleteCartItemHandler = (id) => cartCtx.deleteFromCart(id);
 
-    // const increaseHandler = () => {
-    //     if (cartQuantity < quantity) {
-    //         cartCtx.increaseCounter(id);
-    //     } else {
-    //         alert("This is maximum!")
-    //     }
-    // }
-
-    // const decreaseHandler = () => {
-    //     if (cartQuantity !== 1) {
-    //         cartCtx.decreaseCounter(id);
-    //     } else return;
-    // }
-
     return (
         <li>
             <Card className="book-card">
@@ -40,18 +26,13 @@ const CartItem = ({ name, id, price, category, img }) => {
                 </div>
                 <div className="price-and-delete-container">
                     <div className="price-box">
-                        {/*<button onClick={decreaseHandler}>-</button>*/}
-                        {/*<div>*/}
-                        {/*    {price * cartQuantity} <span>hrn</span> / {cartQuantity}*/}
-                        {/*</div>*/}
                         <div>{price} hrn</div>
-                        {/*<button onClick={increaseHandler}>+</button>*/}
                         <button className="price-box__delete-btn" title="Delete item" onClick={() => deleteCartItemHandler(id)}>
                             <DeleteIcon fontSize="small" />
                         </button>
                     </div>
                     <div className="order-box">
-                        <Link to="/checkout" className="order-cart-item-box">
+                        <Link onClick={cartCtx.closeCart} to="/home/order" className="order-cart-item-box">
                             <Button variant="contained">Order</Button>
                         </Link>
                     </div>

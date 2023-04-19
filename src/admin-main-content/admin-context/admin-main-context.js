@@ -2,61 +2,84 @@ import React, { useState, useEffect } from "react";
 
 import Swal from "sweetalert2";
 
-import cImg from "../../images/adventure-books-cover.png";
-import dImg from "../../images/6204107.png";
-
 const AdminMainContext = React.createContext({
+    fetchingCategories: () => {},
     fetchingAddingCategory: (body) => {},
-    fetchingDeleteCategory: (id, name) => {},
+    fetchingDeleteCategory: (id) => {},
     fetchingChangingCategory: (id, name, newName) => {},
 });
 
 export const AdminMainContextProvider = ({ children }) => {
     const [adminLoading, setAdminLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
     const [menuIsOpen, setMenuIsOpen] = useState(JSON.parse(localStorage.getItem("menuIsOpen")));
-    const [categoriesList, setCategoriesList] = useState([{ name: "adventure", img: cImg }, { name: "detective", img: dImg }]);
+    const [categoriesList, setCategoriesList] = useState([]);
+    const [categoriesForSelect, setCategoriesForSelect] = useState([]);
 
-    const handleMenu = () => {
-        setMenuIsOpen(active => !active);
+    const alert = (title, text, icon ) => {
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: icon,
+            width: 460,
+            height: 400,
+        })
     }
+
+    const handleMenu = () => setMenuIsOpen(active => !active);
 
     const fetchingCategories = () => {
         setAdminLoading(true);
 
-        fetch("https://.../categories")
+        fetch("http://localhost:8081/genre")
             .then(response => response.json())
             .then(data => {
                 setCategoriesList(data);
+
                 setAdminLoading(false);
             })
             .catch(error => {
                 setAdminLoading(false);
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!",
-                    width: 460,
-                    height: 400,
-                })
+
+                alert("Oops...", "Something went wrong!", "error");
+            })
+    }
+
+    const fetchingSelectCategories = () => {
+        fetch("http://localhost:8081/genre")
+            .then(response => response.json())
+            .then(data => {
+                setCategoriesForSelect([]);
+
+                for (let i = 0; i < data.length; i++) {
+                    setCategoriesForSelect(prevItem => {
+                        return [
+                            ...prevItem,
+                            {
+                                id: data[i].id,
+                                label: data[i].name.toLowerCase(),
+                                value: i + 1,
+                            },
+                        ];
+                    });
+                }
             })
     }
 
     const fetchingAddingCategory = (body)  => {
         setAdminLoading(true);
 
-        fetch("https://.../categories", {
+        fetch("http://localhost:8081/genre", {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
-                Authorization: localStorage.getItem("token"),
                 "Content-Type": "application/json",
             },
         })
             .then((res) => {
                 if (res.ok) {
                     setAdminLoading(false);
-                    // fetchingCategoryData(category);
+                    alert("Great", "You successful add new category","success");
+
                     return res.json();
                 } else {
                     return res.json().then((data) => {
@@ -65,46 +88,54 @@ export const AdminMainContextProvider = ({ children }) => {
                         throw new Error(errorMessage);
                     });
                 }
-
-                Swal.fire({
-                    title: "Great",
-                    text: "You successful add new category",
-                    icon: "success",
-                    width: 460,
-                    height: 400,
-                })
-
-                setSuccess(true);
         })
             .catch(error => {
                 setAdminLoading(false);
-                setSuccess(false);
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: "Something went wrong!",
-                    width: 460,
-                    height: 400,
-                })
+
+                alert("Oops...", "Something went wrong!", "error");
             })
-
-        return success;
     }
 
-    const fetchingChangingCategory = (id, name, newName) => {
-        for (let item of categoriesList) {
-            if (item.name === name) {
-                item.name = newName;
-            }
-        }
+    const fetchingChangingCategory = async (id, name, newName, image) => {
+       await fetch(`http://localhost:8081/genre/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: newName,
+                file: image,
+            }),
+        })
+            .then(response => {
+                if (response.ok) fetchingCategories();
+            })
+            .catch(error => {
+                setAdminLoading(false);
+
+                alert("Oops...", "Something went wrong!", "error");
+            })
     }
 
-    const fetchingDeleteCategory = (id, name) => {
-        setCategoriesList(categoriesList.filter(c => c.name !== name));
-        console.log("delete ", name);
+    const fetchingDeleteCategory = async (id) => {
+        await  fetch(`http://localhost:8081/genre/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-type": "application/json",
+            },
+        })
+            .then(response => {
+                if (response.ok) fetchingCategories();
+            })
+            .catch(error => {
+                setAdminLoading(false);
+
+                alert("Oops...", "Something went wrong!", "error");
+            })
     }
 
     useEffect(() => {
+        fetchingSelectCategories();
         // fetchingCategories();
 
         if (!JSON.parse(localStorage.getItem("menuIsOpen"))) {
@@ -112,7 +143,7 @@ export const AdminMainContextProvider = ({ children }) => {
         }
 
         localStorage.setItem("menuIsOpen", JSON.stringify(menuIsOpen));
-    }, [menuIsOpen, categoriesList])
+    }, [menuIsOpen])
 
     return (
         <AdminMainContext.Provider
@@ -120,10 +151,12 @@ export const AdminMainContextProvider = ({ children }) => {
                 menuIsOpen: menuIsOpen,
                 adminLoading: adminLoading,
                 openMenu: handleMenu,
+                fetchingCategories: fetchingCategories,
                 fetchingAddingCategory: fetchingAddingCategory,
                 fetchingDeleteCategory: fetchingDeleteCategory,
                 fetchingChangingCategory:fetchingChangingCategory,
                 categories: categoriesList,
+                categoriesForSelect: categoriesForSelect,
             }}
         >
             {children}

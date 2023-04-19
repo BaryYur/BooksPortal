@@ -1,0 +1,250 @@
+.adding-item-form-container {
+    margin: 20px auto;
+    width: 600px;
+    min-height: 500px;
+}
+
+.adding-item-form-container form {
+    background-color: white;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 20%), 0px 0px 1px 0px rgb(0 0 0 / 20%);
+}
+
+.adding-item-form-container form h2 {
+    margin-bottom: 20px;
+}
+
+/* .adding-item-form-container form ul {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+} */    
+
+.adding-item-form-container form .control {
+    width: 270px;
+}
+
+.adding-item-form-container__controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.adding-item-form-container form ul label {
+    padding: 5px 15px;
+    border-radius: 4px;
+    border: 1px solid #318CE7;
+    cursor: pointer;
+    color: #318CE7;
+}
+
+.adding-item-form-container form ul li input {
+    display: none;
+}
+
+.adding-item-form-container form ul li input:checked + label {
+    background-color: #318CE7;
+    color: white;
+}
+
+.adding-item-form-container form .control label {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+.category-select {
+    font-size: 15px;
+}
+
+.adding-item-form-container form .control input,
+.adding-item-form-container form .control .author-name-input {
+    width: 100%;
+    padding: 7px;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    background-color: whitesmoke;
+    border: 1px solid lightgrey;
+    transition: all 0.2s ease-in-out;
+    min-height: 35.2px;
+}
+
+.adding-item-form-container form .control .author-name-input {
+    min-height: 35px;
+    padding: 2px;
+    display: flex;
+}
+
+.adding-item-form-container form .control .author-name-input .clear-btn {
+    background: none;
+    color: grey;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 0;
+    font-size: 1.25em;
+}
+
+.adding-item-form-container form .control .author-name-input .close-btn:hover,
+.adding-item-form-container form .control .author-name-input .close-btn:focus {
+    color: #262626;
+}
+
+.adding-item-form-container form .control .author-name-input:focus {
+    transition: all 0.2s ease-in-out;
+    border: 1px solid var(--main-input-border);
+    box-shadow: var(--main-input-box-shadow);
+}
+
+.adding-item-form-container form .control .author-name-input .divider {
+    background-color: #777;
+    width: 0.05em;
+    align-self: stretch;
+    margin: 0 5px;
+}
+
+.caret-btn {
+    border: none;
+    background-color: transparent;
+    width: 9px;
+    margin-left: 2px;
+}
+
+.adding-item-form-container form .control .author-name-input .caret {
+    translate: 0 25%;
+    border: 0.25em solid transparent;
+    border-top-color: #777;
+}
+
+.adding-item-form-container form .control input[type="file"] {
+    padding: 5px;
+}
+
+.adding-item-form-container form .control textarea {
+    max-width: 560px;
+    min-height: 220px;
+    min-width: 560px;
+    padding: 7px;
+    border-radius: 3px;
+    background-color: whitesmoke;
+    border: 1px solid lightgrey;
+    margin-bottom: 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.adding-item-form-container form input:focus,
+.adding-item-form-container form textarea:focus {
+    transition: all 0.2s ease-in-out;
+    border: 1px solid var(--main-input-border);
+    box-shadow: var(--main-input-box-shadow);
+}
+
+.adding-item-form-container form .number-inputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 270px;
+}
+
+.adding-item-form-container form .number-inputs .control {
+    width: 130px;
+}
+
+.input-name-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 5px;
+    width: 400px;
+    padding: 10px;
+}
+
+.input-name-modal input {
+    width: 100%;
+    padding: 5px;
+    border-radius: 3px;
+    margin: 7px 0 15px 0;
+    background-color: whitesmoke;
+    border: 1px solid lightgrey;
+    transition: all 0.2s ease-in-out;
+}
+
+.input-name-modal input:focus {
+    transition: all 0.2s ease-in-out;
+    border: 1px solid var(--main-input-border);
+    box-shadow: var(--main-input-box-shadow);
+}
+
+.existing-authors-list {
+    width: 100%;
+    margin-top: -12px;
+    border: 1px solid lightgrey;
+    border-radius: 0 0 4px 4px;
+    border-bottom: none;
+}
+
+.existing-authors-list li {
+    padding: 5px;
+    font-size: 13px;
+    border-bottom: 1px solid lightgrey;
+}
+
+.authors-list,
+.input-authors-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 6px;
+    margin-top: 5px;
+}
+
+.input-authors-list {
+    margin-top: 0;
+}
+
+.authors-list li,
+.input-authors-list li {
+    display: flex;
+    align-items: center;
+    border: 1px solid lightgrey;
+    border-radius: 4px;
+    padding: 3px 4px;
+    gap: 4px;
+    cursor: pointer;
+    background-color: white;
+    outline: none;
+    font-size: 13.3px;
+}
+
+.authors-list li .remove-btn {
+    font-size: 1.25em;
+    color: #777;
+    cursor: pointer;
+}
+
+.input-authors-list li:hover,
+.input-authors-list li:focus,
+.authors-list li:hover,
+.authors-list li:focus {
+    background-color: hsl(0 100% 90%);
+    border-color: hsl(0 100% 50%);;
+}
+
+.input-authors-list li:hover > .remove-btn,
+.input-authors-list li:focus > .remove-btn,
+.authors-list li:hover > .remove-btn,
+.authors-list li:focus > .remove-btn {
+    color: hsl(0 100% 50%);
+}
+
+.create-new-author-btn-box {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}

@@ -9,7 +9,7 @@
     justify-content: center;
     align-items: center;
     /*position: relative;*/
-    z-index: 1111;
+    z-index:  var(--ui-index-6);
 }
 
 .not-found-page-container img {
@@ -31,7 +31,7 @@
     text-align: center;
     display: block;
     margin: 10px auto;
-    color: royalblue;
+    color: #318CE7;
 }
 
 .not-found-page-container a:hover {

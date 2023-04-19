@@ -1,0 +1,83 @@
+.shop-categories .loading-box {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.shop-categories-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.shop-categories-list li {
+    width: 190px;
+    height: 200px;
+    box-shadow: var(--main-shadow);
+    /*box-shadow: 0 0 0 3px lightgrey;*/
+    border-radius: 5px;
+    overflow: hidden;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+}
+
+.shop-categories-list .category-link-card a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.shop-categories-list li:hover {
+    transition: all 0.2s ease-in-out;
+}
+
+.shop-categories-list li img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: var(--ui-index-1);
+    transition: all 0.2s ease-in-out;
+}
+
+.shop-categories-list li:hover img {
+    width: 106%;
+    height: 106%;
+    margin-left: -3%;
+    margin-top: -3%;
+    position: absolute;
+    z-index: var(--ui-index-1);
+    transition: all 0.2s ease-in-out;
+}
+
+.shop-categories-list .category-link-card .category-card-wrapper {
+    background-color: rgba(0, 0, 0, 0.22);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: var(--ui-index-2);
+}
+
+.category-link-card .bottom-box {
+    /*width: 100%;*/
+    width: 96%;
+    position: absolute;
+    text-align: center;
+    background-color: white;
+    color: #2c2c2c;
+    bottom: 3px;
+    /*bottom: 0;*/
+    left: 2%;
+    border-radius: 30px;
+    z-index: var(--ui-index-3);
+    padding: 3px;
+    transition: all 0.2s ease-in-out;
+}
+
+.shop-categories-list li:hover .bottom-box {
+    transition: all 0.2s ease-in-out;
+    color: #318CE7;
+}

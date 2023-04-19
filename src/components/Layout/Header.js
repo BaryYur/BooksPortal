@@ -10,14 +10,17 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import { Button, Badge } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+// import MenuIcon from "@mui/icons-material/Menu";
 
 import Cart from "../Cart/Cart";
 import "./Header.css";
+// import bookLogoIcon from "../../images/book-icon.png";
 
 const Header = () => {
     const authCtx = useContext(AuthContext);
     const isLoggedIn = authCtx.isLoggedIn;
     const cartCtx = useContext(CartContext);
+    // const [activeMenu, setActiveMenu] = useState(false);
 
     const scrollToTop = () => {
         document.querySelector(".main-wrapper").scrollTop = 0;
@@ -34,25 +37,35 @@ const Header = () => {
         }
     }
 
+    // const activeMenuBarHandler = () => setActiveMenu(active => !active);
+
     return (
         <header id="main-header" className="main-header">
             <div className="header-wrapper">
                 <Link to="/" title="Books shop home" onClick={scrollToTop}>
                     <div className="logo-box">
-                        <ImportContactsOutlinedIcon style={{ color: "royalblue" }} fontSize="large" />
+                        <ImportContactsOutlinedIcon style={{ color: "#318CE7" }} fontSize="large" /> 
+                        {/* <img src={bookLogoIcon} alt="Logo" style={{ width: "35px" }} /> */}
                         <span>Books portal</span>
                     </div>
                 </Link>
-                <nav>
+                <nav> 
                     <ul>
                         <li>
-                            <Button className="header__cart-btn" onClick={cartCtx.openCart} title="Cart">
+                            <Link to="/home/shop">Categories</Link>
+                        </li>
+                        <li>
+                            <Button 
+                                className="header__cart-btn" 
+                                onClick={cartCtx.openCart} 
+                                title="Cart"
+                            >
                                 <Badge
                                     badgeContent={cartCtx.cartItemsCounter}
                                     sx={{
                                         "& .MuiBadge-badge": {
-                                        color: "white",
-                                        backgroundColor: "indianred",
+                                            color: "white",
+                                            backgroundColor: "indianred",
                                         }
                                     }}
                                     max={99}
@@ -61,28 +74,35 @@ const Header = () => {
                                 </Badge>
                             </Button>
                         </li>
-                        {!isLoggedIn && (
-                            <li>
-                                <NavLink
-                                    to="/home/auth"
-                                    title="Login page"
-                                    className="login-link"
-                                    onClick={scrollToTop}
-                                >Login</NavLink>
-                            </li>
-                        )}
-                        {isLoggedIn && (
-                            <li>
-                                <NavLink
-                                    to="/home/profile"
-                                    className="profile-link"
-                                    title="Profile"
-                                    onClick={scrollToTop}
-                                >
-                                    <PersonIcon />
-                                </NavLink>
-                            </li> 
-                        )}
+                        {/* <div className={activeMenu ? "active-nav-bar" : "not-active-nav-bar"}> */}
+                            {!isLoggedIn && (
+                                <li>
+                                    <NavLink
+                                        to="/home/auth"
+                                        title="Login page"
+                                        className="login-link"
+                                        onClick={scrollToTop}
+                                    >Login</NavLink>
+                                </li>
+                            )}
+                            {isLoggedIn && (
+                                <li>
+                                    <NavLink
+                                        to="/home/profile"
+                                        className="profile-link"
+                                        title="Profile"
+                                        onClick={scrollToTop}
+                                    >
+                                        <PersonIcon />
+                                    </NavLink>
+                                </li> 
+                            )}
+                        {/* </div> */}
+                        {/* <div className="menu-btn-box">
+                            <Button onClick={activeMenuBarHandler}>
+                                <MenuIcon />
+                            </Button>
+                        </div> */}
                     </ul>
                 </nav>
             </div>

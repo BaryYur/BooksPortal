@@ -2,3 +2,10 @@
     width: 1200px;
     margin: 25px auto;
 }
+
+@media screen and (max-width: 1200px) {
+    .auth-page-container {
+        width: 100%;
+        margin: 25px auto;
+    }
+}

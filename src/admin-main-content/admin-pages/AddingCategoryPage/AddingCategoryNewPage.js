@@ -1,5 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 
+import { useGetImage } from "../../../hooks/useGetImage";
+
 import AdminMainContext from "../../admin-context/admin-main-context";
 
 import { Button } from "@mui/material";
@@ -8,44 +10,31 @@ import "./AddingCategoryNewPage.css";
 const AddingCategoryNewPage = () => {
     const mainAdminCtx = useContext(AdminMainContext);
     const [categoryNameInput, setCategoryNameInput] = useState("");
-    const [categoryImageInput, setCategoryImageInput] = useState("");
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(true);
-
-    const imageUploadedHandler = (e) => {
-        let file = e.target.files[0];
-        let reader = new FileReader();
-
-        if (file) {
-            reader.readAsDataURL(file);
-            reader.onloadend = () => {
-                setCategoryImageInput(reader.result);
-            }
-        } else {
-            setCategoryImageInput("");
-        }
-    }
+    const { image, changeImage } = useGetImage();
 
     const addingNewCategoryHandler = (event) => {
         event.preventDefault();
 
         let body = {
-            categoryName: categoryNameInput,
-            image: categoryImageInput,
+            name: categoryNameInput,
+            file: image,
         }
 
-        if (mainAdminCtx.fetchingAddingCategory(body) === true) {
-            setCategoryNameInput("");
-            document.getElementById("category-image-input").value = "";
-        }
+        mainAdminCtx.fetchingAddingCategory(body);
+
+        setCategoryNameInput("");
+        setDisabledAddingBtn(false);
+        document.getElementById("category-image-input").value = "";
     }
 
     useEffect(() => {
-        if (categoryImageInput !== "" && categoryNameInput !== "") {
+        if (categoryNameInput !== "" && image !== "") {
             setDisabledAddingBtn(false);
         } else {
             setDisabledAddingBtn(true);
         }
-    }, [categoryImageInput, categoryNameInput])
+    }, [image, categoryNameInput]);
 
     return (
         <div className="admin-page-wrapper">
@@ -66,7 +55,7 @@ const AddingCategoryNewPage = () => {
                         <input
                             id="category-image-input"
                             type="file"
-                            onChange={imageUploadedHandler}
+                            onChange={changeImage}
                             className="image-input"
                         />
                     </div>

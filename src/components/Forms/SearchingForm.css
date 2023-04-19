@@ -16,7 +16,8 @@
 }
 
 .searching-form input:focus {
-    border: 1px solid royalblue;
+    border: 1px solid var(--main-input-border);
+    box-shadow: var(--main-input-box-shadow);
     transition: all 0.2s ease-in-out;
 }
 
@@ -26,7 +27,7 @@
 
 .searching-form button:last-child {
     color: white;
-    background-color: royalblue;
+    background-color: #318CE7;
     border-radius: 0 4px 4px 0;
 }
 
@@ -43,7 +44,7 @@
     position: absolute;
     top: 6px;
     right: 70px;
-    z-index: 5;
+    z-index:  var(--ui-index-2);
     border: none;
     cursor: pointer;
 }

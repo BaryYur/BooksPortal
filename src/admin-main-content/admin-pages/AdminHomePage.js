@@ -8,8 +8,8 @@ import AdminStartingPage from "./AdminStartingPage";
 import AdminUserPage from "./AdminUserPage";
 import AdminAddingCategoryPage from "./AddingCategoryPage/AdminAddingCategoryPage";
 import AddingCategoryNewPage from "./AddingCategoryPage/AddingCategoryNewPage";
-import AdminAddingNewItemPage from "./AddingItemPage/AdminAddingNewItemPage";
-import DeletingItemPage from "./DeletingItemPage";
+import AdminAddingBookItemPage from "./AddingItemPage/AdminAddingBookItemPage";
+import DeletingItemPage from "./DeletingItemPage/DeletingItemPage";
 import NotFoundPage from "../../pages/NotFoundPage";
 import ChangingMainPage from "./ChangingMainPage";
 import "./AdminHomePage.css";
@@ -28,7 +28,7 @@ const AdminHomePage = () => {
                     <Route path="/user-admin" element={<AdminUserPage />} />
                     <Route path="/adding-category" element={<AdminAddingCategoryPage />} />
                     <Route path="/adding-category/new" element={<AddingCategoryNewPage />} />
-                    <Route path="/adding-item" element={<AdminAddingNewItemPage />} />
+                    <Route path="/adding-item" element={<AdminAddingBookItemPage />} />
                     <Route path="/deleting-item" element={<DeletingItemPage />} />
                     <Route path="/main-page-handling" element={<ChangingMainPage />} />
                     <Route path="*" element={<NotFoundPage />} />

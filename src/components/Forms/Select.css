@@ -1,21 +1,23 @@
 .select-container {
     position: relative;
-    width: 300px;
-    min-height: 1.5em;
+    width: 270px;
     border: 1px solid lightgrey;
     display: flex;
     align-items: center;
     gap: 0.05em;
-    padding: 0.5em;
-    border-radius: 4px;
+    padding: 2px;
+    border-radius: 3px;
     outline: none;
     background-color: whitesmoke;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     margin-top: 5px;
+    transition: all 0.2s ease-in-out;
 }
 
 .select-container:focus {
-    border-color: royalblue;
+    transition: all 0.2s ease-in-out;
+    border-color: var(--main-input-border);
+    box-shadow: var(--main-input-box-shadow);
 }
 
 .select-container ul {
@@ -66,13 +68,13 @@
     max-height: 15em;
     overflow-y: auto;
     overflow-x: hidden;
-    border: 0.05em solid #777;
-    border-radius: 0.25em;
+    border: 1px solid #777;
+    border-radius: 0px;
     width: 100%;
     left: 0;
-    top: calc(100% + 0.25em);
+    top: calc(100% + 4px);
     background-color: white;
-    z-index: 100;
+    z-index:  var(--ui-index-2);
 }
 
 .select-container .show {
@@ -81,16 +83,16 @@
     padding: 0;
     position: absolute;
     list-style: none;
-    max-height: 15em;
+    max-height: 200px;
     overflow-y: auto;
     overflow-x: hidden;
-    border: 0.05em solid #777;
-    border-radius: 0.25em;
+    border: 0.05em solid lightgrey;
+    border-radius: 4px;
     width: 100%;
     left: 0;
-    top: calc(100% + 0.25em);
+    top: calc(100% + 4px);
     background-color: white;
-    z-index: 50;
+    z-index:  var(--ui-index-1);
 }
 
 .select-container .option {
@@ -99,7 +101,7 @@
 }
 
 .select-container .selected {
-    background-color: royalblue;
+    background-color: #318CE7;
     color: white;
     padding: 0.25em 0.5em;
 }

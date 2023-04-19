@@ -18,8 +18,7 @@
     min-height: 140px;
     display: flex;
     justify-content: space-between;
-    border: 1px solid rgb(0 0 0 / 20%);
-    boxShadow: none;
+    box-shadow: var(--main-shadow);
 }
 
 .price-and-delete-container {

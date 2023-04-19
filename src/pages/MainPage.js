@@ -5,6 +5,10 @@ import { Route, Routes } from "react-router-dom";
 import AuthContext from "../context/auth-context";
 
 import HomePage from "./HomePage/HomePage";
+import NewsPage from "./NewsPage";
+import OrderPage from "./OrderPage";
+import PublishingPage from "./PublishingPage";
+import AuthorPage from "./AuthorPage/AuthorPage";
 import AuthPage from "./AuthPage";
 import ProfilePage from "./ProfilePage";
 import ShopPage from "./ShopPage/ShopPage";
@@ -16,12 +20,18 @@ import NotFoundPage from "./NotFoundPage";
 const MainPage = () => {
     const authCtx = useContext(AuthContext);
     const isLoggedIn = authCtx.isLoggedIn;
+    const isPublisher = authCtx.isUserIsPublisher;
+    const isAuthor = authCtx.isUserIsAuthor;
 
     return (
         <div>
             <Layout>
                 <Routes>
                     <Route path="/" element={<HomePage />} />
+                    <Route path="/news" element={<NewsPage />} />
+                    <Route path="/order" element={<OrderPage />} />
+                    {isPublisher && <Route path="/publishing" element={<PublishingPage />} />}
+                    {isAuthor && <Route path="/author" element={<AuthorPage />} />}
                     {!isLoggedIn && <Route path="/auth" element={<AuthPage />} />}
                     {isLoggedIn && <Route path="/profile" element={<ProfilePage />} />}
                     <Route path="/shop/*" element={<ShopPage />} />
