@@ -7,13 +7,15 @@ export const useGetImage = () => {
         let file = e.target.files[0];
         let reader = new FileReader();
 
-        if (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png") {
+        if ((file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png") && file.size < 1_000_000) {
             reader.readAsDataURL(file);
             reader.onloadend = () => {
                 setImage(reader.result);
             }
-
-            console.log(image);
+        } else if (file.size > 1_000_000) {
+            setImage("");
+            e.target.value = "";
+            alert("Image to havy");
         } else {
             setImage("");
             e.target.value = "";
