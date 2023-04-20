@@ -15,7 +15,7 @@ export const useGetImage = () => {
         } else if (file.size > 1_000_000) {
             setImage("");
             e.target.value = "";
-            alert("Image to havy");
+            alert("Image to heavy");
         } else {
             setImage("");
             e.target.value = "";
