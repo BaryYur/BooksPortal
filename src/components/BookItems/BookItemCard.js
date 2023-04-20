@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 
 import { useCutText } from "../../hooks/useCutText";
+import { useScrollToTop } from "../../hooks/useScrollToTop";
 
 import { Link, useNavigate } from "react-router-dom";
 
@@ -14,6 +15,8 @@ import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 
+import defImg from "../../images/book-cover.jpg";
+
 const BookItemCard = ({ id, name, price, link, adminItems }) => {
     const navigate = useNavigate();
     const cartCtx = useContext(CartContext);
@@ -22,6 +25,7 @@ const BookItemCard = ({ id, name, price, link, adminItems }) => {
     const [activeAddingBtn, setActiveAddingBtn] = useState(false);
     const [openDeletingModal, setOpenDeletingModal] = useState(false);
     const { changeText } = useCutText();
+    const { scrollToTop } = useScrollToTop();
 
     const addToCartHandler = () => {
         cartCtx.addToCart(id, {
@@ -70,14 +74,20 @@ const BookItemCard = ({ id, name, price, link, adminItems }) => {
         <li>
             <Card
                 style={{
-                    minHeight: "280px",
+                    minHeight: "350px",
+                    maxHeight: "350px",
                     display: "flex",
                     justifyContent: "space-between",
                     flexDirection: "column",
                 }}
             >
-                <Link to={link} title={name}>
+                <Link
+                    to={link}
+                    title={name}
+                    onClick={scrollToTop}
+                >
                     <div className="book-card__head">
+                        <img src={defImg} className={adminItems ? "admin-card-img" : ""} />
                         {/*<img src={img} alt={name} />*/}
                         <p>{changedName}</p>
                     </div>
@@ -94,7 +104,7 @@ const BookItemCard = ({ id, name, price, link, adminItems }) => {
                         onClick={addToCartHandler}
                     >Add</Button>}
                     {adminItems && <button
-                        alt="Delete this book"
+                        title="Delete this book"
                         className="delete-book-btn"
                         onClick={openDeletingModalHandler}
                     >

@@ -17,8 +17,7 @@ import "./Header.css";
 // import bookLogoIcon from "../../images/book-icon.png";
 
 const Header = () => {
-    const authCtx = useContext(AuthContext);
-    const isLoggedIn = authCtx.isLoggedIn;
+    const { isLoggedIn, isUserIsAdmin } = useContext(AuthContext);
     const cartCtx = useContext(CartContext);
     // const [activeMenu, setActiveMenu] = useState(false);
 
@@ -74,6 +73,16 @@ const Header = () => {
                                 </Badge>
                             </Button>
                         </li>
+                        {isUserIsAdmin && (
+                            <li>
+                                <Link
+                                    to="/admin"
+                                    title="Admin page"
+                                    className="login-link"
+                                    onClick={scrollToTop}
+                                >Admin panel</Link>
+                            </li>
+                        )}
                         {/* <div className={activeMenu ? "active-nav-bar" : "not-active-nav-bar"}> */}
                             {!isLoggedIn && (
                                 <li>

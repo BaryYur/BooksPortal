@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 
+import { useScrollToTop } from "../../hooks/useScrollToTop";
+
 import { Link } from "react-router-dom";
 
 import AuthContext from "../../context/auth-context";
@@ -17,11 +19,7 @@ import heroImg from "../../images/hero-image.png";
 
 const HomePage = () => {
     const authCtx = useContext(AuthContext);
-
-    const scrollToTop = () => {
-        document.querySelector(".main-wrapper").scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-    }
+    const { scrollToTop } = useScrollToTop();
 
     return (
         <div className="home-page-container">

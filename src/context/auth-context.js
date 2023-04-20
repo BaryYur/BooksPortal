@@ -49,7 +49,7 @@ const retrieveStoredToken = () => {
 
 export const AuthContextProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState({});
-    const [isUserIsAdmin, setIsUserIsAdmin] = useState(false);
+    const [isUserIsAdmin, setIsUserIsAdmin] = useState(true);
     const [isUserIsAuthor, setIsUserIsAuthor] = useState(false);
     const [isUserIsPublisher, setIsUserIsPublisher] = useState(false);
     const [isLoading, setIsLoading] = useState(false);

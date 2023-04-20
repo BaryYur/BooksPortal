@@ -15,13 +15,25 @@
 
 .list-of-book-items-container ul li {
     width: 24%;
+    position: relative;
 }
 
 .book-card__head img {
     display: block;
     width: 100%;
     height: 230px;
+    object-fit: cover;
     background-color: grey;
+}
+
+.book-card__head .admin-card-img {
+    height: 280px;
+    object-fit: cover;
+}
+
+.list-of-book-items-container ul li a:hover p {
+    color: #318CE7;
+    transition: all 0.2s ease-in-out;
 }
 
 .book-card__head p {
@@ -80,8 +92,8 @@
 }
 
 .delete-book-btn {
-    background-color: indianred;
-    color: white;
+    background-color: rgba(205, 92, 92, 0.10);
+    color: indianred;
     padding: 4px 8px 2px 5px;
     border-radius: 4px;
     display: flex;
@@ -89,12 +101,15 @@
     justify-content: center;
     border: none;
     cursor: pointer;
-    /*position: absolute;*/
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    border: 1px solid;
     transition: all 0.2s ease-in-out;
 }
 
 .delete-book-btn:hover {
-    background-color: #be4040;
+    color: #be4040;
     transition: all 0.2s ease-in-out;
 }
 

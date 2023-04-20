@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 
+import { useScrollToTop } from "../../../hooks/useScrollToTop";
+
 import { Link, NavLink } from "react-router-dom";
 
 import AdminMainContext from "../../admin-context/admin-main-context";
@@ -17,11 +19,7 @@ import booksShopLogo from "../../../images/book-icon.png";
 
 const AdminNavBar = () => {
     const adminMainCtx = useContext(AdminMainContext);
-
-    const scrollToTopHandler = () => {
-        document.querySelector(".admin-main-wrapper").scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-    }
+    const { scrollToTop } = useScrollToTop();
 
     return (
         <div className={adminMainCtx.menuIsOpen ? "active-admin-nav-bar-container admin-nav-bar" : "admin-nav-bar-container admin-nav-bar"}>
@@ -39,7 +37,7 @@ const AdminNavBar = () => {
                     <Link
                         to="/admin/starting/page/1"
                         title="Admin Home"
-                        onClick={scrollToTopHandler}
+                        onClick={scrollToTop}
                         className="admin-header__logo-box"
                     >
                         <img alt="logo" src={booksShopLogo} style={{ width: "35px", marginLeft: "-15px" }} />
@@ -51,7 +49,7 @@ const AdminNavBar = () => {
                 <li>
                     <NavLink
                         to="/admin/starting/page/1"
-                        onClick={scrollToTopHandler}
+                        onClick={scrollToTop}
                         style={({ isActive }) => {
                             return { backgroundColor: isActive ? "#52a8ff" : "#1976d2" }
                         }}
@@ -66,7 +64,7 @@ const AdminNavBar = () => {
                 <li>
                     <NavLink
                         to="/admin/adding-category"
-                        onClick={scrollToTopHandler}
+                        onClick={scrollToTop}
                         style={({ isActive }) => {
                             return { backgroundColor: isActive ? "#52a8ff" : "#1976d2" }
                         }}
@@ -81,7 +79,7 @@ const AdminNavBar = () => {
                 <li>
                     <NavLink
                         to="/admin/adding-item"
-                        onClick={scrollToTopHandler}
+                        onClick={scrollToTop}
                         style={({ isActive }) => {
                             return { backgroundColor: isActive ? "#52a8ff" : "#1976d2" }
                         }}
@@ -96,7 +94,7 @@ const AdminNavBar = () => {
                 <li>
                     <NavLink
                         to="/admin/deleting-item"
-                        onClick={scrollToTopHandler}
+                        onClick={scrollToTop}
                         style={({ isActive }) => {
                             return { backgroundColor: isActive ? "#52a8ff" : "#1976d2" }
                         }}
@@ -111,7 +109,7 @@ const AdminNavBar = () => {
                 <li>
                     <NavLink
                         to="/admin/main-page-handling"
-                        onClick={scrollToTopHandler}
+                        onClick={scrollToTop}
                         style={({ isActive }) => {
                             return { backgroundColor: isActive ? "#52a8ff" : "#1976d2" }
                         }}

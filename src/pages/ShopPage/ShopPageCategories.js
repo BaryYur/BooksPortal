@@ -10,10 +10,10 @@ import CategoryItem from "./CategoryItemCard";
 const ShopPageCategories = () => {
     // const dispatch = useDispatch(); // redux actions
     // const categories = useSelector(state => state.bookItems.booksGenres); // redux states
-    const { booksGenres, fetchingBooksGenres, loading } = useContext(ItemsContext);
+    const { booksGenres, fetchingAllCategories, loading } = useContext(ItemsContext);
 
     useEffect(() => {
-        fetchingBooksGenres();
+        fetchingAllCategories();
 
         // dispatch(fetchingBooksGenres());
     }, [])

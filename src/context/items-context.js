@@ -166,7 +166,7 @@ const ItemsContext = React.createContext({
     fetchingAddingBookItem: (body) => {},
     searchingItemsFetch: (book) => {},
     fetchingGenreBooks: (genreName) => {},
-    fetchingBooksGenres: () => {},
+    fetchingAllCategories: () => {},
 });
 
 export const ItemsContextProvider = ({ children }) => {
@@ -187,7 +187,7 @@ export const ItemsContextProvider = ({ children }) => {
         })
     }
 
-    const fetchingBooksGenres = () => {
+    const fetchingAllCategories = () => {
         setLoading(true);
 
         fetch(`http://localhost:8081/genre`)
@@ -292,7 +292,7 @@ export const ItemsContextProvider = ({ children }) => {
 
     useEffect(() => {
         // searchingItemsFetch();
-        fetchingBooksGenres();
+        fetchingAllCategories();
         // fetchingNews();
         // console.log(Dotenv.MAIN_PATH);
     }, [])
@@ -307,7 +307,7 @@ export const ItemsContextProvider = ({ children }) => {
                 bookItem: bookItem,
                 booksGenres: booksGenres,
                 fetchingGenreBooks: fetchingGenreBooks,
-                fetchingBooksGenres: fetchingBooksGenres,
+                fetchingAllCategories: fetchingAllCategories,
                 genreBooks: genreBooks,
                 categoriesForSelect: categoriesForSelect,
                 loading: loading,

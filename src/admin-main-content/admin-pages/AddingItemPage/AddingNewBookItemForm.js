@@ -16,7 +16,7 @@ const AddingNewBookItemForm = () => {
     const itemsCtx = useContext(itemsContext);
     const [chosenCategories, setChosenCategories] = useState([]);
     const [chosenAuthors, setChosenAuthors] = useState([]);
-    // const [existingAuthors, setExistingAuthors] = useState([]);
+    const [existingAuthors, setExistingAuthors] = useState([]);
 
     const [bookNameInput, setBookNameInput] = useState("");
     const [authorNameInput, setAuthorNameInput] = useState("");
@@ -57,7 +57,7 @@ const AddingNewBookItemForm = () => {
     }
 
     const handleKeyPress = (event) => {
-        if (event.key === "Enter" && authorNameInput.length > 3) {
+        if (event.key === "Enter" && authorNameInput.length >= 3) {
             if (checkingAuthorExisting() === true) {
                 fetch(`http://localhost:8081/author/all/${authorNameInput}`)
                     .then(response => response.json())
@@ -77,21 +77,21 @@ const AddingNewBookItemForm = () => {
             }
         }
 
-        // setExistingAuthors([]);
+        if (event.key === "Enter" && authorNameInput.length <= 3) {
+            alert("Author Name is to short");
+        }
+    }
 
-        // if (authorNameInput !== "") {
-        //     fetch(`http://localhost:8081/author/all/${authorNameInput}`)
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             if (data.length === 0) {
-        //                 setExistingAuthors([]);
-        //             } else {
-        //                 setExistingAuthors(prevAuthor => {
-        //                     return [...prevAuthor, data];
-        //                 });
-        //             }
-        //         })
-        // }
+    const fetchingExistingAuthors = () => {
+        if (authorNameInput !== "") {
+            fetch(`http://localhost:8081/author/all/${authorNameInput}`)
+                .then(response => response.json())
+                .then(data => {
+                    setExistingAuthors(data);
+                })
+        } else if (authorNameInput === "") {
+            setExistingAuthors([]);
+        }
     }
 
     const createNewAuthorHandler = () => {
@@ -122,7 +122,7 @@ const AddingNewBookItemForm = () => {
     }
 
     const deleteChosenAuthor = (id) => {
-        setChosenAuthors(chosenAuthors.filter(a => a.id !== id));
+        setChosenAuthors(chosenAuthors.filter(author => author.id !== id));
     }
 
     const clearChosenAuthors = (e) => {
@@ -160,8 +160,6 @@ const AddingNewBookItemForm = () => {
         }
 
         itemsCtx.fetchingAddingBookItem(body);
-
-        console.log(body);
     }
 
     useEffect(() => {
@@ -177,9 +175,13 @@ const AddingNewBookItemForm = () => {
             setDisabledAddingBtn(true);
         }
 
-        // if (authorNameInput === "") {
-        //     setExistingAuthors([]);
-        // }
+        itemsCtx.fetchingAllCategories();
+
+        if (authorNameInput.length <= 3) {
+            setCreateAuthorBtn(false);
+        }
+
+        fetchingExistingAuthors();
     }, [
         bookNameInput,
         authorNameInput,
@@ -192,7 +194,7 @@ const AddingNewBookItemForm = () => {
         priceInput,
         image,
         descriptionInput,
-    ])
+    ]);
 
     return (
         <div className="adding-book-form-wrapper">
@@ -342,13 +344,25 @@ const AddingNewBookItemForm = () => {
                         <label>Author name</label>
                         <input
                             type="text"
+                            list="existing-authors"
                             value={authorNameInput}
                             onKeyPress={handleKeyPress}
                             onChange={changeNameInputHandler}
                         />
+                        <datalist id="existing-authors">
+                            {existingAuthors.map(author => (
+                                <option key={author.id} value={author.name} />
+                            ))}
+                        </datalist>
                         {/*{existingAuthors.length > 0 && <ul className="existing-authors-list">*/}
-                        {/*    {existingAuthors[0].map(author => (*/}
-                        {/*        <li key={author.id}>*/}
+                        {/*    {existingAuthors.map(author => (*/}
+                        {/*        <li*/}
+                        {/*            key={author.id}*/}
+                        {/*            onClick={() => {*/}
+                        {/*                setAuthorNameInput(author.name);*/}
+                        {/*                setExistingAuthors([]);*/}
+                        {/*            }}*/}
+                        {/*        >*/}
                         {/*            <span>{author.name}</span>*/}
                         {/*        </li>*/}
                         {/*    ))}*/}

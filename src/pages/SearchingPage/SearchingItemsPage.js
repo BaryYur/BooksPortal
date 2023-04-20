@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState, useMemo, memo, useRef } from "react";
 
+import { useScrollToTop } from "../../hooks/useScrollToTop";
+
 import { useNavigate } from "react-router-dom";
 
 import ItemsContext from "../../context/items-context";
@@ -15,7 +17,7 @@ const SearchingItemsPage = ({ search }) => {
     const page = Number(search.split("/")[2]);
     const [currentBookItems, setCurrentBookItems] = useState([]);
     const [searchingPagesCounter, setSearchingPagesCounter] = useState(1);
-    const mainWrapperRef = useRef(null);
+    const { scrollToTop } = useScrollToTop();
 
     useEffect(() => {
         setCurrentBookItems(
@@ -43,8 +45,7 @@ const SearchingItemsPage = ({ search }) => {
                         shape="rounded"
                         onChange={(e, value) => {
                             navigate(`/home/shop/search/${search.split('/')[0]}/page/${value}`);
-                            mainWrapperRef.current.scrollTop = 0;
-                            document.documentElement.scrollTop = 0;
+                            scrollToTop();
                         }}
                     />
                 </Stack>

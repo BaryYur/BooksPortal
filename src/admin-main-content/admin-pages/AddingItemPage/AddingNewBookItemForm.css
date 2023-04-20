@@ -193,6 +193,11 @@
     padding: 5px;
     font-size: 13px;
     border-bottom: 1px solid lightgrey;
+    cursor: pointer;
+}
+
+.existing-authors-list li:hover {
+    background-color: rgba(211, 211, 211, 0.44);
 }
 
 .authors-list,

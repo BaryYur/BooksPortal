@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { useScrollToTop } from "../../hooks/useScrollToTop";
+
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { Button } from "@mui/material";
@@ -11,6 +13,7 @@ const SearchingForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchingInput, setSearchingInput] = useState("");
+    const { scrollToTop } = useScrollToTop();
 
     const searchingSubmitHandler = (e) => {
         e.preventDefault();
@@ -19,9 +22,7 @@ const SearchingForm = () => {
 
         localStorage.setItem("search", JSON.stringify(searchingInput.toLowerCase()));
         navigate(`/home/shop/search/?text=${searchingInput.toLowerCase()}/page/1`);
-
-        document.querySelector("body").scrollTop = 0;
-        document.documentElement.scrollTop = 0;
+        scrollToTop();
     }
 
     useEffect(() => {
