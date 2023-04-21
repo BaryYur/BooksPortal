@@ -183,10 +183,15 @@
 
 .existing-authors-list {
     width: 100%;
+    max-width: 100%;
     margin-top: -12px;
     border: 1px solid lightgrey;
     border-radius: 0 0 4px 4px;
     border-bottom: none;
+    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: auto;
+    max-height: 300px;
 }
 
 .existing-authors-list li {
@@ -197,7 +202,7 @@
 }
 
 .existing-authors-list li:hover {
-    background-color: rgba(211, 211, 211, 0.44);
+    background-color: rgba(65, 105, 225, 0.6);
 }
 
 .authors-list,

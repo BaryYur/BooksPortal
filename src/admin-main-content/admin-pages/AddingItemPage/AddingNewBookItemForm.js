@@ -349,24 +349,24 @@ const AddingNewBookItemForm = () => {
                             onKeyPress={handleKeyPress}
                             onChange={changeNameInputHandler}
                         />
-                        <datalist id="existing-authors">
-                            {existingAuthors.map(author => (
-                                <option key={author.id} value={author.name} />
-                            ))}
-                        </datalist>
-                        {/*{existingAuthors.length > 0 && <ul className="existing-authors-list">*/}
+                        {/*<datalist id="existing-authors">*/}
                         {/*    {existingAuthors.map(author => (*/}
-                        {/*        <li*/}
-                        {/*            key={author.id}*/}
-                        {/*            onClick={() => {*/}
-                        {/*                setAuthorNameInput(author.name);*/}
-                        {/*                setExistingAuthors([]);*/}
-                        {/*            }}*/}
-                        {/*        >*/}
-                        {/*            <span>{author.name}</span>*/}
-                        {/*        </li>*/}
+                        {/*        <option key={author.id} value={author.name} />*/}
                         {/*    ))}*/}
-                        {/*</ul>}*/}
+                        {/*</datalist>*/}
+                        {existingAuthors.length > 0 && <ul className="existing-authors-list">
+                            {existingAuthors.map(author => (
+                                <li
+                                    key={author.id}
+                                    onClick={() => {
+                                        setAuthorNameInput(author.name);
+                                        setExistingAuthors([]);
+                                    }}
+                                >
+                                    <span>{author.name}</span>
+                                </li>
+                            ))}
+                        </ul>}
                         <ul className="authors-list">
                             {chosenAuthors.length > 0 && chosenAuthors.map(author => (
                                 <li
