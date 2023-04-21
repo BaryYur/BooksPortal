@@ -162,7 +162,7 @@
     border: 1px solid grey;
     border-radius: 5px;
     width: 400px;
-    padding: 10px;
+    padding: 10px 10px 0 10px;
 }
 
 .input-name-modal input {
