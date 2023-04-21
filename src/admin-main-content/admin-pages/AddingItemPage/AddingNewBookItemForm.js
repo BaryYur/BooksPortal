@@ -57,7 +57,7 @@ const AddingNewBookItemForm = () => {
     }
 
     const handleKeyPress = (event) => {
-        if (event.key === "Enter" && authorNameInput.length >= 3) {
+        if (event.key === "Enter" && authorNameInput.length > 3) {
             if (checkingAuthorExisting() === true) {
                 fetch(`http://localhost:8081/author/all/${authorNameInput}`)
                     .then(response => response.json())
@@ -69,7 +69,7 @@ const AddingNewBookItemForm = () => {
 
                             setAuthorNameInput("");
                             setCreateAuthorBtn(false);
-                        } else if (data.length === 0 || data[0].name !== authorNameInput) {
+                        } else if ((data.length === 0 || data[0].name !== authorNameInput) && authorNameInput.length > 3) {
                             alert("This author not exist");
                             setCreateAuthorBtn(true);
                         }
@@ -79,6 +79,7 @@ const AddingNewBookItemForm = () => {
 
         if (event.key === "Enter" && authorNameInput.length <= 3) {
             alert("Author Name is to short");
+            setCreateAuthorBtn(false);
         }
     }
 
