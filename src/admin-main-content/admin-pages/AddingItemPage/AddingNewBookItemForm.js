@@ -11,12 +11,13 @@ import { Select } from "../../../components/Forms/Select";
 import Box from "@mui/material/Box";
 import "./AddingNewBookItemForm.css";
 
-const AddingNewBookItemForm = () => {
+const AddingNewBookItemForm = ({ isAuthor }) => {
     const mainAdminCtx = useContext(AdminMainContext);
     const itemsCtx = useContext(itemsContext);
     const [chosenCategories, setChosenCategories] = useState([]);
     const [chosenAuthors, setChosenAuthors] = useState([]);
     const [existingAuthors, setExistingAuthors] = useState([]);
+    const [author, setAuthor] = useState({});
 
     const [bookNameInput, setBookNameInput] = useState("");
     const [authorNameInput, setAuthorNameInput] = useState("");
@@ -26,19 +27,16 @@ const AddingNewBookItemForm = () => {
     const [descriptionInput, setDescriptionInput] = useState("");
     const [publishDateInput, setPublishDateInput] = useState("");
     const [languageInput, setLanguageInput] = useState("");
+    const [bookFileInput, setBookFileInput] = useState("");
     const { image, changeImage } = useGetImage();
 
     const [openNameInputModal, setOpenNameInputModal] = useState(false);
     const [createAuthorBtn, setCreateAuthorBtn] = useState(false);
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(true);
 
-    const closeNameInputModalHandler = () => {
-        setOpenNameInputModal(false);
-    }
+    const closeNameInputModalHandler = () => setOpenNameInputModal(false);
 
-    const changeNameInputHandler = (event) => {
-        setAuthorNameInput(event.target.value);
-    }
+    const changeNameInputHandler = (event) => setAuthorNameInput(event.target.value);
 
     const checkingAuthorExisting = () => {
         let counter = 0;
@@ -47,6 +45,10 @@ const AddingNewBookItemForm = () => {
             for (let author of chosenAuthors) {
                 if (author.name === authorNameInput) counter++;
             }
+        }
+
+        if (isAuthor) {
+            if (authorNameInput === author.name) counter++;
         }
 
         if (counter > 0) {
@@ -122,14 +124,39 @@ const AddingNewBookItemForm = () => {
         }
     }
 
-    const deleteChosenAuthor = (id) => {
-        setChosenAuthors(chosenAuthors.filter(author => author.id !== id));
-    }
+    const deleteChosenAuthor = (id) => setChosenAuthors(chosenAuthors.filter(author => author.id !== id));
 
     const clearChosenAuthors = (e) => {
         e.stopPropagation();
 
         setChosenAuthors([]);
+    }
+
+    const bookFileHandler = (e) => {
+        setBookFileInput(e.target.files[0]);
+
+        const formData = new FormData();
+        formData.append("id", "fef051ab-c52d-4f25-abc9-9747d3bf1de5");
+        formData.append("file", e.target.files[0]);
+
+        fetch("http://localhost:8081/attachment", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+            .then((res) => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    return console.log("attachment error ", res);
+                }
+            })
+            .catch(error => {
+                console.log("attachment error ", error);
+                // alert("Oops...", `Something went wrong! ${error}` , "error");
+            });
     }
 
     const addingFormSubmitHandler = (event) => {
@@ -147,10 +174,14 @@ const AddingNewBookItemForm = () => {
             selectedAuthors.push(item.id);
         }
 
+        if (isAuthor) {
+            selectedAuthors.push(author.id);
+        }
+
         let body = {
             name: bookNameInput,
             authors: selectedAuthors,
-            genres: categories,
+            categories: categories,
             publisher: publisherNameInput,
             description: descriptionInput,
             publishDate: publishDateInput,
@@ -158,15 +189,16 @@ const AddingNewBookItemForm = () => {
             file: image,
             pagesCount: Number(pagesCountInput),
             price: Number(priceInput),
+            status: false,
         }
 
-        itemsCtx.fetchingAddingBookItem(body);
+        itemsCtx.fetchingAddingBookItem(body, bookFileInput);
     }
 
     useEffect(() => {
         if (
-            bookNameInput.length > 3 && chosenAuthors.length > 0 &&
-            publisherNameInput.length > 3 && publishDateInput !== "" &&
+            bookNameInput.length > 3
+            && publishDateInput !== "" &&
             languageInput !== "" && image !== "" &&
             pagesCountInput !== "" && priceInput !== "" &&
             descriptionInput !== "" && chosenCategories.length > 0
@@ -182,6 +214,20 @@ const AddingNewBookItemForm = () => {
             setCreateAuthorBtn(false);
         }
 
+        if (isAuthor) {
+            let authorData = JSON.parse(localStorage.getItem("userData"));
+
+            fetch(`http://localhost:8081/user/${authorData.id}`)
+                .then(response => response.json())
+                .then(data => {
+                    fetch(`http://localhost:8081/author/all/${data.name}`)
+                        .then(response => response.json())
+                        .then(author => {
+                            setAuthor(author[0]);
+                        })
+                })
+        }
+
         fetchingExistingAuthors();
     }, [
         bookNameInput,
@@ -194,7 +240,7 @@ const AddingNewBookItemForm = () => {
         pagesCountInput,
         priceInput,
         image,
-        descriptionInput,
+        descriptionInput
     ]);
 
     return (
@@ -211,7 +257,7 @@ const AddingNewBookItemForm = () => {
                                 onChange={(e) => setBookNameInput(e.target.value)}
                             />
                         </div>
-                        <div className="control">
+                        {!isAuthor && <div className="control">
                             <label htmlFor="">Publisher</label>
                             <input
                                 id=""
@@ -219,7 +265,7 @@ const AddingNewBookItemForm = () => {
                                 value={publisherNameInput}
                                 onChange={(e) => setPublisherNameInput(e.target.value)}
                             />
-                        </div>
+                        </div>}
                         <div className="control">
                             <label htmlFor="author-name-input">Author Name</label>
                             <div
@@ -229,6 +275,7 @@ const AddingNewBookItemForm = () => {
                                 onClick={() => setOpenNameInputModal(true)}
                             >
                                 <ul className="input-authors-list">
+                                    {isAuthor && <li className="user-is-author">{author.name}</li>}
                                     {chosenAuthors.length > 0 && chosenAuthors.map(author => (
                                         <li
                                             key={author.id}
@@ -291,6 +338,14 @@ const AddingNewBookItemForm = () => {
                                 type="file"
                                 className="image-input"
                                 onChange={changeImage}
+                            />
+                        </div>
+                        <div className="control">
+                            <label htmlFor="">Book file</label>
+                            <input
+                                id="book-file"
+                                type="file"
+                                onChange={bookFileHandler}
                             />
                         </div>
                         <div className="number-inputs">

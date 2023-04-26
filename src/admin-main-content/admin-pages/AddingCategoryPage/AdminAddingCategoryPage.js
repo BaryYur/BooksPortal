@@ -71,7 +71,7 @@ const AdminAddingCategoryPage = () => {
                         </Link>
                     </div>
                     <ul>
-                        {categories.map(categoryItem => (
+                        {categories.length > 0 && categories.map(categoryItem => (
                             <AdminCategoryCard
                                 key={categoryItem.id}
                                 id={categoryItem.id}
@@ -91,6 +91,7 @@ const AdminAddingCategoryPage = () => {
                                 }}
                             />
                         ))}
+                        {/* {categories.length === 0 && <p>Nothing here yet</p>} */}
                         {adminLoading &&
                             <div className="loading-box">
                                 <CircularProgress />

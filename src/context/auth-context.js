@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import jwt_decode from "jwt-decode";
+// import jwt_decode from "jwt-decode";
 
 import Swal from "sweetalert2";
 
@@ -28,6 +28,7 @@ const calculateRemainingTime = (expirationTime) => {
 const retrieveStoredToken = () => {
     const storedToken = localStorage.getItem("token");
     const storedExpirationDate = localStorage.getItem("expirationTime");
+    const userData = localStorage.getItem("userData");
     const storedId = localStorage.getItem("userId");
 
     const remainingTime = calculateRemainingTime(storedExpirationDate);
@@ -36,6 +37,7 @@ const retrieveStoredToken = () => {
       localStorage.removeItem("token");
       localStorage.removeItem("expirationTime");
       localStorage.removeItem("userId");
+      localStorage.removeItem("userData");
 
       return null;
     }
@@ -44,11 +46,14 @@ const retrieveStoredToken = () => {
         token: storedToken,
         duration: remainingTime,
         storedId: storedId,
+        userData: userData,
     }
 }
 
 export const AuthContextProvider = ({ children }) => {
-    const [userInfo, setUserInfo] = useState({});
+    const [userInfo, setUserInfo] = useState(
+        JSON.parse(localStorage.getItem("userData")) || {}
+    );
     const [isUserIsAdmin, setIsUserIsAdmin] = useState(true);
     const [isUserIsAuthor, setIsUserIsAuthor] = useState(false);
     const [isUserIsPublisher, setIsUserIsPublisher] = useState(false);
@@ -70,24 +75,30 @@ export const AuthContextProvider = ({ children }) => {
         localStorage.removeItem("token");
         localStorage.removeItem("expirationTime");
         localStorage.removeItem("userId");
+        localStorage.removeItem("userData");
+        setUserInfo({});
+        setIsUserIsAdmin(false);
+        setIsUserIsAuthor(false);
+        setIsUserIsPublisher(false);
 
         if (logoutTimer) {
             clearTimeout(logoutTimer);
         }
     }, []);
 
-    const loginHandler = (token, expirationTime) => {
+    const loginHandler = (token, expirationTime, userData) => {
         setToken(token);
 
         localStorage.setItem("token", token);
         localStorage.setItem("expirationTime", expirationTime);
+        localStorage.setItem("userData", JSON.stringify(userData));
 
         const remainingTime = calculateRemainingTime(expirationTime);
 
         logoutTimer = setTimeout(logoutHandler, remainingTime);
     }
 
-    const fetchingUser = (url, body) => {
+    const fetchingUser = (url, body, isLogin) => {
         setIsLoading(true);
 
         fetch(url, {
@@ -99,6 +110,7 @@ export const AuthContextProvider = ({ children }) => {
         })
             .then((res) => {
                 setIsLoading(false);
+
                 if (res.ok) {
                     return res.json();
                 } else {
@@ -117,20 +129,63 @@ export const AuthContextProvider = ({ children }) => {
             })
             .then((data) => {
                 const expirationTime = new Date(new Date().getTime() + +"10048000");
-                const decodedToken = jwt_decode(token);
+                // const decodedToken = jwt_decode(data.token);
 
-                loginHandler(data.token, expirationTime.toISOString());
-    
-                setUserInfo(decodedToken);
-                console.log(decodedToken); 
+                loginHandler(data.token, expirationTime.toISOString(), data);
+                setUserInfo(data);
 
-                if (userInfo.role === "admin") {
+                if (data.role === "ADMIN") {
                     navigate("/admin");
                 } else {
                     navigate("/");
                 }
 
                 setIsLoading(false);
+
+                if (data.role === "PUBLISHING" && !isLogin) {
+                    let pubBody = {
+                        name: body.name,
+                        email: body.email,
+                        userId: data.id,
+                        active: true,
+                    }
+
+                    fetch("http://localhost:8081/publishing", {
+                        method: "POST",
+                        body: JSON.stringify(pubBody),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    })
+                        .then(res => {
+                            console.log("everything is ok ", res);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        } )
+                } else if (data.role === "AUTHOR" && !isLogin) {
+                    let authorBody = {
+                        name: body.name,
+                        email: body.email,
+                        userId: data.id,
+                        active: true,
+                    }
+
+                    fetch("http://localhost:8081/author", {
+                        method: "POST",
+                        body: JSON.stringify(authorBody),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    })
+                        .then(res => {
+
+                            console.log("everything is ok ", res);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
             })
             .catch((err) => {
                 setIsLoading(false);
@@ -151,14 +206,16 @@ export const AuthContextProvider = ({ children }) => {
     }, [tokenData, logoutHandler, userInfo]);
 
     useEffect(() => {
-        if (userInfo.role === "admin") {
+        if (userInfo?.role === "ADMIN") {
             setIsUserIsAdmin(true);
-        } else if (userInfo.role === "author") {
+        } else if (userInfo?.role === "AUTHOR") {
             setIsUserIsAuthor(true);
-        } else if (userInfo.role === "publishing") {
+        } else if (userInfo?.role === "PUBLISHING") {
             setIsUserIsPublisher(true);
-        }
-    }, [])
+        } 
+
+        // console.log(userInfo);
+    }, [userInfo, isUserIsAdmin, isUserIsAuthor, isUserIsPublisher]);
 
     const contextValue = {
         token: token,
@@ -177,7 +234,7 @@ export const AuthContextProvider = ({ children }) => {
         <AuthContext.Provider value={contextValue}>
             {children}
         </AuthContext.Provider>
-    )
+    );
 }
 
 export default AuthContext;

@@ -39,41 +39,34 @@ const AuthForm = () => {
         let url;
         let body;
 
-        let userRole = "user";
+        let userRole = "USER";
 
         if (author) {
-            userRole = "author";
+            userRole = "AUTHOR";
         } else if (publisher) {
-            userRole = "publisher";
+            userRole = "PUBLISHING";
         }
 
         if (isLogin) {
-            url = "https://.../user/login";
+            url = "http://localhost:8081/user/login";
             body = {
                 email: data.email,
                 password: data.password,
-            }
-        } else if (userRole === "publisher") {
-            url = "https://.../user/register";
-            body = {
-                firstName: data.firstName,
-                email: data.email,
-                password: data.password,
-                role: userRole,
             }
         } else {
-            url = "https://.../user/register";
+            url = "http://localhost:8081/user/register";
             body = {
-                firstName: data.firstName,
-                lastName: data.lastName,
+                name: data.firstName,
+                // secondName: data.lastName,
                 email: data.email,
                 password: data.password,
                 role: userRole,
+                status: "ACTIVE",
             }
         }
 
-        authCtx.fetchingUser(url, body);
-        console.log(body);
+        authCtx.fetchingUser(url, body, isLogin);
+        // console.log(body);
     }
 
     return (
@@ -82,7 +75,7 @@ const AuthForm = () => {
             <form onSubmit={handleSubmit(submitHandler)}>
                 {!isLogin && <div className="control">
                     <label htmlFor="firstName">
-                        {publisher ? <span>Publishing Name</span> : <span>Your Name</span>}
+                        {publisher ? <span>Publishing Name</span> : <span>Your Name and Last Name</span>}
                     </label>
                     <input
                         id="firstName"
@@ -97,21 +90,21 @@ const AuthForm = () => {
                     {errors.firstName?.type === "minLength" && <p className="warning-form-p" role="alert">Name is to short</p>}
                     {errors.firstName?.type === "maxLength" && <p className="warning-form-p" role="alert">Name is to long</p>}
                 </div>}
-                {!isLogin && !publisher && <div className="control">
-                    <label htmlFor="lastName">Your Last Name</label>
-                    <input
-                        id="lastName"
-                        type="text"
-                        {...register("lastName", {
-                                required: true,
-                                minLength: 3,
-                                maxLength: 20,
-                            }
-                        )}
-                    />
-                    {errors.lastName?.type === "minLength" && <p className="warning-form-p" role="alert">Last name is to short</p>}
-                    {errors.lastName?.type === "maxLength" && <p className="warning-form-p" role="alert">Last name is to long</p>}
-                </div>}
+                {/*{!isLogin && !publisher && <div className="control">*/}
+                {/*    <label htmlFor="lastName">Your Last Name</label>*/}
+                {/*    <input*/}
+                {/*        id="lastName"*/}
+                {/*        type="text"*/}
+                {/*        {...register("lastName", {*/}
+                {/*                required: true,*/}
+                {/*                minLength: 3,*/}
+                {/*                maxLength: 20,*/}
+                {/*            }*/}
+                {/*        )}*/}
+                {/*    />*/}
+                {/*    {errors.lastName?.type === "minLength" && <p className="warning-form-p" role="alert">Last name is to short</p>}*/}
+                {/*    {errors.lastName?.type === "maxLength" && <p className="warning-form-p" role="alert">Last name is to long</p>}*/}
+                {/*</div>}*/}
                 <div className="control">
                     <label htmlFor="email">Your Email</label>
                     <input

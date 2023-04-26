@@ -24,12 +24,12 @@
     justify-content: center;
 }
 
-.admin-nav-bar ul li:nth-child(5) {
+.admin-nav-bar ul li:nth-child(6) {
     position: relative;
     margin-top: 8px;
 }
 
-.admin-nav-bar ul li:nth-child(5):before {
+.admin-nav-bar ul li:nth-child(6):before {
     content: "";
     display: block;
     position: absolute;

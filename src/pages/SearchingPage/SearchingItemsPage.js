@@ -10,7 +10,7 @@ import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import BookItemsList from "../../components/BookItems/BookItemsList";
 
-const SearchingItemsPage = ({ search }) => {
+const SearchingItemsPage = ({ search, searchingText }) => {
     const navigate = useNavigate();
     const itemsCtx = useContext(ItemsContext);
     const searchingBooks = useMemo(() => itemsCtx.searchingItems, [itemsCtx.searchingItems]);
@@ -20,17 +20,32 @@ const SearchingItemsPage = ({ search }) => {
     const { scrollToTop } = useScrollToTop();
 
     useEffect(() => {
-        setCurrentBookItems(
-            searchingBooks.filter((_, i) => i + 1 > (page * 12) - 12 && i + 1 <= page * 12)
-        );
+        if (searchingBooks !== []) {
+            setCurrentBookItems([]);
+
+            for (let i = 0; i < searchingBooks.length; i++) {
+                if (i + 1 > (page * 12) - 12 && i + 1 <= page * 12) {
+                    setCurrentBookItems(prevItem => {
+                        return [...prevItem, searchingBooks[i]];
+                    });
+                }
+            }
+        } else {
+            setCurrentBookItems([]);
+        }
+
         setSearchingPagesCounter(Math.ceil(searchingBooks.length / 12));
 
-        if (!page || searchingPagesCounter < page) {
-            navigate("/home/shop");
-        }
+        // if (searchingPagesCounter < page) {
+        //     navigate("/home/shop");
+        // }
 
         document.documentElement.scrollTop = 0;
     }, [search, searchingBooks, searchingPagesCounter, navigate, page]);
+
+    useEffect(() => {
+        itemsCtx.fetchingSearchingItems(searchingText);
+    }, [searchingText]);
 
     return (
         <div className="searching-items-container">

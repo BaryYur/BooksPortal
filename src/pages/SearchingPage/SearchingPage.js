@@ -10,10 +10,10 @@ import "./SearchingPage.css";
 const SearchingPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const itemsCtx = useContext(ItemsContext);
+    const { searchingItems } = useContext(ItemsContext);
     const [searchingText, setSearchingText] = useState("");
 
-    const itemsLength = useMemo(() => itemsCtx.searchingItems.length, [itemsCtx]);
+    const itemsLength = useMemo(() => searchingItems.length, [searchingItems]);
 
     useEffect(() => {
         if (location.search.split("").includes("=")) {
@@ -24,7 +24,9 @@ const SearchingPage = () => {
         }
 
         if (location.search.length < 7) navigate("/home");
-    }, [navigate, location])
+
+        // fetchingSearchingItems(searchingText);
+    }, [navigate, location, searchingText])
 
     return (
         <div>
@@ -39,7 +41,7 @@ const SearchingPage = () => {
                     <p>filters</p>
                 </div>
                 <Routes>
-                    <Route path="/" element={<SearchingItemsPage search={location.search} />} />
+                    <Route path="/" element={<SearchingItemsPage search={location.search} searchingText={searchingText} />} />
                 </Routes>
             </div>
         </div>

@@ -36,3 +36,8 @@
 .admin-searching-box form input::placeholder {
     color: grey;
 }
+
+.searching-items-container .loading-box {
+    margin: 20px auto;
+    width: 42px;
+}

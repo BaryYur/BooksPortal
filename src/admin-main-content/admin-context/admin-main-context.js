@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
 const AdminMainContext = React.createContext({
+    fetchingUpdateUserStatus: (id, status, email, name, password, role) => {},
+    fetchingUsersList: () => {},
     fetchingCategories: () => {},
     fetchingAddingCategory: (body) => {},
     fetchingDeleteCategory: (id) => {},
@@ -10,6 +12,7 @@ const AdminMainContext = React.createContext({
 });
 
 export const AdminMainContextProvider = ({ children }) => {
+    const [usersList, setUsersList] = useState([]);
     const [adminLoading, setAdminLoading] = useState(false);
     const [menuIsOpen, setMenuIsOpen] = useState(JSON.parse(localStorage.getItem("menuIsOpen")));
     const [categoriesList, setCategoriesList] = useState([]);
@@ -27,10 +30,19 @@ export const AdminMainContextProvider = ({ children }) => {
 
     const handleMenu = () => setMenuIsOpen(active => !active);
 
+    const fetchingUsersList = async () => {
+        await fetch("http://localhost:8081/user")
+            .then(response => response.json())
+            .then(data => {
+                setUsersList(data);
+            })
+            .catch(error => console.log(error))
+    }
+
     const fetchingCategories = () => {
         setAdminLoading(true);
 
-        fetch("http://localhost:8081/genre")
+        fetch("http://localhost:8081/category")
             .then(response => response.json())
             .then(data => {
                 setCategoriesList(data);
@@ -45,7 +57,7 @@ export const AdminMainContextProvider = ({ children }) => {
     }
 
     const fetchingSelectCategories = () => {
-        fetch("http://localhost:8081/genre")
+        fetch("http://localhost:8081/category")
             .then(response => response.json())
             .then(data => {
                 setCategoriesForSelect([]);
@@ -61,14 +73,14 @@ export const AdminMainContextProvider = ({ children }) => {
                             },
                         ];
                     });
-                }
+                } 
             })
     }
 
     const fetchingAddingCategory = (body)  => {
         setAdminLoading(true);
 
-        fetch("http://localhost:8081/genre", {
+        fetch("http://localhost:8081/category", {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
@@ -97,7 +109,7 @@ export const AdminMainContextProvider = ({ children }) => {
     }
 
     const fetchingChangingCategory = async (id, name, newName, image) => {
-       await fetch(`http://localhost:8081/genre/${id}`, {
+       await fetch(`http://localhost:8081/category/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -118,7 +130,7 @@ export const AdminMainContextProvider = ({ children }) => {
     }
 
     const fetchingDeleteCategory = async (id) => {
-        await  fetch(`http://localhost:8081/genre/${id}`, {
+        await  fetch(`http://localhost:8081/category/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json",
@@ -128,13 +140,34 @@ export const AdminMainContextProvider = ({ children }) => {
                 if (response.ok) fetchingCategories();
             })
             .catch(error => {
-                setAdminLoading(false);
+                alert("Oops...", "Something went wrong!", "error");
+            })
+    }
 
+    const fetchingUpdateUserStatus = async (id, status, email, name, password, role) => {
+        await fetch(`http://localhost:8081/user/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email,
+                name: name,
+                password: password,
+                role: role,
+                status: status,
+            }),
+        })
+            .then(response => {
+                if (response.ok) fetchingUsersList();
+            })
+            .catch(error => {
                 alert("Oops...", "Something went wrong!", "error");
             })
     }
 
     useEffect(() => {
+        fetchingUsersList();
         fetchingSelectCategories();
         // fetchingCategories();
 
@@ -151,6 +184,9 @@ export const AdminMainContextProvider = ({ children }) => {
                 menuIsOpen: menuIsOpen,
                 adminLoading: adminLoading,
                 openMenu: handleMenu,
+                usersList: usersList,
+                fetchingUsersList: fetchingUsersList,
+                fetchingUpdateUserStatus: fetchingUpdateUserStatus,
                 fetchingCategories: fetchingCategories,
                 fetchingAddingCategory: fetchingAddingCategory,
                 fetchingDeleteCategory: fetchingDeleteCategory,

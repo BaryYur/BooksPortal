@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+
+import AdminMainContext from "../admin-context/admin-main-context";
 
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -7,110 +9,42 @@ import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import "./AdminStartingPage.css";
 
-const DUMMY_USERS = [
-    {
-        name: "User",
-        lastName: "First",
-        phoneNumber: "3805367344",
-        email: "test1@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Second",
-        phoneNumber: "3805367344",
-        email: "test2@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Third",
-        phoneNumber: "3805367344",
-        email: "test3@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Fourth",
-        phoneNumber: "3805367344",
-        email: "test4@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Fifth",
-        phoneNumber: "3805367344",
-        email: "test5@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Sixth",
-        phoneNumber: "3805367344",
-        email: "test6@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Seven",
-        phoneNumber: "3805367344",
-        email: "test7@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Eight",
-        phoneNumber: "3805367344",
-        email: "test8@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Ninth",
-        phoneNumber: "3805367344",
-        email: "test9@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Ten",
-        phoneNumber: "3805367344",
-        email: "test10@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Eleventh",
-        phoneNumber: "3805367344",
-        email: "test11@test.com",
-    },
-    {
-        name: "User",
-        lastName: "Twelve",
-        phoneNumber: "3805367344",
-        email: "test12@test.com",
-    },
-];
-
 const AdminStartingPage = () => {
     const navigate = useNavigate();
     const params = useParams();
     let page = Number(params.number);
+    const { usersList } = useContext(AdminMainContext);
     const [currentUsers, setCurrentUsers] = useState([]);
     const [userPagesCounter, setUserPagesCounter] = useState(1);
 
-    useEffect(() => {
-        let users = DUMMY_USERS;
+    const [counter, setCounter] = useState(0);
+
+    const currentUsersHandler = () => {
         setCurrentUsers([]);
 
-        for (let i = 0; i < users.length; i++) {
+        for (let i = 0; i < usersList.length; i++) {
             if (i + 1 > (page * 10) - 10 && i + 1 <= page * 10) {
                 setCurrentUsers(prevItem => {
-                    return [...prevItem, users[i]];
+                    return [...prevItem, usersList[i]];
                 });
             }
         }
 
-        let counter = users.length / 10;
-        setUserPagesCounter(Number(counter.toString().split(".")[0]) + 1);
-    }, [params.number])
+        let usersCounter = usersList.length / 10;
+        setUserPagesCounter(Math.round(usersCounter) + 1);
+        setCounter((usersList.length / 10) + 1);
+    }
+
+    useEffect(() => {
+        currentUsersHandler();
+    }, [params.number, usersList]);
 
     return (
         <div className="admin-page-wrapper">
             <h1>Registered users</h1>
             <div>
                 <UsersList usersData={currentUsers} />
-                {userPagesCounter > 1 && (
+                {counter > 2 && (
                     <Stack spacing={2} className="pagination-stack">
                         <Pagination
                             count={userPagesCounter}

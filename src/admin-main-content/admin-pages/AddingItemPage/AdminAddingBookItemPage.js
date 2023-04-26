@@ -5,7 +5,7 @@ import AddingNewBookItemForm from "./AddingNewBookItemForm";
 const AdminAddingBookItemPage = () => {
     return (
         <div className="admin-page-wrapper">
-            <AddingNewBookItemForm />
+            <AddingNewBookItemForm isAuthor={false} />
         </div>
     );
 }

@@ -10,17 +10,19 @@ const UsersList = ({ usersData }) => {
                 <div></div>
             </div>
             <ul>
-            {usersData.length !== 0 && usersData.map(userInfo => (
-                    <UserItem
-                        key={Math.random()}
-                        name={userInfo.name}
-                        lastName={userInfo.lastName}
-                        phoneNumber={userInfo.phoneNumber}
-                        email={userInfo.email}
-                    />
-                ))
-            }
-            {usersData.length === 0 && <p className="no-items-paragraph" style={{ fontSize: "20px" }}>Not found users!</p>}
+                {usersData.length !== 0 && usersData.map(userInfo => (
+                        <UserItem
+                            key={userInfo.id}
+                            id={userInfo.id}
+                            name={userInfo.name}
+                            email={userInfo.email}
+                            userStatus ={userInfo.status}
+                            password={userInfo.password}
+                            role={userInfo.role}
+                        />
+                    ))
+                }
+                {usersData.length === 0 && <p className="no-items-paragraph" style={{ fontSize: "20px" }}>Not found users!</p>}
             </ul>
         </div>
     );

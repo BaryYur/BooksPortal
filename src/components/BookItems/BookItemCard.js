@@ -14,14 +14,29 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
+import BlockIcon from "@mui/icons-material/Block";
 
-import defImg from "../../images/book-cover.jpg";
-
-const BookItemCard = ({ id, name, price, link, adminItems }) => {
+const BookItemCard = ({ 
+    id, 
+    name, 
+    price, 
+    link, 
+    adminItems, 
+    status, 
+    img, 
+    categories, 
+    authors, 
+    description, 
+    publishDate, 
+    language, 
+    pagesCount,
+    publisher,
+    searchingName,
+}) => {
     const navigate = useNavigate();
     const cartCtx = useContext(CartContext);
     const authCtx = useContext(AuthContext);
-    const { searchingItemsFetch } = useContext(ItemsContext);
+    const { fetchingDeletingBookItem, fetchingUnlockBook } = useContext(ItemsContext);
     const [activeAddingBtn, setActiveAddingBtn] = useState(false);
     const [openDeletingModal, setOpenDeletingModal] = useState(false);
     const { changeText } = useCutText();
@@ -61,7 +76,7 @@ const BookItemCard = ({ id, name, price, link, adminItems }) => {
     const openDeletingModalHandler = () => setOpenDeletingModal(true);
 
     const deleteItemHandler = (id) => {
-        searchingItemsFetch(id);
+        fetchingDeletingBookItem(id);
 
         setOpenDeletingModal(false);
     }
@@ -74,8 +89,8 @@ const BookItemCard = ({ id, name, price, link, adminItems }) => {
         <li>
             <Card
                 style={{
-                    minHeight: "350px",
-                    maxHeight: "350px",
+                    minHeight: "355px",
+                    maxHeight: "355px",
                     display: "flex",
                     justifyContent: "space-between",
                     flexDirection: "column",
@@ -87,8 +102,8 @@ const BookItemCard = ({ id, name, price, link, adminItems }) => {
                     onClick={scrollToTop}
                 >
                     <div className="book-card__head">
-                        <img src={defImg} className={adminItems ? "admin-card-img" : ""} />
-                        {/*<img src={img} alt={name} />*/}
+                        {/* <img src={defImg} className={adminItems ? "admin-card-img" : ""} /> */}
+                        <img src={img} alt={name} />
                         <p>{changedName}</p>
                     </div>
                 </Link>
@@ -112,6 +127,50 @@ const BookItemCard = ({ id, name, price, link, adminItems }) => {
                             <DeleteIcon />
                         </span>
                     </button>}
+                    {adminItems && <button
+                        title="Unlock this book"
+                        className="unlock-book-btn"
+                        onClick={() => {
+                            if (status === true) {
+                                let body = {
+                                    id: id,
+                                    name: name,
+                                    price: price,
+                                    status: false,
+                                    file: img,
+                                    description: description,
+                                    publishDate: publishDate,
+                                    pagesCount: pagesCount,
+                                    language: language,
+                                    categories: categories,
+                                    authors: authors,
+                                }
+
+                                fetchingUnlockBook(body, searchingName);
+                            } else {
+                                let body = {
+                                    id: id,
+                                    name: name,
+                                    price: price,
+                                    status: true,
+                                    file: img,
+                                    description: description,
+                                    publishDate: publishDate,
+                                    pagesCount: pagesCount,
+                                    language: language,
+                                    categories: categories,
+                                    authors: authors,
+                                }
+
+                                fetchingUnlockBook(body, searchingName);
+                            }
+                        }}
+                    >
+                        <span>
+                            <BlockIcon />
+                        </span>
+                    </button>}
+                    {adminItems && <p className={status ? "active-book-status" : "inactive-book-status"}>{status ? <span>active</span> : <span>not active</span>}</p>}
                 </div>
             </Card>
 

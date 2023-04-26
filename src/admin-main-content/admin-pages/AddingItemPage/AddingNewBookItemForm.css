@@ -162,7 +162,7 @@
     border: 1px solid grey;
     border-radius: 5px;
     width: 400px;
-    padding: 10px 10px 0 10px;
+    padding: 10px;
 }
 
 .input-name-modal input {
@@ -243,7 +243,7 @@
 .authors-list li:hover,
 .authors-list li:focus {
     background-color: hsl(0 100% 90%);
-    border-color: hsl(0 100% 50%);;
+    border-color: hsl(0 100% 50%);
 }
 
 .input-authors-list li:hover > .remove-btn,
@@ -257,4 +257,10 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
+}
+
+.input-authors-list .user-is-author:hover {
+    cursor: auto;
+    background-color: white;
+    border-color: lightgrey;
 }

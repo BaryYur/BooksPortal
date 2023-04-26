@@ -9,16 +9,16 @@ import { Button } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import TabsPanel from "../components/Tabs/TabsPanel";
 import "./BookItemPage.css";
-import bookCover from "../images/book-cover.jpg";
+// import bookItemCard from "../components/BookItems/BookItemCard";
 
 const BookItemPage = () => {
     const itemId = useParams().id;
-    const itemsCtx = useContext(ItemsContext);
+    const { bookItem, fetchingBookItem } = useContext(ItemsContext);
     const cartCtx = useContext(CartContext);
     let tabsInfo = [
         {
             name: "description",
-            description: itemsCtx.bookItem.description,
+            description: bookItem.description,
         },
         {
             name: "comments",
@@ -26,17 +26,17 @@ const BookItemPage = () => {
         }
     ];
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(false);
+    const [bookItemCategories, setBookItemCategories] = useState([]);
 
     const addToCartHandler = (id) => {
         cartCtx.addToCart(id, {
-            name: itemsCtx.bookItem.name,
+            name: bookItem.name,
             category: "cat 1",
             price: 20,
         });
 
         setDisabledAddingBtn(true);
     }
-
 
     const btnIsActive = () => {
         let idArr = [];
@@ -56,10 +56,37 @@ const BookItemPage = () => {
         return setDisabledAddingBtn;
     }
 
+    const categoriesList = () => {
+        fetch("http://localhost:8081/category")
+            .then(response => response.json())
+            .then(data => {
+                if (data !== []) {
+                    for (let category of bookItem.categories) {
+                        for (let i = 0; i < data.length; i++) {
+                            if (category === data[i].id) {
+                                setBookItemCategories(prevItem => {
+                                    return [
+                                        ...prevItem,
+                                        {
+                                            id: data[i].id,
+                                            name: data[i].name,
+                                        },
+                                    ];
+                                });
+                            }
+                        }
+                    }
+                }
+
+                console.log(bookItemCategories);
+            })
+    }
+
     useEffect(() => {
         btnIsActive();
 
-        itemsCtx.fetchingBookItem(itemId, "");
+        fetchingBookItem(itemId);
+        // categoriesList();
     }, [itemId, disabledAddingBtn, cartCtx.cartItems])
 
     return (
@@ -68,14 +95,14 @@ const BookItemPage = () => {
                 <div className="book-item-main-container">
                     <div className="book-item__image-container">
                         <div className="book-cover-wrapper">
-                            <img src={bookCover} alt="book-image" />
+                            <img src={bookItem.file} alt="book-image" />
                         </div>
                         <div>
-                            <p>Price: {itemsCtx.bookItem.price} hrn</p>
+                            <p>Price: {bookItem.price} hrn</p>
                             <Button
                                 variant="contained"
                                 disabled={disabledAddingBtn}
-                                onClick={() => addToCartHandler(itemsCtx.bookItem.id)}
+                                onClick={() => addToCartHandler(bookItem.id)}
                             >
                                 <ShoppingCartIcon />
                                 <span>Add to cart</span>
@@ -84,25 +111,25 @@ const BookItemPage = () => {
                     </div>
                     <div className="book-item__main-info">
                         <div>
-                            <h1>{itemsCtx.bookItem.name}</h1>
+                            <h1>{bookItem.name}</h1>
                         </div>
                         <div className="main-info__top">
                             <ul>
                                 <li>
                                     <p>Publish Date</p>
-                                    <p>{itemsCtx.bookItem.publishDate}</p>
+                                    <p>{bookItem.publishDate}</p>
                                 </li>
                                 <li>
                                     <p>Publisher</p>
-                                    <p>{itemsCtx.bookItem.publisher}</p>
+                                    <p>{bookItem.publisher !== null ? <span>{bookItem.publisher}</span> : <span>-</span>}</p>
                                 </li>
                                 <li>
                                     <p>Language</p>
-                                    <p>{itemsCtx.bookItem.language}</p>
+                                    <p>{bookItem.language}</p>
                                 </li>
                                 <li>
                                     <p>Pages</p>
-                                    <p>{itemsCtx.bookItem.pages}</p>
+                                    <p>{bookItem.pagesCount}</p>
                                 </li>
                             </ul>
                         </div>
@@ -111,10 +138,14 @@ const BookItemPage = () => {
                             <hr />
                             <div>
                                 <ul>
-                                    <li>test 1</li>
-                                    <li>test 2</li>
-                                    <li>test 3</li>
-                                    <li>test 4</li>
+                                    {/*<li>*/}
+                                        {/*Authors: {bookItem.authors[0]}*/}
+                                    {/*</li>*/}
+                                    {/*<li>Categories:*/}
+                                    {/*    {bookItemCategories.map((category => (*/}
+                                    {/*        <span key={category.id}>{category.name}</span>*/}
+                                    {/*    )))}*/}
+                                    {/*</li>*/}
                                 </ul>
                             </div>
                         </div>

@@ -10,7 +10,7 @@ import CategoryItem from "./CategoryItemCard";
 const ShopPageCategories = () => {
     // const dispatch = useDispatch(); // redux actions
     // const categories = useSelector(state => state.bookItems.booksGenres); // redux states
-    const { booksGenres, fetchingAllCategories, loading } = useContext(ItemsContext);
+    const { booksCategories, fetchingAllCategories, loading } = useContext(ItemsContext);
 
     useEffect(() => {
         fetchingAllCategories();
@@ -22,7 +22,7 @@ const ShopPageCategories = () => {
         <div className="shop-categories">
             <h2>Categories</h2>
             <ul className="shop-categories-list">
-                {booksGenres.map(genre => (
+                {booksCategories.map(genre => (
                     <CategoryItem
                         key={genre.id}
                         id={genre.id}

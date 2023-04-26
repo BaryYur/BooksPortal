@@ -24,6 +24,7 @@
 
 .searching-items-container {
     flex: 6;
+    padding: 10px;
 }
 
 .searching-page__items-box {

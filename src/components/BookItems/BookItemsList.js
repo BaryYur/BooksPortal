@@ -1,9 +1,9 @@
-import React , { memo } from "react";
+import React from "react";
 
 import BookItemCard from "./BookItemCard";
 import "./BookItemsList.css";
 
-const BookItemsList = ({ booksData, adminItems }) => {
+const BookItemsList = ({ booksData, adminItems, searchingName }) => {
     return (
         <div className="list-of-book-items-container">
             <ul>
@@ -13,8 +13,18 @@ const BookItemsList = ({ booksData, adminItems }) => {
                         id={bookItem.id}
                         name={bookItem.name}
                         price={bookItem.price}
-                        link={`/home/shop/categories/${bookItem.category.toLowerCase()}/${bookItem.id}`}
+                        link={`/home/shop/categories/${bookItem.categories[0]}/${bookItem.id}`}
                         adminItems={adminItems}
+                        status={bookItem.status}
+                        img={bookItem.file}
+                        description={bookItem.description}
+                        publishDate={bookItem.publishDate}
+                        pagesCount={bookItem.pagesCount}
+                        language={bookItem.language}
+                        categories={bookItem.categories}
+                        authors={bookItem.authors}
+                        publisher={bookItem.publisher}
+                        searchingName={searchingName}
                     />
                 ))}
             </ul>
@@ -22,4 +32,4 @@ const BookItemsList = ({ booksData, adminItems }) => {
     );
 }
 
-export default memo(BookItemsList);
+export default BookItemsList;

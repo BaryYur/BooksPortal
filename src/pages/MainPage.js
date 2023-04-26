@@ -11,6 +11,7 @@ import PublishingPage from "./PublishingPage";
 import AuthorPage from "./AuthorPage/AuthorPage";
 import AuthPage from "./AuthPage";
 import ProfilePage from "./ProfilePage";
+import NotificationsPage from "./NotificationsPage";
 import ShopPage from "./ShopPage/ShopPage";
 import Layout from "../components/Layout/Layout";
 import CategoryPage from "./CategoryPage";
@@ -18,10 +19,7 @@ import BookItemPage from "./BookItemPage";
 import NotFoundPage from "./NotFoundPage";
 
 const MainPage = () => {
-    const authCtx = useContext(AuthContext);
-    const isLoggedIn = authCtx.isLoggedIn;
-    const isPublisher = authCtx.isUserIsPublisher;
-    const isAuthor = authCtx.isUserIsAuthor;
+    const { isUserIsAuthor, isUserIsPublisher, isLoggedIn } = useContext(AuthContext);
 
     return (
         <div>
@@ -30,8 +28,9 @@ const MainPage = () => {
                     <Route path="/" element={<HomePage />} />
                     <Route path="/news" element={<NewsPage />} />
                     <Route path="/order" element={<OrderPage />} />
-                    {isPublisher && <Route path="/publishing" element={<PublishingPage />} />}
-                    {isAuthor && <Route path="/author" element={<AuthorPage />} />}
+                    {(isUserIsAuthor || isUserIsPublisher) &&<Route path="/notifications" element={<NotificationsPage />} />}
+                    {isUserIsPublisher && <Route path="/publishing" element={<PublishingPage />} />}
+                    {isUserIsAuthor && <Route path="/author" element={<AuthorPage />} />}
                     {!isLoggedIn && <Route path="/auth" element={<AuthPage />} />}
                     {isLoggedIn && <Route path="/profile" element={<ProfilePage />} />}
                     <Route path="/shop/*" element={<ShopPage />} />

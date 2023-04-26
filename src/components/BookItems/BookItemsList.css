@@ -10,7 +10,6 @@
     gap: 10px;
     flex-wrap: wrap;
     width: 100%;
-    padding-left: 10px;
 }
 
 .list-of-book-items-container ul li {
@@ -91,7 +90,8 @@
     /*background-color: #76a976;*/
 }
 
-.delete-book-btn {
+.delete-book-btn,
+.unlock-book-btn {
     background-color: rgba(205, 92, 92, 0.10);
     color: indianred;
     padding: 4px 8px 2px 5px;
@@ -103,9 +103,18 @@
     cursor: pointer;
     position: absolute;
     right: 4px;
-    top: 4px;
     border: 1px solid;
     transition: all 0.2s ease-in-out;
+}
+
+.delete-book-btn {
+    top: 4px;
+}
+
+.unlock-book-btn {
+    color: orange; 
+    bottom: 4px;
+    border-color: orange;
 }
 
 .delete-book-btn:hover {
@@ -113,10 +122,35 @@
     transition: all 0.2s ease-in-out;
 }
 
-.delete-book-btn span:last-child {
+.delete-book-btn span:last-child,
+.unlock-book-btn span:last-child {
     margin-top: 3px;
     margin-left: 3px;
     text-transform: uppercase;
+}
+
+.active-book-status,
+.inactive-book-status {
+    background-color: white;
+    padding: 4px 8px 2px 5px;
+    border-radius: 4px;
+    border: none;
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    border: 1px solid lightgrey;
+}
+
+.active-book-status {
+    border: 1px solid limegreen;
+    color: forestgreen;
+    background-color: rgba(144, 238, 144, 0.34);
+}
+
+.inactive-book-status {
+    border: 1px solid orange;
+    color: orange;
+    background-color: rgba(255, 69, 0, 0.21);
 }
 
 @media screen and (max-width: 1200px) {

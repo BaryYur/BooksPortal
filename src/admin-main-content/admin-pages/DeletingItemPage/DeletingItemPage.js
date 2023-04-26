@@ -1,13 +1,14 @@
 import React, { useContext } from "react";
 
-import BookItemsList from "../../../components/BookItems/BookItemsList";
-
-import "./DeletingItemPage.css";
-import AdminSearchingForm from "./AdminSearchingForm";
 import ItemsContext from "../../../context/items-context";
 
+import BookItemsList from "../../../components/BookItems/BookItemsList";
+import AdminSearchingForm from "./AdminSearchingForm";
+import CircularProgress from "@mui/material/CircularProgress";
+import "./DeletingItemPage.css";
+
 const DeletingItemPage = () => {
-    const { searchingItems } = useContext(ItemsContext);
+    const { searchingItems, loading } = useContext(ItemsContext);
 
     return (
         <div className="admin-page-wrapper admin-deleting-page-container">
@@ -19,7 +20,13 @@ const DeletingItemPage = () => {
                     <BookItemsList
                         adminItems={true}
                         booksData={searchingItems}
-                    /> : <p>Start typing</p>
+                        searchingName={JSON.parse(localStorage.getItem("admin-search"))}
+                    /> : <p className="no-items-paragraph">Nothing found</p>
+                }
+                {loading &&
+                    <div className="loading-box">
+                        <CircularProgress />
+                    </div>
                 }
             </div>
         </div>

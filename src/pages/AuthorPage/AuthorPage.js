@@ -1,14 +1,10 @@
-import React, { useContext, useEffect } from "react";
-
-import itemsContext from "../../context/items-context";
+import React from "react";
 
 import TabsPanel from "../../components/Tabs/TabsPanel";
 import AuthorBooks from "./AuthorBooks";
 import AddingNewBookItemForm from "../../admin-main-content/admin-pages/AddingItemPage/AddingNewBookItemForm";
 
 const AuthorPage = () => {
-    const { fetchingGenreBooks } = useContext(itemsContext);
-
     let tabsInfo = [
         {
             name: "Your books",
@@ -16,13 +12,9 @@ const AuthorPage = () => {
         },
         {
             name: "Add book",
-            description: <AddingNewBookItemForm />
+            description: <AddingNewBookItemForm isAuthor={true} />
         },
     ];
-
-    useEffect(() => {
-        fetchingGenreBooks();
-    }, [])
 
     return (
         <div className="main-wrapper">

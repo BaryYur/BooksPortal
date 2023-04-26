@@ -10,6 +10,7 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import { Button, Badge } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 // import MenuIcon from "@mui/icons-material/Menu";
 
 import Cart from "../Cart/Cart";
@@ -17,7 +18,7 @@ import "./Header.css";
 // import bookLogoIcon from "../../images/book-icon.png";
 
 const Header = () => {
-    const { isLoggedIn, isUserIsAdmin } = useContext(AuthContext);
+    const { isLoggedIn, isUserIsAdmin, isUserIsAuthor, isUserIsPublisher } = useContext(AuthContext);
     const cartCtx = useContext(CartContext);
     // const [activeMenu, setActiveMenu] = useState(false);
 
@@ -54,6 +55,27 @@ const Header = () => {
                             <Link to="/home/shop">Categories</Link>
                         </li>
                         <li>
+                            {(isUserIsAuthor || isUserIsPublisher) && <Link to="/home/notifications">
+                                <Button 
+                                    className="header__cart-btn" 
+                                    title="Notifications"
+                                >
+                                    {/* <Badge
+                                        badgeContent={cartCtx.cartItemsCounter}
+                                        sx={{
+                                            "& .MuiBadge-badge": {
+                                                color: "white",
+                                                backgroundColor: "indianred",
+                                            }
+                                        }}
+                                        max={99}
+                                    > */}
+                                        <NotificationsNoneIcon />
+                                    {/* </Badge> */}
+                                </Button>
+                            </Link>}
+                        </li>
+                        <li>
                             <Button 
                                 className="header__cart-btn" 
                                 onClick={cartCtx.openCart} 
@@ -78,9 +100,11 @@ const Header = () => {
                                 <Link
                                     to="/admin"
                                     title="Admin page"
-                                    className="login-link"
+                                    // className="login-link"
                                     onClick={scrollToTop}
-                                >Admin panel</Link>
+                                >
+                                    <Button variant="contained">Admin panel</Button>
+                                </Link>
                             </li>
                         )}
                         {/* <div className={activeMenu ? "active-nav-bar" : "not-active-nav-bar"}> */}

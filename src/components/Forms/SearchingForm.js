@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+
+import ItemsContext from "../../context/items-context";
 
 import { useScrollToTop } from "../../hooks/useScrollToTop";
 
@@ -12,6 +14,7 @@ import "./SearchingForm.css";
 const SearchingForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { fetchingSearchingItems } = useContext(ItemsContext);
     const [searchingInput, setSearchingInput] = useState("");
     const { scrollToTop } = useScrollToTop();
 
@@ -20,8 +23,9 @@ const SearchingForm = () => {
 
         if (searchingInput === "") return;
 
-        localStorage.setItem("search", JSON.stringify(searchingInput.toLowerCase()));
-        navigate(`/home/shop/search/?text=${searchingInput.toLowerCase()}/page/1`);
+        fetchingSearchingItems(searchingInput);
+        localStorage.setItem("search", JSON.stringify(searchingInput));
+        navigate(`/home/shop/search/?text=${searchingInput}/page/1`);
         scrollToTop();
     }
 
@@ -31,7 +35,7 @@ const SearchingForm = () => {
         } else {
             setSearchingInput("");
         }
-    }, [location])
+    }, [location]);
 
     return (
         <form onSubmit={searchingSubmitHandler} className="searching-form">

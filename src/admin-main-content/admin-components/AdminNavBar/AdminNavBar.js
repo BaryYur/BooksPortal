@@ -14,6 +14,8 @@ import LibraryAddIcon from "@mui/icons-material/LibraryAdd";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import BrushIcon from "@mui/icons-material/Brush";
+// import ChecklistRtlIcon from "@mui/icons-material/ChecklistRtl";
+import ListIcon from '@mui/icons-material/List';
 import  "./AdminNavBar.css";
 import booksShopLogo from "../../../images/book-icon.png";
 
@@ -88,7 +90,22 @@ const AdminNavBar = () => {
                         <span>
                             <LibraryAddIcon />
                         </span>
-                        <span className="link-text">Add item</span>
+                        <span className="link-text">Add book</span>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
+                        to="/admin/check-books"
+                        onClick={scrollToTop}
+                        style={({ isActive }) => {
+                            return { backgroundColor: isActive ? "#52a8ff" : "#1976d2" }
+                        }}
+                        title="Check books"
+                    >
+                        <span>
+                            <ListIcon />
+                        </span>
+                        <span className="link-text">Check book</span>
                     </NavLink>
                 </li>
                 <li>
@@ -103,7 +120,7 @@ const AdminNavBar = () => {
                         <span>
                             <RemoveCircleIcon />
                         </span>
-                        <span className="link-text">Delete item</span>
+                        <span className="link-text">Delete book</span>
                     </NavLink>
                 </li>
                 <li>

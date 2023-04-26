@@ -4,27 +4,36 @@ import { useParams } from "react-router-dom";
 
 import ItemsContext from "../context/items-context";
 
+import BookItemsList from "../components/BookItems/BookItemsList";
+import "./CategoryPage.css";
+
 const CategoryPage = () => {
-    const booksCtx = useContext(ItemsContext);
+    const { fetchingCategoryBooks, categoryBooks } = useContext(ItemsContext);
     const params = useParams();
+    const categoryName = params.category.charAt(0).toUpperCase() + params.category.slice(1)
+
+    const fetchingCategoryBookItems = () => {
+        fetch("http://localhost:8081/category")
+            .then(response => response.json())
+            .then(data => {
+                for (let category of data) {
+                    if (params.category === category.name.toLowerCase()) {
+                        fetchingCategoryBooks(category.id);
+                    }
+                }
+            });
+    }
 
     useEffect(() => {
-        booksCtx.fetchingGenreBooks(params.category);
-
-        // for (let item of booksCtx.categoriesForSelect) {
-        //     if (item.name === params.category) {
-        //         booksCtx.fetchingGenreBooks(item.id);
-        //     }
-        // }
-
-        console.log(booksCtx.genreBooks);
-    }, [params.category])
+        fetchingCategoryBookItems();
+    }, [params.category]);
 
     return (
         <div className="main-wrapper">
-            <h2>Category</h2>
-            {params.category}
-            {/*{booksCtx.genreBooks.map()}*/}
+            <h2>{categoryName} Category</h2>
+            <div className="category-items-container">
+                <BookItemsList booksData={categoryBooks} />
+            </div>
         </div>
     );
 }

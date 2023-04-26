@@ -4,14 +4,14 @@ import ItemsContext from "../../../context/items-context";
 import SearchIcon from "@mui/icons-material/Search";
 
 const AdminSearchingForm = () => {
-    const { searchingItemsFetch } = useContext(ItemsContext);
+    const { fetchingSearchingItems } = useContext(ItemsContext);
     const [searchingInput, setSearchingInput] = useState("");
 
     const submitSearchingHandler = (e) => {
         e.preventDefault();
 
-        searchingItemsFetch(searchingInput);
-        console.log(searchingInput);
+        fetchingSearchingItems(searchingInput);
+        localStorage.setItem("admin-search", JSON.stringify(searchingInput));
     }
 
     return (
