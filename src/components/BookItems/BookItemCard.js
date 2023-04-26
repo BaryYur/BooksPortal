@@ -128,7 +128,7 @@ const BookItemCard = ({
                         </span>
                     </button>}
                     {adminItems && <button
-                        title="Unlock this book"
+                        title={status ? "Block this book" : "Unlock this book"}
                         className="unlock-book-btn"
                         onClick={() => {
                             if (status === true) {
@@ -170,7 +170,11 @@ const BookItemCard = ({
                             <BlockIcon />
                         </span>
                     </button>}
-                    {adminItems && <p className={status ? "active-book-status" : "inactive-book-status"}>{status ? <span>active</span> : <span>not active</span>}</p>}
+                    {adminItems && (
+                        <p className={status ? "active-book-status" : "inactive-book-status"}>
+                            {status ? <span>active</span> : <span>not active</span>}
+                        </p>
+                    )}
                 </div>
             </Card>
 

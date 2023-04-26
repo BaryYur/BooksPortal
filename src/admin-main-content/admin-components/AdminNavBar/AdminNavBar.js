@@ -105,7 +105,7 @@ const AdminNavBar = () => {
                         <span>
                             <ListIcon />
                         </span>
-                        <span className="link-text">Check book</span>
+                        <span className="link-text">Update book status</span>
                     </NavLink>
                 </li>
                 <li>

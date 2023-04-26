@@ -18,7 +18,7 @@ const AdminCheckingPage = () => {
                     <BookItemsList
                         adminItems={true}
                         booksData={adminBooks}
-                    /> : <p>Nothing here</p>
+                    /> : <p className="no-items-paragraph">Not found books for update</p>
                 }
             </div>
         </div>

@@ -24,8 +24,6 @@ const SearchingPage = () => {
         }
 
         if (location.search.length < 7) navigate("/home");
-
-        // fetchingSearchingItems(searchingText);
     }, [navigate, location, searchingText])
 
     return (
