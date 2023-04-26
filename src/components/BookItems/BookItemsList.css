@@ -150,7 +150,6 @@
 .inactive-book-status {
     border: 1px solid orange;
     color: orange;
-    background-color: rgba(255, 69, 0, 0.21);
 }
 
 @media screen and (max-width: 1200px) {
