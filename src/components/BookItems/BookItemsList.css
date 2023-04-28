@@ -90,8 +90,7 @@
     /*background-color: #76a976;*/
 }
 
-.delete-book-btn,
-.unlock-book-btn {
+.delete-book-btn {
     background-color: rgba(205, 92, 92, 0.10);
     color: indianred;
     padding: 4px 8px 2px 5px;
@@ -107,15 +106,45 @@
     transition: all 0.2s ease-in-out;
 }
 
+/*.block-book-btn {*/
+/*    bottom: 45px;*/
+/*    color: orange;*/
+/*    border-color: orange;*/
+/*    width: calc(100% - 8px);*/
+/*    padding: 7px 14px;*/
+/*    text-transform: uppercase;*/
+/*}*/
+
 .delete-book-btn {
     top: 4px;
 }
 
-.unlock-book-btn {
-    color: orange; 
+/*.unlock-book-btn {*/
+/*    bottom: 4px;*/
+/*    border: 1px solid royalblue;*/
+/*    color: royalblue;*/
+/*    background-color: transparent;*/
+/*    padding: 7px 14px;*/
+/*    width: calc(100% - 8px);*/
+/*    background-color: rgba(65, 105, 225, 0.16);*/
+/*}*/
+
+.unlock-book-btn,
+.block-book-btn {
+    display: block;
+    position: absolute;
+    width: 94px;
+    /*width: calc(100% - 8px);*/
+    left: 0px;
+    border: 1px solid black;
+}
+
+.block-book-btn {
     bottom: 4px;
-    border-color: orange;
-    background-color: transparent;
+}
+
+.unlock-book-btn {
+    bottom: 4px;
 }
 
 .delete-book-btn:hover {
@@ -130,15 +159,16 @@
     text-transform: uppercase;
 }
 
+.book-status,
 .active-book-status,
 .inactive-book-status {
     background-color: white;
-    padding: 4px 8px 2px 5px;
+    padding: 7px 14px;
     border-radius: 4px;
     border: none;
     position: absolute;
     left: 4px;
-    bottom: 4px;
+    top: 4px;
     border: 1px solid lightgrey;
 }
 

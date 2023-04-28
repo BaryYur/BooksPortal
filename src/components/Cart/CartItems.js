@@ -17,14 +17,13 @@ const CartItems = () => {
                         key={Math.random()}
                         name={cartItem.name}
                         price={cartItem.price}
-                        category={cartItem.category.toLowerCase()}
-                        cartQuantity={cartItem.cartQuantity}
-                        // img={cartItem.file}
+                        // category={cartItem.categories[0]}
+                        img={cartItem.file}
                     />
                 ))}
-                <div className="cart-bottom">
-                    <h2>Total price: <span>{cartCtx.cartTotalPrice}</span>hrn</h2>
-                </div>
+                {/*<div className="cart-bottom">*/}
+                {/*    <h2>Total price: <span>{cartCtx.cartTotalPrice}</span>hrn</h2>*/}
+                {/*</div>*/}
             </ul>
         </div>
     );

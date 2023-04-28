@@ -16,13 +16,14 @@ const DeletingItemPage = () => {
                 <AdminSearchingForm />
             </div>
             <div className="searching-items-container">
-                {searchingItems.length !== 0 ?
+                {searchingItems.length !== 0 &&
                     <BookItemsList
                         adminItems={true}
                         booksData={searchingItems}
                         searchingName={JSON.parse(localStorage.getItem("admin-search"))}
-                    /> : <p className="no-items-paragraph">Nothing found</p>
+                    />
                 }
+                {!loading && searchingItems.length === 0 && <p className="no-items-paragraph">Nothing found</p>}
                 {loading &&
                     <div className="loading-box">
                         <CircularProgress />

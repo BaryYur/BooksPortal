@@ -134,29 +134,6 @@ const AddingNewBookItemForm = ({ isAuthor }) => {
 
     const bookFileHandler = (e) => {
         setBookFileInput(e.target.files[0]);
-
-        const formData = new FormData();
-        formData.append("id", "fef051ab-c52d-4f25-abc9-9747d3bf1de5");
-        formData.append("file", e.target.files[0]);
-
-        fetch("http://localhost:8081/attachment", {
-            method: "POST",
-            body: formData,
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                } else {
-                    return console.log("attachment error ", res);
-                }
-            })
-            .catch(error => {
-                console.log("attachment error ", error);
-                // alert("Oops...", `Something went wrong! ${error}` , "error");
-            });
     }
 
     const addingFormSubmitHandler = (event) => {
@@ -189,7 +166,7 @@ const AddingNewBookItemForm = ({ isAuthor }) => {
             file: image,
             pagesCount: Number(pagesCountInput),
             price: Number(priceInput),
-            status: false,
+            status: "CONSIDERATION",
         }
 
         itemsCtx.fetchingAddingBookItem(body, bookFileInput);
@@ -345,6 +322,7 @@ const AddingNewBookItemForm = ({ isAuthor }) => {
                             <input
                                 id="book-file"
                                 type="file"
+                                accept="application/pdf"
                                 onChange={bookFileHandler}
                             />
                         </div>

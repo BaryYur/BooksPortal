@@ -3,15 +3,18 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import AuthContext from "../context/auth-context";
+import CartContext from "../context/cart-context";
 
 import { Button } from "@mui/material";
 
 const ProfilePage = () => {
     const navigate = useNavigate();
     const { logout } = useContext(AuthContext);
+    const { dropCart } = useContext(CartContext);
 
     const logoutHandler = () => {
         logout();
+        dropCart();
         navigate("/");
     }
 

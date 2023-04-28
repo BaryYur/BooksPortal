@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 const CartContext = React.createContext({
-    fetchingCartItems: () => {},
+    fetchingCartItems: (id) => {},
     addingToCart: () => {},
     deleteFromCart: (id) => {},
-    increaseCartItemsCounter: (id) => {},
-    decreaseCartItemsCounter: (id) => {},
+    dropCart: () => {},
 });
 
 export const CartContextProvider = ({ children }) => {
@@ -13,89 +12,59 @@ export const CartContextProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
     const [cartItemsCounter, setCartItemsCounter] = useState(0);
     const [cartTotalPrice, setCartTotalPrice] = useState(0);
-    const userId = "";
+    const [userId, setUserId] = useState(
+        JSON.parse(localStorage.getItem("userData")) || ""
+    );
 
     const closeCartHandler = () => setCartIsOpen(false);
     const openCartHandler = () => setCartIsOpen(true);
 
-    const counter = () => {
+    const fetchingCartItems = (userId) => {
         setCartItemsCounter(0);
 
-        for (let item of cartItems) {
-            if (cartItems.length !== 0) {
-                setCartItemsCounter(counter => counter + item.cartQuantity);
-            }
-        }
-    }
-
-    const fetchingCartItems = () => {
-        fetch(`https://.../${userId}/cart`)
+        fetch(`http://localhost:8081/user/${userId}`)
             .then(response => response.json())
-            .then(data => setCartItems(data))
+            .then(data => {
+                fetch(`http://localhost:8081/book/ids?ids=${data.basket}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        setCartItems(data);
+                    })
+
+                setCartItemsCounter(0);
+
+                for (let item of data.basket) {
+                    setCartItemsCounter(counter => counter + 1);
+                }
+            });
     }
 
-    const addingToCart = (id, body) => {
-        // fetch(`https://.../${userId}/cart`, {
-        //     method: "POST",
-        //     body: JSON.stringify(body),
-        // })
-
-        setCartItems(prevItem => {
-            return [...prevItem, {
-                id: id,
-                name: "String 4",
-                category: "Category 4",
-                price: 40,
-                cartQuantity: 1,
-            }];
+    const addingToCart = (userId, body) => {
+        fetch(`http://localhost:8081/user/${userId}`, {
+            method: "PUT",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            }
         })
+            .then(response => {
+                fetchingCartItems(userId);
+            })
+            .catch(error => console.log(error));
     }
 
-    const deleteFromCart = (id) => {
-        // fetch(`https://.../${userId}/cart/item/${id}`, {
-        //     method: "DELETE",
-        // })
-
-        setCartItems(cartItems.filter(item => item.id !== id));
-    }
-
-
-    const increaseCartItemsCounter = (id) => {
-        // fetch(`https://.../${userId}/cart/item/${id}`, {
-        //     method: "PUT",
-        // })
-
-        for (let cartItem of cartItems) {
-            if (cartItem.id === id) {
-                cartItem.cartQuantity = cartItem.cartQuantity + 1; 
+    const deleteFromCart = (userId, body) => {
+        fetch(`http://localhost:8081/user/${userId}`, {
+            method: "PUT",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
             }
-        }
-
-        counter();
-    }
-
-    const decreaseCartItemsCounter = (id) => {
-        // fetch(`https://.../${userId}/cart/item/${id}`, {
-        //     method: "PUT",
-        // })
-
-        // const requestOptions = {
-        //     method: 'PUT',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ title: 'React PUT Request Example' })
-        // }
-
-        // fetch('https://jsonplaceholder.typicode.com/posts/1', requestOptions)
-        //     .then(response => response.json())
-        //     .then(data => this.setState({ postId: data.id }));
-
-        for (let cartItem of cartItems) {
-            if (cartItem.id === id) {
-                cartItem.cartQuantity = cartItem.cartQuantity - 1; 
-            }
-        }
-
-        counter();
+        })
+            .then(response => {
+                fetchingCartItems(userId);
+            })
+            .catch(error => console.log(error));
     }
 
     const countTotalPrice = () => {
@@ -108,16 +77,14 @@ export const CartContextProvider = ({ children }) => {
         }
     }
 
+    const dropCart = () => {
+        setCartItemsCounter(0);
+        setCartItems([]);
+    }
+
     useEffect(() => {
-        counter();
         countTotalPrice();
-    }, [
-        cartItems, 
-        cartItemsCounter, 
-        increaseCartItemsCounter, 
-        decreaseCartItemsCounter,
-        cartTotalPrice,
-    ])   
+    }, []);
 
     return (
         <CartContext.Provider
@@ -130,8 +97,8 @@ export const CartContextProvider = ({ children }) => {
                 cartItemsCounter: cartItemsCounter,
                 cartTotalPrice: cartTotalPrice,
                 deleteFromCart: deleteFromCart,
-                increaseCounter: increaseCartItemsCounter,
-                decreaseCounter: decreaseCartItemsCounter,
+                fetchingCartItems: fetchingCartItems,
+                dropCart: dropCart,
             }}
         >
             {children}

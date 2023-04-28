@@ -2,166 +2,6 @@ import React, { useEffect, useState } from "react";
 
 import Swal from "sweetalert2";
 
-// const DUMMY__SEARCHING__ITEMS = [
-//     {
-//         id: "id1",
-//         name: "String 1 string string string stringstringstringstring",
-//         category: "Category 1",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English",
-//         status: false,
-//     },
-//     {
-//         id: "id2",
-//         name: "String 2",
-//         category: "Category 2",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id3",
-//         name: "String 3",
-//         category: "Category 1",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id4",
-//         name: "String 4",
-//         category: "Category 4",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id5",
-//         name: "String 5",
-//         category: "Category 5",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id6",
-//         name: "String 6",
-//         category: "Category 2",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id7",
-//         name: "String 7",
-//         category: "Category 2",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id8",
-//         name: "String 8",
-//         category: "Category 2",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub 1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id9",
-//         name: "String 9",
-//         category: "Category 3",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub 1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id10",
-//         name: "String 10",
-//         category: "Category 4",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub 1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id11",
-//         name: "String 11",
-//         category: "Category 3",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub 1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id12",
-//         name: "String 12",
-//         category: "Category 5",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub 1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-//     {
-//         id: "id13",
-//         name: "String 13",
-//         category: "Category 5",
-//         price: 40,
-//         description: "item description",
-//         authors: [{ id: Math.random, name: "First author" }],
-//         publisher: "pub 1",
-//         publishDate: "11-11-1111",
-//         pages: 100,
-//         language: "English"
-//     },
-// ];
-
 const ItemsContext = React.createContext({
     fetchingBookItem: (id, category) => {},
     fetchingAddingBookItem: (body) => {},
@@ -175,6 +15,8 @@ const ItemsContext = React.createContext({
 
 export const ItemsContextProvider = ({ children }) => {
     const [searchingItems, setSearchingItems] = useState([]);
+    const [searchingItems1, setSearchingItems1] = useState([]);
+    const [searchingItems2, setSearchingItems2] = useState([]);
     const [booksCategories, setBooksCategories] = useState([]);
     const [categoryBooks, setCategoryBooks] = useState([]);
     const [bookItem, setBookItem] = useState({});
@@ -225,7 +67,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingCategoryBooks = (categoryId) => {
-        fetch(`http://localhost:8081/book/category/${categoryId}`)
+        fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
             .then(response => response.json())
             .then(data => {
                 setCategoryBooks(data);
@@ -235,19 +77,35 @@ export const ItemsContextProvider = ({ children }) => {
             })
     }
 
-    const fetchingSearchingItems = async (bookName) => {
+    const fetchingSearchingItems = (bookName) => {
         setLoading(true);
+        setSearchingItems([]);
 
-        await  fetch(`http://localhost:8081/book/all/${bookName}`)
+        fetch(`http://localhost:8081/book/all/${bookName}/GOOD`)
             .then(response => response.json())
             .then(data => {
-                setSearchingItems(data);
+                setSearchingItems1([]);
+                setSearchingItems1(data);
                 setLoading(false);
             })
             .catch(error => {
                 setLoading(false);
                 alert("Oops...", `Something went wrong!` , "error");
             });
+
+        fetch(`http://localhost:8081/book/all/${bookName}/BAD`)
+            .then(response => response.json())
+            .then(data => {
+                setSearchingItems2([]);
+                setSearchingItems2(data);
+                setLoading(false);
+            })
+            .catch(error => {
+                setLoading(false);
+                alert("Oops...", `Something went wrong!` , "error");
+            });
+
+        setSearchingItems([ ...searchingItems1, ...searchingItems2 ]);
     }
 
     const fetchingDeletingBookItem = (id) => {
@@ -260,6 +118,7 @@ export const ItemsContextProvider = ({ children }) => {
             .then(response => {
                 if (response.ok) {
                     setSearchingItems(searchingItems.filter(book => book.id !== id));
+                    setAdminBooks(adminBooks.filter(book => book.id !== id));
                 }
             })
             .catch(error => {
@@ -282,20 +141,17 @@ export const ItemsContextProvider = ({ children }) => {
         const formData = new FormData();
         formData.append("id", id);
         formData.append("file", file);
+        console.log(id);
 
         fetch("http://localhost:8081/attachment", {
             method: "POST",
             body: formData,
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
+            // headers: {
+            //     "Content-Type": `multipart/form-data: boundary=add-random-characters`
+            // },
         })
             .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                } else {
-                    return console.log("attachment error ", res);
-                }
+                console.log(res);
             })
             .catch(error => {
                 console.log("attachment error ", error);
@@ -325,7 +181,6 @@ export const ItemsContextProvider = ({ children }) => {
                 }
             })
             .then(data => {
-                console.log(data);
                 attachmentFileHandler(data.id, bookFile);
             })
             .catch(error => {
@@ -334,10 +189,9 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingAdminBooks = () => {
-        fetch("http://localhost:8081/book/status/false")
+        fetch("http://localhost:8081/book/status/CONSIDERATION")
             .then(response => response.json())
             .then(data => {
-                console.log("unlock ", data);
                 setAdminBooks(data);
             });
     }
@@ -351,7 +205,6 @@ export const ItemsContextProvider = ({ children }) => {
             }
         })
             .then(() => {
-                fetchingSearchingItems(bookName);
                 fetchingAdminBooks();
             });
     }
@@ -365,12 +218,12 @@ export const ItemsContextProvider = ({ children }) => {
     // }
 
     useEffect(() => {
-        // searchingItemsFetch();
         fetchingAllCategories();
-        console.log(booksCategories)
+
+        setSearchingItems([ ...searchingItems1, ...searchingItems2 ]);
         // fetchingNews();
         // console.log(Dotenv.MAIN_PATH);
-    }, [])
+    }, [searchingItems1, searchingItems2])
 
     return (
         <ItemsContext.Provider

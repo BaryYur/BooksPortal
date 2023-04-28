@@ -14,7 +14,6 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-import BlockIcon from "@mui/icons-material/Block";
 
 const BookItemCard = ({ 
     id, 
@@ -34,20 +33,43 @@ const BookItemCard = ({
     searchingName,
 }) => {
     const navigate = useNavigate();
-    const cartCtx = useContext(CartContext);
-    const authCtx = useContext(AuthContext);
-    const { fetchingDeletingBookItem, fetchingUnlockBook } = useContext(ItemsContext);
+    const { addToCart, cartItems } = useContext(CartContext);
+    const { isLoggedIn } = useContext(AuthContext);
+    const { fetchingDeletingBookItem, fetchingUnlockBook, fetchingSearchingItems } = useContext(ItemsContext);
     const [activeAddingBtn, setActiveAddingBtn] = useState(false);
     const [openDeletingModal, setOpenDeletingModal] = useState(false);
+    const [userData, setUserData] = useState({});
     const { changeText } = useCutText();
     const { scrollToTop } = useScrollToTop();
 
+    const fetchingUserData = () => {
+        let userId = JSON.parse(localStorage.getItem("userData")).id;
+
+        fetch(`http://localhost:8081/user/${userId}`)
+            .then(response => response.json())
+            .then(user => {
+                setUserData(user);
+            })
+    }
+
     const addToCartHandler = () => {
-        cartCtx.addToCart(id, {
-            name: name,
-            category: "cat 1",
-            price: 20,
-        });
+        if (!isLoggedIn) {
+            navigate("/home/auth");
+        } else {
+            let newBasket = userData.basket;
+            newBasket.push(id);
+
+            let userBody = {
+                basket: newBasket,
+                email: userData.email,
+                name: userData.name,
+                password: userData.password,
+                role: userData.role,
+                status: userData.status,
+            }
+
+            addToCart(userData.id, userBody);
+        }
 
         setActiveAddingBtn(true);
     }
@@ -55,7 +77,7 @@ const BookItemCard = ({
     const btnIsActive = () => {
         let idArr = [];
 
-        for (let item of cartCtx.cartItems) {
+        for (let item of cartItems) {
             if (item.id === id) {
                 setActiveAddingBtn(true);
             }
@@ -81,9 +103,34 @@ const BookItemCard = ({
         setOpenDeletingModal(false);
     }
 
+    const blockBookHandler = (status) => {
+        let body = {
+            id: id,
+            name: name,
+            price: price,
+            status: status,
+            file: img,
+            description: description,
+            publishDate: publishDate,
+            pagesCount: pagesCount,
+            language: language,
+            categories: categories,
+            authors: authors,
+        }
+
+        fetchingUnlockBook(body, searchingName);
+        setTimeout(() => {
+            fetchingSearchingItems(searchingName);
+        }, 400);
+    }
+
     useEffect(() => {
         btnIsActive();
-    }, [activeAddingBtn, cartCtx.cartItems])
+
+        if (isLoggedIn) {
+            fetchingUserData();
+        }
+    }, [activeAddingBtn, cartItems, isLoggedIn]);
 
     return (
         <li>
@@ -97,12 +144,11 @@ const BookItemCard = ({
                 }}
             >
                 <Link
-                    to={link}
+                    to={adminItems ? "/admin/deleting-item" : link}
                     title={name}
                     onClick={scrollToTop}
                 >
                     <div className="book-card__head">
-                        {/* <img src={defImg} className={adminItems ? "admin-card-img" : ""} /> */}
                         <img src={img} alt={name} />
                         <p>{changedName}</p>
                     </div>
@@ -127,54 +173,32 @@ const BookItemCard = ({
                             <DeleteIcon />
                         </span>
                     </button>}
-                    {adminItems && <button
+                    {adminItems && <Button
+                        title="Block this book"
+                        variant="contained"
+                        color="error"
+                        className="block-book-btn"
+                        disabled={status === "BAD"}
+                        onClick={() => blockBookHandler("BAD")}
+                    >Block</Button>}
+                    {adminItems && <Button
                         title={status ? "Block this book" : "Unlock this book"}
+                        variant="contained"
                         className="unlock-book-btn"
-                        onClick={() => {
-                            if (status === true) {
-                                let body = {
-                                    id: id,
-                                    name: name,
-                                    price: price,
-                                    status: false,
-                                    file: img,
-                                    description: description,
-                                    publishDate: publishDate,
-                                    pagesCount: pagesCount,
-                                    language: language,
-                                    categories: categories,
-                                    authors: authors,
-                                }
-
-                                fetchingUnlockBook(body, searchingName);
-                            } else {
-                                let body = {
-                                    id: id,
-                                    name: name,
-                                    price: price,
-                                    status: true,
-                                    file: img,
-                                    description: description,
-                                    publishDate: publishDate,
-                                    pagesCount: pagesCount,
-                                    language: language,
-                                    categories: categories,
-                                    authors: authors,
-                                }
-
-                                fetchingUnlockBook(body, searchingName);
-                            }
-                        }}
-                    >
-                        <span>
-                            <BlockIcon />
-                        </span>
-                    </button>}
-                    {adminItems && (
-                        <p className={status ? "active-book-status" : "inactive-book-status"}>
-                            {status ? <span>active</span> : <span>not active</span>}
+                        disabled={status === "GOOD"}
+                        onClick={() => blockBookHandler("GOOD")}
+                    >Unblock</Button>}
+                    {adminItems && (status === "GOOD" || status === "BAD") && (
+                        <p className={status === "GOOD" ? "active-book-status" : "inactive-book-status"}>
+                            {status === "GOOD" && <span>active</span>}
+                            {status === "BAD" && <span>not active</span>}
                         </p>
                     )}
+                    {adminItems && status === "CONSIDERATION" &&
+                        <p className="book-status">
+                            <span>consideration</span>
+                        </p>
+                    }
                 </div>
             </Card>
 

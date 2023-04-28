@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { Link } from "react-router-dom";
 import CartContext from "../../context/cart-context";
@@ -6,22 +6,55 @@ import CartContext from "../../context/cart-context";
 import { Button, Card } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./CartItem.css";
+import AuthContext from "../../context/auth-context";
 
 const CartItem = ({ name, id, price, category, img }) => {
     const cartCtx = useContext(CartContext);
+    const { isLoggedIn } = useContext(AuthContext);
+    const [userData, setUserData] = useState({});
 
-    const deleteCartItemHandler = (id) => cartCtx.deleteFromCart(id);
+    const fetchingUserData = () => {
+        let userId = JSON.parse(localStorage.getItem("userData")).id;
+
+        fetch(`http://localhost:8081/user/${userId}`)
+            .then(response => response.json())
+            .then(user => {
+                setUserData(user);
+            })
+    }
+
+    const deleteCartItemHandler = (id) => {
+        let newBasket = [...userData.basket];
+        newBasket = newBasket.filter(item => item !== id);
+
+        let userBody = {
+            basket: newBasket,
+            email: userData.email,
+            name: userData.name,
+            password: userData.password,
+            role: userData.role,
+            status: userData.status,
+        }
+
+        cartCtx.deleteFromCart(userData.id, userBody);
+    }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            fetchingUserData();
+        }
+    }, [isLoggedIn]);
 
     return (
         <li>
             <Card className="book-card">
                 <div className="cart-item-box">
                     <Link onClick={cartCtx.closeCart} to={`/home/shop/categories/${category}/${id}`}>
-                        {/* <img src={img} alt={name} /> */}
+                        <img src={img} alt={name} />
                     </Link>
                     <div>
                         <Link onClick={cartCtx.closeCart} to={`/home/shop/categories/${category}/${id}`}>{name}</Link>
-                        <p>Category: {category} </p>
+                        <p>Category:  </p>
                     </div>
                 </div>
                 <div className="price-and-delete-container">

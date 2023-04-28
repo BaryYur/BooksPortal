@@ -4,12 +4,12 @@
 
 .cart-items-container li a img {
     object-fit: cover;
-    width: 95px;
-    height: 75px;
+    width: 85px;
+    height: 130px;
     background-color: #a6a6a6;
     margin-right: 8px;
-    border: 1px solid grey;
-    border-radius: 4px;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
 }
 
 .book-card {

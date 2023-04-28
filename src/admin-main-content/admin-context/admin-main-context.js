@@ -30,8 +30,8 @@ export const AdminMainContextProvider = ({ children }) => {
 
     const handleMenu = () => setMenuIsOpen(active => !active);
 
-    const fetchingUsersList = async () => {
-        await fetch("http://localhost:8081/user")
+    const fetchingUsersList = () => {
+        fetch("http://localhost:8081/user")
             .then(response => response.json())
             .then(data => {
                 setUsersList(data);
