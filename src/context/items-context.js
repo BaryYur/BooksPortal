@@ -102,7 +102,7 @@ export const ItemsContextProvider = ({ children }) => {
             })
             .catch(error => {
                 setLoading(false);
-                alert("Oops...", `Something went wrong!` , "error");
+                alert("Oops...", `Something went wrong! ${error}` , "error");
             });
 
         setSearchingItems([ ...searchingItems1, ...searchingItems2 ]);
@@ -141,21 +141,18 @@ export const ItemsContextProvider = ({ children }) => {
         const formData = new FormData();
         formData.append("id", id);
         formData.append("file", file);
-        console.log(id);
 
         fetch("http://localhost:8081/attachment", {
             method: "POST",
             body: formData,
-            // headers: {
-            //     "Content-Type": `multipart/form-data: boundary=add-random-characters`
-            // },
         })
             .then((res) => {
-                console.log(res);
+                if (!res.ok) {
+                    console.log("attachment error");
+                }
             })
             .catch(error => {
-                console.log("attachment error ", error);
-                // alert("Oops...", `Something went wrong! ${error}` , "error");
+                alert("Oops...", `Something went wrong!` , "error");
             });
     }
 
