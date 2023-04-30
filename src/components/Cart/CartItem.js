@@ -59,7 +59,7 @@ const CartItem = ({ name, id, price, category, img }) => {
                 </div>
                 <div className="price-and-delete-container">
                     <div className="price-box">
-                        <div>{price} hrn</div>
+                        <div>{price} $</div>
                         <button className="price-box__delete-btn" title="Delete item" onClick={() => deleteCartItemHandler(id)}>
                             <DeleteIcon fontSize="small" />
                         </button>

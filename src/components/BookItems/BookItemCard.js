@@ -11,6 +11,7 @@ import ItemsContext from "../../context/items-context";
 
 import { Button, Card } from "@mui/material";
 import Modal from "@mui/material/Modal";
+import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -19,8 +20,7 @@ const BookItemCard = ({
     id, 
     name, 
     price, 
-    link, 
-    adminItems, 
+    link,
     status, 
     img, 
     categories, 
@@ -31,6 +31,7 @@ const BookItemCard = ({
     pagesCount,
     publisher,
     searchingName,
+    adminItems,
 }) => {
     const navigate = useNavigate();
     const { addToCart, cartItems } = useContext(CartContext);
@@ -41,6 +42,7 @@ const BookItemCard = ({
     const [userData, setUserData] = useState({});
     const { changeText } = useCutText();
     const { scrollToTop } = useScrollToTop();
+    const [searchingLoading, setSearchingLoading] = useState(false);
 
     const fetchingUserData = () => {
         let userId = JSON.parse(localStorage.getItem("userData")).id;
@@ -119,10 +121,15 @@ const BookItemCard = ({
         }
 
         fetchingUnlockBook(body, searchingName);
+        setSearchingLoading(true);
+
         setTimeout(() => {
             fetchingSearchingItems(searchingName);
-        }, 400);
+            setSearchingLoading(false);
+        }, 1000);
     }
+
+    const [cardHeight, setCardHeight] = useState("");
 
     useEffect(() => {
         btnIsActive();
@@ -130,14 +137,16 @@ const BookItemCard = ({
         if (isLoggedIn) {
             fetchingUserData();
         }
+
+        adminItems ? setCardHeight("450px") : setCardHeight("415px");
     }, [activeAddingBtn, cartItems, isLoggedIn]);
 
     return (
         <li>
             <Card
                 style={{
-                    minHeight: "355px",
-                    maxHeight: "355px",
+                    minHeight: cardHeight,
+                    maxHeight: cardHeight,
                     display: "flex",
                     justifyContent: "space-between",
                     flexDirection: "column",
@@ -156,7 +165,7 @@ const BookItemCard = ({
                 <div className="book-card__bottom">
                     {!adminItems && <div>
                         <h3>{price}</h3>
-                        <span>hrn</span>
+                        <span>$</span>
                     </div>}
                     {!adminItems && <Button
                         variant="contained"
@@ -165,8 +174,10 @@ const BookItemCard = ({
                         onClick={addToCartHandler}
                     >Add</Button>}
                     {adminItems && <button
-                        title="Delete this book"
+                        // color="error"
+                        // title="Delete this book"
                         className="delete-book-btn"
+                        style={{ position: "absolute" }}
                         onClick={openDeletingModalHandler}
                     >
                         <span>
@@ -176,8 +187,8 @@ const BookItemCard = ({
                     {adminItems && <Button
                         title="Block this book"
                         variant="contained"
-                        color="error"
                         className="block-book-btn"
+                        style={{ position: "absolute" }}
                         disabled={status === "BAD"}
                         onClick={() => blockBookHandler("BAD")}
                     >Block</Button>}
@@ -185,20 +196,21 @@ const BookItemCard = ({
                         title={status ? "Block this book" : "Unlock this book"}
                         variant="contained"
                         className="unlock-book-btn"
+                        style={{ position: "absolute" }}
                         disabled={status === "GOOD"}
                         onClick={() => blockBookHandler("GOOD")}
                     >Unblock</Button>}
-                    {adminItems && (status === "GOOD" || status === "BAD") && (
-                        <p className={status === "GOOD" ? "active-book-status" : "inactive-book-status"}>
-                            {status === "GOOD" && <span>active</span>}
-                            {status === "BAD" && <span>not active</span>}
-                        </p>
-                    )}
-                    {adminItems && status === "CONSIDERATION" &&
-                        <p className="book-status">
-                            <span>consideration</span>
-                        </p>
-                    }
+                    {/*{adminItems && (status === "GOOD" || status === "BAD") && (*/}
+                    {/*    <p className={status === "GOOD" ? "active-book-status" : "inactive-book-status"}>*/}
+                    {/*        {status === "GOOD" && <span>active</span>}*/}
+                    {/*        {status === "BAD" && <span>not active</span>}*/}
+                    {/*    </p>*/}
+                    {/*)}*/}
+                    {/*{adminItems && status === "CONSIDERATION" &&*/}
+                    {/*    <p className="book-status">*/}
+                    {/*        <span>consideration</span>*/}
+                    {/*    </p>*/}
+                    {/*}*/}
                 </div>
             </Card>
 
@@ -220,6 +232,11 @@ const BookItemCard = ({
                             <CloseIcon />
                         </button>
                     </div>
+                </Box>
+            </Modal>
+            <Modal open={searchingLoading}>
+                <Box className="searching-modal">
+                    <CircularProgress />
                 </Box>
             </Modal>
         </li>

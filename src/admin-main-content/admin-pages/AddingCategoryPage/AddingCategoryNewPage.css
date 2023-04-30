@@ -43,7 +43,8 @@
     font-size: 15px;
 }
 
-.image-input {
+.image-input,
+.book-file-input {
     background-color: whitesmoke;
     font-family: sans-serif;
     color: #1976d2;

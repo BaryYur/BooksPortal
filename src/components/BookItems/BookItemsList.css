@@ -19,14 +19,16 @@
 
 .book-card__head img {
     display: block;
-    width: 100%;
-    height: 230px;
+    width: 90%;
+    margin-left: 5%;
+    margin-top: 10px;
+    height: 290px;
     object-fit: cover;
     background-color: grey;
 }
 
 .book-card__head .admin-card-img {
-    height: 280px;
+    height: 250px;
     object-fit: cover;
 }
 
@@ -91,7 +93,7 @@
 }
 
 .delete-book-btn {
-    background-color: rgba(205, 92, 92, 0.10);
+    background-color: transparent;
     color: indianred;
     padding: 4px 8px 2px 5px;
     border-radius: 4px;
@@ -102,7 +104,7 @@
     cursor: pointer;
     position: absolute;
     right: 4px;
-    border: 1px solid;
+    border: 1px solid ;
     transition: all 0.2s ease-in-out;
 }
 
@@ -134,23 +136,22 @@
     display: block;
     position: absolute;
     width: 94px;
-    /*width: calc(100% - 8px);*/
-    left: 0px;
-    border: 1px solid black;
+    width: calc(100% - 8px);
+    left: 4px;
 }
 
 .block-book-btn {
-    bottom: 4px;
+    bottom: 45px;
 }
 
 .unlock-book-btn {
     bottom: 4px;
 }
 
-.delete-book-btn:hover {
-    color: #be4040;
-    transition: all 0.2s ease-in-out;
-}
+/*.delete-book-btn:hover {*/
+/*    color: #be4040;*/
+/*    transition: all 0.2s ease-in-out;*/
+/*}*/
 
 .delete-book-btn span:last-child,
 .unlock-book-btn span:last-child {
@@ -175,13 +176,20 @@
 .active-book-status {
     border: 1px solid limegreen;
     color: forestgreen;
-    background-color: rgba(144, 238, 144, 0.34);
+    background-color: #b0eeb0;
 }
 
 .inactive-book-status {
     border: 1px solid orange;
     color: orange;
-    background-color: rgba(255, 69, 0, 0.21);
+    background-color: #ffdb97;
+}
+
+.searching-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
 }
 
 @media screen and (max-width: 1200px) {

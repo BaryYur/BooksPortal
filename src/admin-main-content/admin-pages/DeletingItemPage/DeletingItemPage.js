@@ -16,7 +16,7 @@ const DeletingItemPage = () => {
                 <AdminSearchingForm />
             </div>
             <div className="searching-items-container">
-                {searchingItems.length !== 0 &&
+                {!loading &&
                     <BookItemsList
                         adminItems={true}
                         booksData={searchingItems}

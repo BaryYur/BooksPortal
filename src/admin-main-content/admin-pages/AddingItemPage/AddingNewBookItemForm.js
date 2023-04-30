@@ -11,7 +11,7 @@ import { Select } from "../../../components/Forms/Select";
 import Box from "@mui/material/Box";
 import "./AddingNewBookItemForm.css";
 
-const AddingNewBookItemForm = ({ isAuthor }) => {
+const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
     const mainAdminCtx = useContext(AdminMainContext);
     const itemsCtx = useContext(itemsContext);
     const [chosenCategories, setChosenCategories] = useState([]);
@@ -155,6 +155,12 @@ const AddingNewBookItemForm = ({ isAuthor }) => {
             selectedAuthors.push(author.id);
         }
 
+        let bookStatus = "CONSIDERATION";
+
+        if (isAdmin) {
+            bookStatus = "GOOD";
+        }
+
         let body = {
             name: bookNameInput,
             authors: selectedAuthors,
@@ -166,7 +172,7 @@ const AddingNewBookItemForm = ({ isAuthor }) => {
             file: image,
             pagesCount: Number(pagesCountInput),
             price: Number(priceInput),
-            status: "CONSIDERATION",
+            status: bookStatus,
         }
 
         itemsCtx.fetchingAddingBookItem(body, bookFileInput);
@@ -322,13 +328,14 @@ const AddingNewBookItemForm = ({ isAuthor }) => {
                             <input
                                 id="book-file"
                                 type="file"
+                                className="book-file-input"
                                 accept="application/pdf"
                                 onChange={bookFileHandler}
                             />
                         </div>
                         <div className="number-inputs">
                             <div className="control">
-                                <label htmlFor="">Price (hrn)</label>
+                                <label htmlFor="">Price ($)</label>
                                 <input
                                     id=""
                                     type="number"

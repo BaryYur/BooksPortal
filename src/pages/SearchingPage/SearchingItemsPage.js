@@ -17,7 +17,6 @@ const SearchingItemsPage = ({ search, searchingText }) => {
     const page = Number(search.split("/")[2]);
     const [currentBookItems, setCurrentBookItems] = useState([]);
     const [searchingPagesCounter, setSearchingPagesCounter] = useState(1);
-    // const [searchingName, setSearchingName] = useState(searchingText);
     const { scrollToTop } = useScrollToTop();
 
     useEffect(() => {
@@ -37,9 +36,9 @@ const SearchingItemsPage = ({ search, searchingText }) => {
 
         setSearchingPagesCounter(Math.ceil(searchingBooks.length / 12));
 
-        // if (searchingPagesCounter < page) {
-        //     navigate("/home/shop");
-        // }
+        if (searchingPagesCounter < page) {
+            navigate("/home/shop");
+        }
 
         document.documentElement.scrollTop = 0;
     }, [search, searchingBooks, searchingPagesCounter, navigate, page]);

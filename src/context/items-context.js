@@ -19,6 +19,8 @@ export const ItemsContextProvider = ({ children }) => {
     const [searchingItems2, setSearchingItems2] = useState([]);
     const [booksCategories, setBooksCategories] = useState([]);
     const [categoryBooks, setCategoryBooks] = useState([]);
+    const [bookItemCategoriesList, setBookItemCategoriesList] = useState([]);
+    const [bookItemAuthorsList, setBookItemAuthorsList] = useState([]);
     const [bookItem, setBookItem] = useState({});
     const [adminBooks, setAdminBooks] = useState([]);
     const [categoriesForSelect, setCategoriesForSelect] = useState([]);
@@ -86,7 +88,6 @@ export const ItemsContextProvider = ({ children }) => {
             .then(data => {
                 setSearchingItems1([]);
                 setSearchingItems1(data);
-                setLoading(false);
             })
             .catch(error => {
                 setLoading(false);
@@ -98,13 +99,13 @@ export const ItemsContextProvider = ({ children }) => {
             .then(data => {
                 setSearchingItems2([]);
                 setSearchingItems2(data);
-                setLoading(false);
             })
             .catch(error => {
                 setLoading(false);
                 alert("Oops...", `Something went wrong! ${error}` , "error");
             });
 
+        setLoading(false);
         setSearchingItems([ ...searchingItems1, ...searchingItems2 ]);
     }
 
@@ -124,17 +125,6 @@ export const ItemsContextProvider = ({ children }) => {
             .catch(error => {
                 alert("Oops...", `Something went wrong` , "error");
             });
-    }
-
-    const fetchingBookItem = (id) => {
-        fetch(`http://localhost:8081/book/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                setBookItem(data);
-            })
-            .catch(error => {
-                alert("Oops...", `Something went wrong! ${error}` , "error");
-            })
     }
 
     const attachmentFileHandler = (id, file) => {
@@ -206,6 +196,36 @@ export const ItemsContextProvider = ({ children }) => {
             });
     }
 
+    const fetchingCategoriesList = (categories) => {
+        fetch(`http://localhost:8081/category/ids?ids=${categories}`)
+            .then(response => response.json())
+            .then(data => {
+                setBookItemCategoriesList(data);
+            })
+    }
+
+    const fetchingAuthorsList = (authors) => {
+        fetch(`http://localhost:8081/author/ids?ids=${authors}`)
+            .then(response => response.json())
+            .then(data => {
+                setBookItemAuthorsList(data);
+            })
+    }
+
+    const fetchingBookItem = (id) => {
+        fetch(`http://localhost:8081/book/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                setBookItem(data);
+
+                fetchingAuthorsList(data.authors);
+                fetchingCategoriesList(data.categories);
+            })
+            .catch(error => {
+                alert("Oops...", `Something went wrong! ${error}` , "error");
+            })
+    }
+
     // const fetchingNews = () => {
         // fetch("https://newsapi.org/v2/everything?q=Apple&from=2023-04-13&sortBy=popularity&apiKey=4269e448034e451d86c8fa22f9780efe")
         //     .then(response => response.json())
@@ -231,6 +251,8 @@ export const ItemsContextProvider = ({ children }) => {
                 fetchingSearchingItems: fetchingSearchingItems,
                 fetchingDeletingBookItem: fetchingDeletingBookItem,
                 bookItem: bookItem,
+                bookItemCategoriesList: bookItemCategoriesList,
+                bookItemAuthorsList: bookItemAuthorsList,
                 booksCategories: booksCategories,
                 fetchingCategoryBooks: fetchingCategoryBooks,
                 fetchingAllCategories: fetchingAllCategories,
