@@ -124,7 +124,7 @@ const BookItemCard = ({
         setSearchingLoading(true);
 
         setTimeout(() => {
-            fetchingSearchingItems(searchingName);
+            fetchingSearchingItems(searchingName, true);
             setSearchingLoading(false);
         }, 1000);
     }
@@ -187,13 +187,14 @@ const BookItemCard = ({
                     {adminItems && <Button
                         title="Block this book"
                         variant="contained"
+                        color="error"
                         className="block-book-btn"
                         style={{ position: "absolute" }}
                         disabled={status === "BAD"}
                         onClick={() => blockBookHandler("BAD")}
                     >Block</Button>}
                     {adminItems && <Button
-                        title={status ? "Block this book" : "Unlock this book"}
+                        title="Unlock this book"
                         variant="contained"
                         className="unlock-book-btn"
                         style={{ position: "absolute" }}
@@ -206,11 +207,11 @@ const BookItemCard = ({
                     {/*        {status === "BAD" && <span>not active</span>}*/}
                     {/*    </p>*/}
                     {/*)}*/}
-                    {/*{adminItems && status === "CONSIDERATION" &&*/}
-                    {/*    <p className="book-status">*/}
-                    {/*        <span>consideration</span>*/}
-                    {/*    </p>*/}
-                    {/*}*/}
+                    {adminItems && status === "CONSIDERATION" &&
+                        <p className="book-status">
+                            <span>consideration</span>
+                        </p>
+                    }
                 </div>
             </Card>
 

@@ -13,6 +13,7 @@ const AuthorBooks = ({ books }) => {
                     />
                 ))}
             </ul>
+            {books.length === 0 && <p className="no-items-paragraph">No items</p>}
         </div>
     );
 }

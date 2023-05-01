@@ -10,7 +10,7 @@ const AdminSearchingForm = () => {
     const submitSearchingHandler = (e) => {
         e.preventDefault();
 
-        fetchingSearchingItems(searchingInput);
+        fetchingSearchingItems(searchingInput, true);
         localStorage.setItem("admin-search", JSON.stringify(searchingInput));
     }
 

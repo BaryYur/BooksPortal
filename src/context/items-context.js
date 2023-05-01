@@ -11,6 +11,7 @@ const ItemsContext = React.createContext({
     fetchingAllCategories: () => {},
     fetchingUnlockBook: (id) => {},
     fetchingAdminBooks: () => {},
+    fetchingAuthorBooks: (id, status) => {},
 });
 
 export const ItemsContextProvider = ({ children }) => {
@@ -79,14 +80,15 @@ export const ItemsContextProvider = ({ children }) => {
             })
     }
 
-    const fetchingSearchingItems = (bookName) => {
+    const fetchingSearchingItems = (bookName, isAdmin) => {
         setLoading(true);
         setSearchingItems([]);
+        setSearchingItems1([]);
+        setSearchingItems2([]);
 
         fetch(`http://localhost:8081/book/all/${bookName}/GOOD`)
             .then(response => response.json())
             .then(data => {
-                setSearchingItems1([]);
                 setSearchingItems1(data);
             })
             .catch(error => {
@@ -94,16 +96,17 @@ export const ItemsContextProvider = ({ children }) => {
                 alert("Oops...", `Something went wrong!` , "error");
             });
 
-        fetch(`http://localhost:8081/book/all/${bookName}/BAD`)
+        if (isAdmin) {
+            fetch(`http://localhost:8081/book/all/${bookName}/BAD`)
             .then(response => response.json())
             .then(data => {
-                setSearchingItems2([]);
                 setSearchingItems2(data);
             })
             .catch(error => {
                 setLoading(false);
                 alert("Oops...", `Something went wrong! ${error}` , "error");
             });
+        }
 
         setLoading(false);
         setSearchingItems([ ...searchingItems1, ...searchingItems2 ]);
@@ -226,6 +229,29 @@ export const ItemsContextProvider = ({ children }) => {
             })
     }
 
+    // authors context
+    const [authorConsiderationBooks, setAuthorConsiderationBooks] = useState([]);
+    const [authorGoodBooks, setAuthorGoodBooks] = useState([]);
+    const [authorBadBooks, setAuthorBadBooks] = useState([]);
+
+    const fetchingAuthorBooks = (id, status) => {
+        fetch(`http://localhost:8081/book/author/${id}/${status}`)
+            .then(response => response.json())
+            .then(data => {
+                if (status === "CONSIDERATION") {
+                    setAuthorConsiderationBooks(data);
+                } else if (status === "GOOD") {
+                    setAuthorGoodBooks(data);
+                    console.log(data);
+                } else {
+                    setAuthorBadBooks(data);
+                }
+            })
+            .catch(error => {
+                alert("Oops...", `Something went wrong! with author data` , "error");
+            })
+    }
+
     // const fetchingNews = () => {
         // fetch("https://newsapi.org/v2/everything?q=Apple&from=2023-04-13&sortBy=popularity&apiKey=4269e448034e451d86c8fa22f9780efe")
         //     .then(response => response.json())
@@ -238,9 +264,19 @@ export const ItemsContextProvider = ({ children }) => {
         fetchingAllCategories();
 
         setSearchingItems([ ...searchingItems1, ...searchingItems2 ]);
+        // const uniqueData = [];
+        // const ids = [];
+
+        // setSearchingItems(searchingItems.filter((item) => {
+        //     if (!ids.includes(item.id)) {
+        //       ids.push(item.id);
+        //       uniqueData.push(item);
+        //     }
+        // }));
+        // setSearchingItems(uniqueData);
         // fetchingNews();
         // console.log(Dotenv.MAIN_PATH);
-    }, [searchingItems1, searchingItems2])
+    }, [searchingItems1, searchingItems2]);
 
     return (
         <ItemsContext.Provider
@@ -253,6 +289,10 @@ export const ItemsContextProvider = ({ children }) => {
                 bookItem: bookItem,
                 bookItemCategoriesList: bookItemCategoriesList,
                 bookItemAuthorsList: bookItemAuthorsList,
+                fetchingAuthorBooks: fetchingAuthorBooks,
+                authorConsiderationBooks: authorConsiderationBooks,
+                authorGoodBooks: authorGoodBooks,
+                authorBadBooks: authorBadBooks,
                 booksCategories: booksCategories,
                 fetchingCategoryBooks: fetchingCategoryBooks,
                 fetchingAllCategories: fetchingAllCategories,

@@ -15,7 +15,7 @@ import NotificationsPage from "./NotificationsPage";
 import ShopPage from "./ShopPage/ShopPage";
 import Layout from "../components/Layout/Layout";
 import CategoryPage from "./CategoryPage";
-import BookItemPage from "./BookItemPage";
+import BookItemPage from "./BookItemPage/BookItemPage";
 import NotFoundPage from "./NotFoundPage";
 
 const MainPage = () => {

@@ -36,9 +36,9 @@ const SearchingItemsPage = ({ search, searchingText }) => {
 
         setSearchingPagesCounter(Math.ceil(searchingBooks.length / 12));
 
-        if (searchingPagesCounter < page) {
-            navigate("/home/shop");
-        }
+        // if (searchingPagesCounter < page) {
+        //     navigate("/home/shop");
+        // }
 
         document.documentElement.scrollTop = 0;
     }, [search, searchingBooks, searchingPagesCounter, navigate, page]);

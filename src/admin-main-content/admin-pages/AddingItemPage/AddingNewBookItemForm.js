@@ -191,8 +191,6 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
             setDisabledAddingBtn(true);
         }
 
-        itemsCtx.fetchingAllCategories();
-
         if (authorNameInput.length <= 3) {
             setCreateAuthorBtn(false);
         }
@@ -209,6 +207,7 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
                             setAuthor(author[0]);
                         })
                 })
+
         }
 
         fetchingExistingAuthors();

@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { useNavigate, useParams } from "react-router-dom";
 
-import ItemsContext from "../context/items-context";
-import CartContext from "../context/cart-context";
-import AuthContext from "../context/auth-context";
+import ItemsContext from "../../context/items-context";
+import CartContext from "../../context/cart-context";
+import AuthContext from "../../context/auth-context";
 
 import { Button } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import TabsPanel from "../components/Tabs/TabsPanel";
+import TabsPanel from "../../components/Tabs/TabsPanel";
+import BookItemComments from "./BookItemComments";
 import "./BookItemPage.css";
 
 const BookItemPage = () => {
@@ -17,6 +18,9 @@ const BookItemPage = () => {
     const { bookItem, fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList } = useContext(ItemsContext);
     const { addToCart, cartItems } = useContext(CartContext);
     const { isLoggedIn } = useContext(AuthContext);
+    const [disabledAddingBtn, setDisabledAddingBtn] = useState(false);
+    const [userData, setUserData] = useState({});
+
     let tabsInfo = [
         {
             name: "description",
@@ -24,11 +28,13 @@ const BookItemPage = () => {
         },
         {
             name: "comments",
-            description: "some text",
+            description: <BookItemComments
+                bookId={itemId}
+                userName={userData.name}
+                userId={userData.id}
+            />,
         }
     ];
-    const [disabledAddingBtn, setDisabledAddingBtn] = useState(false);
-    const [userData, setUserData] = useState({});
 
     const fetchingUserData = () => {
         let user = JSON.parse(localStorage.getItem("userData"));

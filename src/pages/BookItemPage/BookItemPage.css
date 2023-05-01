@@ -49,6 +49,7 @@
 .book-item__image-container button {
     width: 100%;
     margin-top: 10px;
+    background-color: rgb(82, 168, 255);
 }
 
 .book-item__image-container button span {
