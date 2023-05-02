@@ -1,10 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
 
 import BookItemComment from "./BookItemComment";
+import { Button } from "@mui/material";
 import "./BookItemComments.css";
-import {Button} from "@mui/material";
 
 const BookItemComments = ({ bookId, userId, userName }) => {
+    const navigate = useNavigate();
     const [commentInput, setCommentInput] = useState("");
     const [comments, setComments] = useState([]);
 
@@ -31,35 +34,39 @@ const BookItemComments = ({ bookId, userId, userName }) => {
     const submitCommentHandler = (e) => {
         e.preventDefault();
 
-        if (commentInput.length < 4) {
-            alert("Message to short");
+        if (userName) {
+            if (commentInput.length < 4) {
+                alert("Message is to short");
 
-            return;
+                return;
+            }
+
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, "0");
+            const day = now.getDate().toString().padStart(2, "0");
+            const hours = now.getHours().toString().padStart(2, "0");
+            const minutes = now.getMinutes().toString().padStart(2, "0");
+            const seconds = now.getSeconds().toString().padStart(2, "0");
+            const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+            let commentBody = {
+                bookId: bookId,
+                dateTime: formattedDate,
+                name: userName,
+                text: commentInput,
+                userId: userId,
+            }
+
+            fetchingAddingComment(commentBody);
+
+            setTimeout(() => {
+                fetchingBookComments();
+                setCommentInput("");
+            }, 500);
+        } else {
+            navigate("/home/auth");
         }
-
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = (now.getMonth() + 1).toString().padStart(2, '0');
-        const day = now.getDate().toString().padStart(2, '0');
-        const hours = now.getHours().toString().padStart(2, '0');
-        const minutes = now.getMinutes().toString().padStart(2, '0');
-        const seconds = now.getSeconds().toString().padStart(2, '0');
-        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-        let commentBody = {
-            bookId: bookId,
-            dateTime: formattedDate,
-            name: userName,
-            text: commentInput,
-            userId: userId,
-        }
-
-        fetchingAddingComment(commentBody);
-
-        setTimeout(() => {
-            fetchingBookComments();
-            setCommentInput("");
-        }, 500);
     }
 
     useEffect(() => {

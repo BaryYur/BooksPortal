@@ -11,13 +11,16 @@ import { Select } from "../../../components/Forms/Select";
 import Box from "@mui/material/Box";
 import "./AddingNewBookItemForm.css";
 
-const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
+const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin }) => {
     const mainAdminCtx = useContext(AdminMainContext);
     const itemsCtx = useContext(itemsContext);
     const [chosenCategories, setChosenCategories] = useState([]);
     const [chosenAuthors, setChosenAuthors] = useState([]);
     const [existingAuthors, setExistingAuthors] = useState([]);
     const [author, setAuthor] = useState({});
+    const [chosenPublishers, setChosenPublishers] = useState([]);
+    const [existingPublishers, setExistingPublishers] = useState([]);
+    const [publisher, setPublisher] = useState({});
 
     const [bookNameInput, setBookNameInput] = useState("");
     const [authorNameInput, setAuthorNameInput] = useState("");
@@ -30,20 +33,32 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
     const [bookFileInput, setBookFileInput] = useState("");
     const { image, changeImage } = useGetImage();
 
-    const [openNameInputModal, setOpenNameInputModal] = useState(false);
+    const [openAuthorNameInputModal, setOpenAuthorNameInputModal] = useState(false);
+    const [openPublisherNameInputModal, setOpenPublisherNameInputModal] = useState(false);
     const [createAuthorBtn, setCreateAuthorBtn] = useState(false);
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(true);
+    const [createPublisherBtn, setCreatePublisherBtn] = useState(false);
 
-    const closeNameInputModalHandler = () => setOpenNameInputModal(false);
+    const closeAuthorNameInputModalHandler = () => setOpenAuthorNameInputModal(false);
+    const closePublisherNameInputModalHandler = () => setOpenPublisherNameInputModal(false);
 
-    const changeNameInputHandler = (event) => setAuthorNameInput(event.target.value);
+    const changeAuthorNameInputHandler = (event) => setAuthorNameInput(event.target.value);
+    const changePublisherNameInputHandler = (event) => setPublisherNameInput(event.target.value);
 
-    const checkingAuthorExisting = () => {
+    const checkingExisting = (author, publisher) => {
         let counter = 0;
 
-        if (chosenAuthors.length > 0) {
-            for (let author of chosenAuthors) {
-                if (author.name === authorNameInput) counter++;
+        if (author) {
+            if (chosenAuthors.length > 0) {
+                for (let author of chosenAuthors) {
+                    if (author.name === authorNameInput) counter++;
+                }
+            }
+        } else {
+            if (chosenPublishers.length > 0) {
+                for (let publisher of chosenPublishers) {
+                    if (publisher.name === publisherNameInput) counter++;
+                }
             }
         }
 
@@ -58,9 +73,9 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
         } else return true;
     }
 
-    const handleKeyPress = (event) => {
+    const handleAuthorKeyPress = (event) => {
         if (event.key === "Enter" && authorNameInput.length > 3) {
-            if (checkingAuthorExisting() === true) {
+            if (checkingExisting(true, false) === true) {
                 fetch(`http://localhost:8081/author/all/${authorNameInput}`)
                     .then(response => response.json())
                     .then(data => {
@@ -85,20 +100,59 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
         }
     }
 
+    const handlePublisherKeyPress = (event) => {
+        if (event.key === "Enter" && publisherNameInput.length > 3) {
+            if (checkingExisting(false, true) === true) {
+                fetch(`http://localhost:8081/publishing/all/${publisherNameInput}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length !== 0 && data[0].name === publisherNameInput) {
+                            setChosenPublishers(prevPublisher => {
+                                return [...prevPublisher, data[0]];
+                            });
+
+                            setPublisherNameInput("");
+                            setCreatePublisherBtn(false);
+                        } else if ((data.length === 0 || data[0].name !== publisherNameInput) && publisherNameInput.length > 3) {
+                            alert("This publisher not exist");
+                            setCreatePublisherBtn(true);
+                        }
+                    })
+            }
+        }
+
+        if (event.key === "Enter" && publisherNameInput.length <= 3) {
+            alert("Publisher Name is to short");
+            setCreatePublisherBtn(false);
+        }
+    }
+
     const fetchingExistingAuthors = () => {
         if (authorNameInput !== "") {
             fetch(`http://localhost:8081/author/all/${authorNameInput}`)
                 .then(response => response.json())
                 .then(data => {
                     setExistingAuthors(data);
-                })
+                });
         } else if (authorNameInput === "") {
             setExistingAuthors([]);
         }
     }
 
+    const fetchingExistingPublishers = () => {
+        if (publisherNameInput !== "") {
+            fetch(`http://localhost:8081/publishing/all/${publisherNameInput}`)
+                .then(response => response.json())
+                .then(data => {
+                    setExistingPublishers(data);
+                });
+        } else if (publisherNameInput === "") {
+            setExistingPublishers([]);
+        }
+    }
+
     const createNewAuthorHandler = () => {
-        if (checkingAuthorExisting() === true) {
+        if (checkingExisting(true, false) === true) {
             fetch("http://localhost:8081/author", {
                 method: "POST",
                 body: JSON.stringify({
@@ -124,12 +178,46 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
         }
     }
 
+    const createNewPublisherHandler = () => {
+        if (checkingExisting(true, false) === true) {
+            fetch("http://localhost:8081/publishing", {
+                method: "POST",
+                body: JSON.stringify({
+                    name: publisherNameInput,
+                    isActive: false,
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then((response) => {
+                    fetch(`http://localhost:8081/publishing/all/${publisherNameInput}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            setChosenPublishers(prevPublisher => {
+                                return [...prevPublisher, data[0]];
+                            });
+                        })
+                })
+
+            setPublisherNameInput("");
+            setCreatePublisherBtn(false);
+        }
+    }
+
     const deleteChosenAuthor = (id) => setChosenAuthors(chosenAuthors.filter(author => author.id !== id));
+    const deleteChosenPublisher = (id) => setChosenPublishers(chosenPublishers.filter(publisher => publisher.id !== id));
 
     const clearChosenAuthors = (e) => {
         e.stopPropagation();
 
         setChosenAuthors([]);
+    }
+
+    const clearChosenPublishers = (e) => {
+        e.stopPropagation();
+
+        setChosenPublishers([]);
     }
 
     const bookFileHandler = (e) => {
@@ -151,8 +239,18 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
             selectedAuthors.push(item.id);
         }
 
+        const selectedPublishers = [];
+
+        for (let item of chosenPublishers) {
+            selectedPublishers.push(item.id);
+        }
+
         if (isAuthor) {
             selectedAuthors.push(author.id);
+        }
+
+        if (isPublisher) {
+            selectedPublishers.push(publisher.id);
         }
 
         let bookStatus = "CONSIDERATION";
@@ -165,7 +263,7 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
             name: bookNameInput,
             authors: selectedAuthors,
             categories: categories,
-            publisher: publisherNameInput,
+            publishers: selectedPublishers,
             description: descriptionInput,
             publishDate: publishDateInput,
             language: languageInput,
@@ -210,12 +308,29 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
 
         }
 
+        if (isPublisher) {
+            let publisherData = JSON.parse(localStorage.getItem("userData"));
+
+            fetch(`http://localhost:8081/user/${publisherData.id}`)
+                .then(response => response.json())
+                .then(data => {
+                    fetch(`http://localhost:8081/publishing/all/${data.name}`)
+                        .then(response => response.json())
+                        .then(publisher => {
+                            setPublisher(publisher[0]);
+                        })
+                })
+        }
+
         fetchingExistingAuthors();
+        fetchingExistingPublishers();
     }, [
         bookNameInput,
         authorNameInput,
-        chosenAuthors,
         publisherNameInput,
+        chosenAuthors,
+        chosenPublishers,
+        // publisherNameInput,
         publishDateInput,
         chosenCategories,
         languageInput,
@@ -240,21 +355,50 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
                             />
                         </div>
                         {!isAuthor && <div className="control">
-                            <label htmlFor="">Publisher</label>
-                            <input
-                                id=""
-                                type="text"
-                                value={publisherNameInput}
-                                onChange={(e) => setPublisherNameInput(e.target.value)}
-                            />
+                            <label htmlFor="">Publisher Name</label>
+                            <div
+                                id="publisher-name-input"
+                                className="publisher-name-input"
+                                tabIndex={0}
+                                onClick={() => setOpenPublisherNameInputModal(true)}
+                            >
+                                <ul className="input-authors-list">
+                                    {isPublisher && <li className="user-is-author">{publisher.name}</li>}
+                                    {chosenPublishers.length > 0 && chosenPublishers.map(publisher => (
+                                        <li
+                                            key={publisher.id}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                deleteChosenPublisher(publisher.id);
+                                            }}
+                                        >
+                                            <span>{publisher.name}</span>
+                                            <span className="remove-btn">&times;</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <button
+                                    type="button"
+                                    onClick={(e) => clearChosenPublishers(e)}
+                                    className="clear-btn"
+                                >&times;</button>
+                                <div className="divider"></div>
+                                <button type="button" className="caret-btn">
+                                    <div
+                                        className="caret"
+                                        onClick={() => setOpenPublisherNameInputModal(true)}
+                                    ></div>
+                                </button>
+                            </div>
                         </div>}
+
                         <div className="control">
                             <label htmlFor="author-name-input">Author Name</label>
                             <div
                                 id="author-name-input"
                                 className="author-name-input"
                                 tabIndex={0}
-                                onClick={() => setOpenNameInputModal(true)}
+                                onClick={() => setOpenAuthorNameInputModal(true)}
                             >
                                 <ul className="input-authors-list">
                                     {isAuthor && <li className="user-is-author">{author.name}</li>}
@@ -280,11 +424,12 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
                                 <button type="button" className="caret-btn">
                                     <div
                                         className="caret"
-                                        onClick={() => setOpenNameInputModal(true)}
+                                        onClick={() => setOpenAuthorNameInputModal(true)}
                                     ></div>
                                 </button>
                             </div>
                         </div>
+
                         <div className="control">
                             <label htmlFor="">Publish Date</label>
                             <input
@@ -375,25 +520,20 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
                 </form>
             </div>
 
+            {/*// author*/}
             <div className="modal-name-input-container">
                 <Modal
-                    open={openNameInputModal}
-                    onClose={closeNameInputModalHandler}
+                    open={openAuthorNameInputModal}
+                    onClose={closeAuthorNameInputModalHandler}
                 >
                     <Box className="input-name-modal">
                         <label>Author name</label>
                         <input
                             type="text"
-                            list="existing-authors"
                             value={authorNameInput}
-                            onKeyPress={handleKeyPress}
-                            onChange={changeNameInputHandler}
+                            onKeyPress={handleAuthorKeyPress}
+                            onChange={changeAuthorNameInputHandler}
                         />
-                        {/*<datalist id="existing-authors">*/}
-                        {/*    {existingAuthors.map(author => (*/}
-                        {/*        <option key={author.id} value={author.name} />*/}
-                        {/*    ))}*/}
-                        {/*</datalist>*/}
                         {existingAuthors.length > 0 && <ul className="existing-authors-list">
                             {existingAuthors.map(author => (
                                 <li
@@ -425,6 +565,57 @@ const AddingNewBookItemForm = ({ isAuthor, isAdmin }) => {
                                 onClick={createNewAuthorHandler}
                             >
                                 Create author
+                            </Button>}
+                        </div>
+                    </Box>
+                </Modal>
+            </div>
+
+            {/*// publisher*/}
+            <div className="modal-name-input-container">
+                <Modal
+                    open={openPublisherNameInputModal}
+                    onClose={closePublisherNameInputModalHandler}
+                >
+                    <Box className="input-name-modal">
+                        <label>Publisher name</label>
+                        <input
+                            type="text"
+                            value={publisherNameInput}
+                            onKeyPress={handlePublisherKeyPress}
+                            onChange={changePublisherNameInputHandler}
+                        />
+                        {existingPublishers.length > 0 && <ul className="existing-authors-list">
+                            {existingPublishers.map(publisher => (
+                                <li
+                                    key={publisher.id}
+                                    onClick={() => {
+                                        setPublisherNameInput(publisher.name);
+                                        setExistingPublishers([]);
+                                    }}
+                                >
+                                    <span>{publisher.name}</span>
+                                </li>
+                            ))}
+                        </ul>}
+                        <ul className="authors-list">
+                            {chosenPublishers.length > 0 && chosenPublishers.map(publisher => (
+                                <li
+                                    key={publisher.id}
+                                    onClick={() => deleteChosenPublisher(publisher.id)}
+                                >
+                                    <span>{publisher.name}</span>
+                                    <span className="remove-btn">&times;</span>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="create-new-author-btn-box">
+                            {createPublisherBtn && <Button
+                                variant="contained"
+                                className="create-new-author-btn"
+                                onClick={createNewPublisherHandler}
+                            >
+                                Create publisher
                             </Button>}
                         </div>
                     </Box>

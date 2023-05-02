@@ -29,7 +29,7 @@ const BookItemCard = ({
     publishDate, 
     language, 
     pagesCount,
-    publisher,
+    publishers,
     searchingName,
     adminItems,
 }) => {
@@ -118,6 +118,7 @@ const BookItemCard = ({
             language: language,
             categories: categories,
             authors: authors,
+            publishers: publishers,
         }
 
         fetchingUnlockBook(body, searchingName);

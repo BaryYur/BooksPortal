@@ -23,7 +23,7 @@ const BookItemsList = ({ booksData, adminItems, searchingName }) => {
                         language={bookItem.language}
                         categories={bookItem.categories}
                         authors={bookItem.authors}
-                        publisher={bookItem.publisher}
+                        publishers={bookItem.publishers}
                         searchingName={searchingName}
                     />
                 ))}

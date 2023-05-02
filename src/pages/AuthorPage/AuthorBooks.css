@@ -1,13 +1,21 @@
 .author-books-lists {
     display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: 20px;
 }
 
+.author-books-lists .no-items-paragraph {
+    display: block;
+    align-self: flex-start;
+}
+
+.author-books-lists h2 {
+    text-align: center;
+}
+
 .author-books-container ul {
     width: 370px;
-    margin: 0 auto;
+    margin: 20px auto 0 auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -18,5 +26,43 @@
     box-shadow: var(--main-shadow);
     border-radius: 4px;
     padding: 10px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+}
+
+.author-books-container ul li img {
+    object-fit: cover;
+    width: 70px;
+    height: 100px;
+    background-color: #a6a6a6;
+    margin-right: 8px;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+}
+
+.author-books-container ul li .book-item__image-box {
+    display: flex;
+    align-items: flex-start;
+}
+
+.author-books-container ul li .book-item__image-box p:last-child {
+    font-weight: 600;
+}
+
+.author-books-container ul li button {
+    color: grey;
+    border: 1px solid;
+    margin-left: 10px;
+    padding: 3px 7px 0px 7px;
+    border-radius: 4px;
+    align-self: flex-start;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.author-books-container ul li button:hover {
+    color: #E62020;
+    border: 1px solid #E62020;
     background-color: white;
 }

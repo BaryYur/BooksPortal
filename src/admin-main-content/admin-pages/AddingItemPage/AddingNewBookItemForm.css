@@ -61,7 +61,8 @@
 }
 
 .adding-item-form-container form .control input,
-.adding-item-form-container form .control .author-name-input {
+.adding-item-form-container form .control .author-name-input,
+.adding-item-form-container form .control .publisher-name-input {
     width: 100%;
     padding: 7px;
     border-radius: 3px;
@@ -72,13 +73,15 @@
     min-height: 35.2px;
 }
 
-.adding-item-form-container form .control .author-name-input {
+.adding-item-form-container form .control .author-name-input,
+.adding-item-form-container form .control .publisher-name-input {
     min-height: 35px;
     padding: 2px;
     display: flex;
 }
 
-.adding-item-form-container form .control .author-name-input .clear-btn {
+.adding-item-form-container form .control .author-name-input .clear-btn,
+.adding-item-form-container form .control .publisher-name-input .clear-btn {
     background: none;
     color: grey;
     border: none;
@@ -89,17 +92,21 @@
 }
 
 .adding-item-form-container form .control .author-name-input .close-btn:hover,
-.adding-item-form-container form .control .author-name-input .close-btn:focus {
+.adding-item-form-container form .control .author-name-input .close-btn:focus,
+.adding-item-form-container form .control .publisher-name-input .close-btn:hover,
+.adding-item-form-container form .control .publisher-name-input .close-btn:focus {
     color: #262626;
 }
 
-.adding-item-form-container form .control .author-name-input:focus {
+.adding-item-form-container form .control .author-name-input:focus,
+.adding-item-form-container form .control .publisher-name-input:focus {
     transition: all 0.2s ease-in-out;
     border: 1px solid var(--main-input-border);
     box-shadow: var(--main-input-box-shadow);
 }
 
-.adding-item-form-container form .control .author-name-input .divider {
+.adding-item-form-container form .control .author-name-input .divider,
+.adding-item-form-container form .control .publisher-name-input .divider {
     background-color: #777;
     width: 0.05em;
     align-self: stretch;
@@ -113,7 +120,8 @@
     margin-left: 2px;
 }
 
-.adding-item-form-container form .control .author-name-input .caret {
+.adding-item-form-container form .control .author-name-input .caret,
+.adding-item-form-container form .control .publisher-name-input .caret {
     translate: 0 25%;
     border: 0.25em solid transparent;
     border-top-color: #777;

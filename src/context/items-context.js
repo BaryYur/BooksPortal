@@ -126,7 +126,7 @@ export const ItemsContextProvider = ({ children }) => {
                 }
             })
             .catch(error => {
-                alert("Oops...", `Something went wrong` , "error");
+                alert("Oops...", `Something went wrong deleting book` , "error");
             });
     }
 
@@ -234,15 +234,14 @@ export const ItemsContextProvider = ({ children }) => {
     const [authorGoodBooks, setAuthorGoodBooks] = useState([]);
     const [authorBadBooks, setAuthorBadBooks] = useState([]);
 
-    const fetchingAuthorBooks = (id, status) => {
-        fetch(`http://localhost:8081/book/author/${id}/${status}`)
+    const fetchingAuthorBooks = (id, status, user) => {
+        fetch(`http://localhost:8081/book/${user}/${id}/${status}`)
             .then(response => response.json())
             .then(data => {
                 if (status === "CONSIDERATION") {
                     setAuthorConsiderationBooks(data);
                 } else if (status === "GOOD") {
                     setAuthorGoodBooks(data);
-                    console.log(data);
                 } else {
                     setAuthorBadBooks(data);
                 }

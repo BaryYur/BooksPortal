@@ -6,34 +6,71 @@ import TabsPanel from "../../components/Tabs/TabsPanel";
 import AuthorBooks from "./AuthorBooks";
 import AddingNewBookItemForm from "../../admin-main-content/admin-pages/AddingItemPage/AddingNewBookItemForm";
 
-const AuthorPage = () => {
+const AuthorPage = ({ publisher, author }) => {
     const [authorData, setAuthorData] = useState(
         JSON.parse(localStorage.getItem("userData")) || ""
     );
     const { fetchingAuthorBooks, authorConsiderationBooks, authorGoodBooks, authorBadBooks } = useContext(ItemsContext);
+    const fetchingAllBooks = (name, user) => {
+        let user1 = user;
+
+        if (user === "publisher") {
+            user1 = "publishing";
+        }
+
+        fetch(`http://localhost:8081/${user1}/all/${name}`)
+            .then(response => response.json())
+            .then(author => {
+                fetchingAuthorBooks(author[0].id, "CONSIDERATION", user);
+                fetchingAuthorBooks(author[0].id, "GOOD", user);
+                fetchingAuthorBooks(author[0].id, "BAD", user);
+            });
+    }
+
+    const fetchingAuthorBooksData = () => {
+        fetch(`http://localhost:8081/user/${authorData.id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (publisher) {
+                    fetchingAllBooks(data.name, "publisher");
+                } else {
+                    fetchingAllBooks(data.name, "author");
+                }
+            })
+    }
 
     let tabsInfo = [
         {
             name: "Your books",
             description: (
                 <div className="author-books-lists">
-                    <AuthorBooks books={authorGoodBooks} />
-                    <AuthorBooks books={authorConsiderationBooks} />
-                    <AuthorBooks books={authorBadBooks} />
+                    <AuthorBooks
+                        books={authorGoodBooks}
+                        status="GOOD"
+                        fetchingAuthorBooksData={fetchingAuthorBooksData}
+                    />
+                    <AuthorBooks
+                        books={authorConsiderationBooks}
+                        status="CONSIDERATION"
+                        fetchingAuthorBooksData={fetchingAuthorBooksData}
+                    />
+                    <AuthorBooks
+                        books={authorBadBooks}
+                        status="BAD"
+                        fetchingAuthorBooksData={fetchingAuthorBooksData}
+                    />
                 </div>
             )
         },
         {
             name: "Add book",
-            description: <AddingNewBookItemForm isAuthor={true} />
+            description: <AddingNewBookItemForm isAuthor={author} isPublisher={publisher} />
         },
     ];
 
     useEffect(() => {
         if (authorData) {
-            fetchingAuthorBooks(authorData.id, "CONSIDERATION");
-            fetchingAuthorBooks(authorData.id, "GOOD");
-            fetchingAuthorBooks(authorData.id, "BAD");
+            fetchingAuthorBooksData();
         }
     }, [authorData]);
 
