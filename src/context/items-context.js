@@ -22,6 +22,7 @@ export const ItemsContextProvider = ({ children }) => {
     const [categoryBooks, setCategoryBooks] = useState([]);
     const [bookItemCategoriesList, setBookItemCategoriesList] = useState([]);
     const [bookItemAuthorsList, setBookItemAuthorsList] = useState([]);
+    const [bookItemPublishersList, setBookItemPublishersList] = useState([]);
     const [bookItem, setBookItem] = useState({});
     const [adminBooks, setAdminBooks] = useState([]);
     const [categoriesForSelect, setCategoriesForSelect] = useState([]);
@@ -215,6 +216,14 @@ export const ItemsContextProvider = ({ children }) => {
             })
     }
 
+    const fetchingPublishersList = (publishers) => {
+        fetch(`http://localhost:8081/publishing/ids?ids=${publishers}`)
+            .then(response => response.json())
+            .then(data => {
+                setBookItemPublishersList(data);
+            })
+    }
+
     const fetchingBookItem = (id) => {
         fetch(`http://localhost:8081/book/${id}`)
             .then(response => response.json())
@@ -223,6 +232,10 @@ export const ItemsContextProvider = ({ children }) => {
 
                 fetchingAuthorsList(data.authors);
                 fetchingCategoriesList(data.categories);
+
+                if (data.publishers !== null) {
+                    fetchingPublishersList(data.publishers);
+                }
             })
             .catch(error => {
                 alert("Oops...", `Something went wrong! ${error}` , "error");
@@ -288,6 +301,7 @@ export const ItemsContextProvider = ({ children }) => {
                 bookItem: bookItem,
                 bookItemCategoriesList: bookItemCategoriesList,
                 bookItemAuthorsList: bookItemAuthorsList,
+                bookItemPublishersList: bookItemPublishersList,
                 fetchingAuthorBooks: fetchingAuthorBooks,
                 authorConsiderationBooks: authorConsiderationBooks,
                 authorGoodBooks: authorGoodBooks,

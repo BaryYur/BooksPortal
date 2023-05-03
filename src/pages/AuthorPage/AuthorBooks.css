@@ -15,14 +15,28 @@
 
 .author-books-container ul {
     width: 370px;
+    max-height: 550px;
     margin: 20px auto 0 auto;
+    padding: 0 5px 0 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    border-radius: 4px;
+    overflow-y: auto;
+}
+
+.author-books-container ul::-webkit-scrollbar {
+    width: 5px;
+    display: block;
+}
+
+.author-books-container ul::-webkit-scrollbar-thumb {
+    background-color: #4f4f4f;
+    border-radius: 8px;
 }
 
 .author-books-container ul li {
-    min-height: 100px;
+    min-height: 120px;
     box-shadow: var(--main-shadow);
     border-radius: 4px;
     padding: 10px;
@@ -50,18 +64,35 @@
     font-weight: 600;
 }
 
+.handling-btns {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .author-books-container ul li button {
     color: grey;
     border: 1px solid;
-    margin-left: 10px;
     padding: 3px 7px 0px 7px;
     border-radius: 4px;
-    align-self: flex-start;
     background-color: transparent;
     cursor: pointer;
 }
 
-.author-books-container ul li button:hover {
+.author-books-container ul li button:last-child {
+    border-radius: 50%;
+    padding: 5px 7px 0 7px;
+    align-self: flex-end;
+}
+
+.author-books-container ul li button:last-child:hover {
+    color: #4f4e4e;
+    border: 1px solid #4f4e4e;
+    background-color: white;
+}
+
+.author-books-container ul li button:first-child:hover {
     color: #E62020;
     border: 1px solid #E62020;
     background-color: white;

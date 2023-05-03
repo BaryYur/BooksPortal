@@ -15,7 +15,7 @@ import "./BookItemPage.css";
 const BookItemPage = () => {
     const navigate = useNavigate();
     const itemId = useParams().id;
-    const { bookItem, fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList } = useContext(ItemsContext);
+    const { bookItem, fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList, bookItemPublishersList } = useContext(ItemsContext);
     const { addToCart, cartItems } = useContext(CartContext);
     const { isLoggedIn } = useContext(AuthContext);
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(false);
@@ -94,12 +94,6 @@ const BookItemPage = () => {
         btnIsActive();
         fetchingBookItem(itemId);
         fetchingUserData();
-
-        // for () {
-        //
-        // }
-        //
-        // console.log(bookItemAuthorsList.join(", "));
     }, [itemId, disabledAddingBtn, cartItems]);
 
     return (
@@ -133,10 +127,6 @@ const BookItemPage = () => {
                                     <p>{bookItem.publishDate}</p>
                                 </li>
                                 <li>
-                                    <p>Publisher</p>
-                                    <p>{bookItem.publisher !== null ? <span>{bookItem.publisher}</span> : <span>-</span>}</p>
-                                </li>
-                                <li>
                                     <p>Language</p>
                                     <p>{bookItem.language}</p>
                                 </li>
@@ -151,15 +141,24 @@ const BookItemPage = () => {
                             <hr />
                             <div>
                                 <ul>
-                                    <li>Authors:
+                                    <li>
+                                        <span>Authors:</span>
                                         {bookItemAuthorsList.map((author => (
-                                            <span key={author.id}>{author.name}</span>
+                                            <span key={author.id} className="item">{author.name}</span>
                                         )))}
                                     </li>
-                                    <li>Categories:
+                                    <li>
+                                        <span>Categories:</span>
                                         {bookItemCategoriesList.map((category => (
-                                            <span key={category.id}>{category.name}</span>
+                                            <span key={category.id} className="item">{category.name}</span>
                                         )))}
+                                    </li>
+                                    <li>
+                                        <span>Publishers:</span>
+                                        {bookItemPublishersList.map((publisher => (
+                                            <span key={publisher.id} className="item">{publisher.name}</span>
+                                        )))}
+                                        {bookItemPublishersList.length === 0 && <span>-</span>}
                                     </li>
                                 </ul>
                             </div>

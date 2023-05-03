@@ -12,6 +12,31 @@
     border-radius: 2px;
 }
 
+.cart-item-box .names-list {
+    display: flex;
+    align-items: center;
+}
+
+.cart-item-box .names-list ul {
+    display: flex;
+}
+
+.cart-item-box .names-list ul li:first-child {
+    margin-left: 10px;
+}
+
+.cart-item-box .names-list ul .item:not(:nth-child(1)):before {
+    content: ", ";
+}
+
+.cart-item-box .names-list span {
+    font-weight: 600;
+}
+
+.cart-item-box .names-list ul {
+    padding: 3px 0;
+}
+
 .book-card {
     margin: 8px 0;
     padding: 7px;

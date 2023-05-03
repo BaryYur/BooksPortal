@@ -54,7 +54,7 @@ export const AuthContextProvider = ({ children }) => {
     const [userInfo, setUserInfo] = useState(
         JSON.parse(localStorage.getItem("userData")) || {}
     );
-    const [isUserIsAdmin, setIsUserIsAdmin] = useState(true);
+    const [isUserIsAdmin, setIsUserIsAdmin] = useState(false);
     const [isUserIsAuthor, setIsUserIsAuthor] = useState(false);
     const [isUserIsPublisher, setIsUserIsPublisher] = useState(false);
     const [isLoading, setIsLoading] = useState(false);

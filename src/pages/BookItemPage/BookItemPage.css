@@ -44,6 +44,8 @@
 
 .book-item__image-container p {
     text-align: center;
+    font-size: 19px;
+    font-weight: 600;
 }
 
 .book-item__image-container button {
@@ -114,4 +116,21 @@
 .book-item-details-container h2 {
     font-size: 22px;
     color: #666666;
+}
+
+.book-item-details-container ul li {
+    line-height: 35px;
+}
+
+.book-item-details-container ul li span:first-child {
+    color: #666666;
+    font-weight: 600;
+}
+
+.book-item-details-container ul li span:nth-child(2) {
+    margin-left: 10px;
+}
+
+.book-item-details-container ul li .item:not(:nth-child(2)):before {
+    content: ",  ";
 }

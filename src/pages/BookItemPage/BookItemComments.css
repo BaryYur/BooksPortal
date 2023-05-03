@@ -8,6 +8,10 @@
     flex-direction: column;
 }
 
+.book-comments-container form .control label {
+    font-size: 18px;
+}
+
 .book-comments-container form .control button {
     display: block;
     align-self: flex-end;
