@@ -1,6 +1,6 @@
 import React from "react";
 
-import AddingNewBookItemForm from "./AddingNewBookItemForm";
+import AddingNewBookItemForm from "../../../components/Forms/AddingNewBookItemForm";
 
 const AdminAddingBookItemPage = () => {
     return (

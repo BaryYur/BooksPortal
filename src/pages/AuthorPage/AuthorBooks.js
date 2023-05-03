@@ -17,6 +17,14 @@ const AuthorBooks = ({ books, status, fetchingAuthorBooksData }) => {
                         price={book.price}
                         books={books}
                         fetchingAuthorBooksData={fetchingAuthorBooksData}
+                        status={book.status}
+                        description={book.description}
+                        publishDate={book.publishDate}
+                        pagesCount={book.pagesCount}
+                        language={book.language}
+                        categories={book.categories}
+                        authors={book.authors}
+                        publishers={book.publishers}
                     />
                 ))}
             </ul>

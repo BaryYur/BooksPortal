@@ -4,7 +4,7 @@ import ItemsContext from "../../context/items-context";
 
 import TabsPanel from "../../components/Tabs/TabsPanel";
 import AuthorBooks from "./AuthorBooks";
-import AddingNewBookItemForm from "../../admin-main-content/admin-pages/AddingItemPage/AddingNewBookItemForm";
+import AddingNewBookItemForm from "../../components/Forms/AddingNewBookItemForm";
 
 const AuthorPage = ({ publisher, author }) => {
     const [authorData, setAuthorData] = useState(

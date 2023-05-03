@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { useGetImage } from "../../../hooks/useGetImage";
+import { useGetImage } from "../../hooks/useGetImage";
+import { useOpenFormModal } from "../../hooks/useOpenFormModal";
 
-import AdminMainContext from "../../admin-context/admin-main-context";
-import itemsContext from "../../../context/items-context";
+import AdminMainContext from "../../admin-main-content/admin-context/admin-main-context";
+import itemsContext from "../../context/items-context";
 
 import { Button } from "@mui/material";
 import Modal from "@mui/material/Modal";
-import { Select } from "../../../components/Forms/Select";
+import { Select } from "./Select";
 import Box from "@mui/material/Box";
 import "./AddingNewBookItemForm.css";
 
-const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin }) => {
+const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, publisherModal, bookFields }) => {
     const mainAdminCtx = useContext(AdminMainContext);
     const itemsCtx = useContext(itemsContext);
     const [chosenCategories, setChosenCategories] = useState([]);
@@ -32,6 +33,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin }) => {
     const [languageInput, setLanguageInput] = useState("");
     const [bookFileInput, setBookFileInput] = useState("");
     const { image, changeImage } = useGetImage();
+    const { closeModalHandler } = useOpenFormModal();
 
     const [openAuthorNameInputModal, setOpenAuthorNameInputModal] = useState(false);
     const [openPublisherNameInputModal, setOpenPublisherNameInputModal] = useState(false);
@@ -273,7 +275,15 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin }) => {
             status: bookStatus,
         }
 
-        itemsCtx.fetchingAddingBookItem(body, bookFileInput);
+        if (authorModal) {
+            itemsCtx.fetchingChangingBookItem(bookFields.id, body, bookFileInput);
+            closeModalHandler();
+        } else if (publisherModal) {
+            itemsCtx.fetchingChangingBookItem(bookFields.id, body, bookFileInput);
+            closeModalHandler();
+        } else {
+            itemsCtx.fetchingAddingBookItem(body, bookFileInput);
+        }
     }
 
     useEffect(() => {
@@ -305,7 +315,6 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin }) => {
                             setAuthor(author[0]);
                         })
                 })
-
         }
 
         if (isPublisher) {
@@ -330,7 +339,6 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin }) => {
         publisherNameInput,
         chosenAuthors,
         chosenPublishers,
-        // publisherNameInput,
         publishDateInput,
         chosenCategories,
         languageInput,
@@ -339,6 +347,19 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin }) => {
         image,
         descriptionInput
     ]);
+
+    useEffect(() => {
+        if (isAuthor || isPublisher) {
+            if (authorModal) {
+                setBookNameInput(bookFields.name);
+                setDescriptionInput(bookFields.description);
+                setPublishDateInput(bookFields.publishDate);
+                setLanguageInput(bookFields.language);
+                setPriceInput(bookFields.price);
+                setPagesCountInput(bookFields.pagesCount);
+            }
+        }
+    }, []);
 
     return (
         <div className="adding-book-form-wrapper">
@@ -510,12 +531,15 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin }) => {
                         ></textarea>
                     </div>
                     <div className="form-bottom">
-                        {!mainAdminCtx.adminLoading && <Button type="submit" variant="contained" disabled={disabledAddingBtn}>
+                        {!mainAdminCtx.adminLoading && !authorModal && !publisherModal && <Button type="submit" variant="contained" disabled={disabledAddingBtn}>
                             Add new item
                         </Button>}
                         {/*{mainAdminCtx.adminLoading && <Button variant="contained" disabled={true}>*/}
                         {/*    Loading...*/}
                         {/*</Button>}*/}
+                        {!mainAdminCtx.adminLoading && (authorModal || publisherModal) && <Button type="submit" variant="contained" disabled={disabledAddingBtn}>
+                            Change book
+                        </Button>}
                     </div>
                 </form>
             </div>

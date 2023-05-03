@@ -4,7 +4,8 @@ import Swal from "sweetalert2";
 
 const ItemsContext = React.createContext({
     fetchingBookItem: (id, category) => {},
-    fetchingAddingBookItem: (body) => {},
+    fetchingAddingBookItem: (body, bookFile) => {},
+    fetchingChangingBookItem: (body, bookFile) => {},
     fetchingSearchingItems: (book) => {},
     fetchingDeletingBookItem: () => {},
     fetchingCategoryBooks: (genreName) => {},
@@ -179,6 +180,35 @@ export const ItemsContextProvider = ({ children }) => {
             })
     }
 
+    const fetchingChangingBookItem = (bookId, body, bookFile) => {
+        fetch(`http://localhost:8081/book/${bookId}`, {
+            method: "PUT",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => {
+                if (res.ok) {
+                    // alert("Great", "You successful add new book","success");
+
+                    return res.json();
+                } else {
+                    return res.json().then((data) => {
+                        let errorMessage = "Adding failed!";
+
+                        throw new Error(errorMessage);
+                    });
+                }
+            })
+            .then(data => {
+                attachmentFileHandler(data.id, bookFile);
+            })
+            .catch(error => {
+                alert("Oops...", `Something went wrong! Changing book error` , "error");
+            })
+    }
+
     const fetchingAdminBooks = () => {
         fetch("http://localhost:8081/book/status/CONSIDERATION")
             .then(response => response.json())
@@ -296,6 +326,7 @@ export const ItemsContextProvider = ({ children }) => {
                 searchingItems: searchingItems,
                 fetchingBookItem: fetchingBookItem,
                 fetchingAddingBookItem: fetchingAddingBookItem,
+                fetchingChangingBookItem: fetchingChangingBookItem,
                 fetchingSearchingItems: fetchingSearchingItems,
                 fetchingDeletingBookItem: fetchingDeletingBookItem,
                 bookItem: bookItem,

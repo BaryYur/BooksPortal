@@ -15,7 +15,7 @@ const BookItemComments = ({ bookId, userId, userName }) => {
         fetch(`http://localhost:8081/comment/book/${bookId}`)
             .then(response => response.json())
             .then(comments => {
-                setComments(comments);
+                setComments(comments.reverse());
             })
             .catch(() => console.log("fetching comment error"));
     }
