@@ -9,7 +9,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AuthContext from "../../context/auth-context";
 import "./CartItem.css";
 
-const CartItem = ({ name, id, price, category, img }) => {
+const CartItem = ({ name, id, price, category, img, pagesCount, language }) => {
     const cartCtx = useContext(CartContext);
     const { isLoggedIn } = useContext(AuthContext);
     // const { fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList } = useContext(ItemsContext);
@@ -57,6 +57,8 @@ const CartItem = ({ name, id, price, category, img }) => {
                     </Link>
                     <div>
                         <Link onClick={cartCtx.closeCart} to={`/home/shop/categories/${category}/${id}`}>{name}</Link>
+                        <p>Pages: <span>{pagesCount}</span></p>
+                        <p>Language: <span>{language}</span></p>
                         {/*<div className="names-list">*/}
                         {/*    <span>Authors:</span>*/}
                         {/*    <ul>*/}

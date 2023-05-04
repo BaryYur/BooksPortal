@@ -44,7 +44,7 @@ const Header = () => {
             <div className="header-wrapper">
                 <Link to="/" title="Books shop home" onClick={scrollToTop}>
                     <div className="logo-box">
-                        <ImportContactsOutlinedIcon style={{ color: "#318CE7" }} fontSize="large" /> 
+                        <ImportContactsOutlinedIcon style={{ color: "#5d5c5c" }} fontSize="large" />
                         {/* <img src={bookLogoIcon} alt="Logo" style={{ width: "35px" }} /> */}
                         <span>Books portal</span>
                     </div>

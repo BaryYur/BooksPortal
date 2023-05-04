@@ -161,7 +161,7 @@ export const ItemsContextProvider = ({ children }) => {
         })
             .then((res) => {
                 if (res.ok) {
-                    alert("Great", "You successful add new book","success");
+                    alert("Great", "Adding successfully","success");
 
                     return res.json();
                 } else {

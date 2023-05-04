@@ -29,6 +29,17 @@
     content: ", ";
 }
 
+.cart-item-box p {
+    line-height: 25px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.cart-item-box p span {
+    font-weight: 400;
+    font-size: 15px;
+}
+
 .cart-item-box .names-list span {
     font-weight: 600;
 }

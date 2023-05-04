@@ -17,8 +17,9 @@ const CartItems = () => {
                         key={Math.random()}
                         name={cartItem.name}
                         price={cartItem.price}
-                        // category={cartItem.categories[0]}
                         img={cartItem.file}
+                        pagesCount={cartItem.pagesCount}
+                        language={cartItem.language}
                     />
                 ))}
                 {/*<div className="cart-bottom">*/}

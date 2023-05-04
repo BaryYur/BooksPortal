@@ -38,7 +38,8 @@
 }
 
 .main-header .logo-box span {
-    color: #318CE7;
+    /*color: #318CE7;*/
+    color: #5d5c5c;
     margin-left: 10px;
     font-size: 18px;
     font-weight: 700;
@@ -46,7 +47,8 @@
 
 .main-header .header__cart-btn {
     padding: 7px 10px;
-    color: #318CE7;
+    color: #5d5c5c;
+    /*color: #318CE7;*/
 }
 
 .main-header .header__cart-btn:hover {
@@ -64,7 +66,8 @@
 }
 
 .main-header ul li a {
-    color: #318CE7;
+    /*color: #318CE7;*/
+    color: #5d5c5c;
     font-weight: 600;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -78,11 +81,13 @@
 .main-header ul li .login-link {
     padding: 6px 15px;
     border-radius: 4px;
-    border: 1px solid #318CE7;
+    /*border: 1px solid #318CE7;*/
+    border: 1px solid #5d5c5c;
 }
 
 .main-header ul li .login-link:hover {
-    background-color: #318CE7;
+    /*background-color: #318CE7;*/
+    background-color: #5d5c5c;
     color: white;
     transition: all 0.3s ease-in-out;
 }
@@ -113,8 +118,10 @@
 }
 
 .menu-btn-box button {
-    color: #318CE7;
-    background-color: #318ce71f;
+    /*color: #318CE7;*/
+    /*background-color: #318ce71f;*/
+    color: #5d5c5c;
+    background-color: #5d5c5c;
 }
 
 .menu-btn-box button svg {
