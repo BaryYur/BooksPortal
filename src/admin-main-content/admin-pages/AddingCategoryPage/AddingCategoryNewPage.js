@@ -2,12 +2,14 @@ import React, { useState, useContext, useEffect } from "react";
 
 import { useGetImage } from "../../../hooks/useGetImage";
 
+import ItemsContext from "../../../context/items-context";
 import AdminMainContext from "../../admin-context/admin-main-context";
 
 import { Button } from "@mui/material";
 import "./AddingCategoryNewPage.css";
 
 const AddingCategoryNewPage = () => {
+    const itemsCtx = useContext(ItemsContext);
     const mainAdminCtx = useContext(AdminMainContext);
     const [categoryNameInput, setCategoryNameInput] = useState("");
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(true);
@@ -22,6 +24,9 @@ const AddingCategoryNewPage = () => {
         }
 
         mainAdminCtx.fetchingAddingCategory(body);
+        setTimeout(() => {
+            itemsCtx.fetchingAllCategories();
+        }, 500);
 
         setCategoryNameInput("");
         setDisabledAddingBtn(false);
@@ -29,7 +34,7 @@ const AddingCategoryNewPage = () => {
     }
 
     useEffect(() => {
-        if (categoryNameInput !== "" && image !== "") {
+        if (categoryNameInput.length >= 3 && image !== "") {
             setDisabledAddingBtn(false);
         } else {
             setDisabledAddingBtn(true);

@@ -21,9 +21,9 @@ const AuthorPage = ({ publisher, author }) => {
         fetch(`http://localhost:8081/${user1}/all/${name}`)
             .then(response => response.json())
             .then(author => {
-                fetchingAuthorBooks(author[0].id, "CONSIDERATION", user);
-                fetchingAuthorBooks(author[0].id, "GOOD", user);
-                fetchingAuthorBooks(author[0].id, "BAD", user);
+                fetchingAuthorBooks(author[0].id, user, "CONSIDERATION");
+                fetchingAuthorBooks(author[0].id, user, "GOOD");
+                fetchingAuthorBooks(author[0].id, user, "BAD");
             });
     }
 

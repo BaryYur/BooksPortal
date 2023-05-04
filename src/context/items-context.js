@@ -277,7 +277,7 @@ export const ItemsContextProvider = ({ children }) => {
     const [authorGoodBooks, setAuthorGoodBooks] = useState([]);
     const [authorBadBooks, setAuthorBadBooks] = useState([]);
 
-    const fetchingAuthorBooks = (id, status, user) => {
+    const fetchingAuthorBooks = (id, user, status) => {
         fetch(`http://localhost:8081/book/${user}/${id}/${status}`)
             .then(response => response.json())
             .then(data => {

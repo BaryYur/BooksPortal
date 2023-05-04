@@ -275,14 +275,38 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             status: bookStatus,
         }
 
+        const authorItems = () => {
+            setTimeout(() => {
+                itemsCtx.fetchingAuthorBooks(publisher.id, "publisher", "CONSIDERATION");
+                itemsCtx.fetchingAuthorBooks(publisher.id, "publisher", "GOOD");
+                itemsCtx.fetchingAuthorBooks(publisher.id, "publisher", "BAD");
+            }, 500);
+        }
+
+        const publisherItems = () => {
+            setTimeout(() => {
+                itemsCtx.fetchingAuthorBooks(author.id, "author", "CONSIDERATION");
+                itemsCtx.fetchingAuthorBooks(author.id, "author", "GOOD");
+                itemsCtx.fetchingAuthorBooks(author.id, "author", "BAD");
+            }, 500);
+        }
+
         if (authorModal) {
             itemsCtx.fetchingChangingBookItem(bookFields.id, body, bookFileInput);
+            authorItems();
             closeModalHandler();
         } else if (publisherModal) {
             itemsCtx.fetchingChangingBookItem(bookFields.id, body, bookFileInput);
+            publisherItems();
             closeModalHandler();
         } else {
             itemsCtx.fetchingAddingBookItem(body, bookFileInput);
+
+            if (isPublisher) {
+                publisherItems();
+            } else if (isAuthor) {
+                authorItems();
+            }
         }
     }
 
@@ -328,7 +352,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                         .then(publisher => {
                             setPublisher(publisher[0]);
                         })
-                })
+                });
         }
 
         fetchingExistingAuthors();
@@ -375,43 +399,6 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                                 onChange={(e) => setBookNameInput(e.target.value)}
                             />
                         </div>
-                        {!isAuthor && <div className="control">
-                            <label htmlFor="">Publisher Name</label>
-                            <div
-                                id="publisher-name-input"
-                                className="publisher-name-input"
-                                tabIndex={0}
-                                onClick={() => setOpenPublisherNameInputModal(true)}
-                            >
-                                <ul className="input-authors-list">
-                                    {isPublisher && <li className="user-is-author">{publisher.name}</li>}
-                                    {chosenPublishers.length > 0 && chosenPublishers.map(publisher => (
-                                        <li
-                                            key={publisher.id}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                deleteChosenPublisher(publisher.id);
-                                            }}
-                                        >
-                                            <span>{publisher.name}</span>
-                                            <span className="remove-btn">&times;</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <button
-                                    type="button"
-                                    onClick={(e) => clearChosenPublishers(e)}
-                                    className="clear-btn"
-                                >&times;</button>
-                                <div className="divider"></div>
-                                <button type="button" className="caret-btn">
-                                    <div
-                                        className="caret"
-                                        onClick={() => setOpenPublisherNameInputModal(true)}
-                                    ></div>
-                                </button>
-                            </div>
-                        </div>}
 
                         <div className="control">
                             <label htmlFor="author-name-input">Author Name</label>
@@ -450,6 +437,44 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                                 </button>
                             </div>
                         </div>
+
+                        {!isAuthor && <div className="control">
+                            <label htmlFor="">Publisher Name</label>
+                            <div
+                                id="publisher-name-input"
+                                className="publisher-name-input"
+                                tabIndex={0}
+                                onClick={() => setOpenPublisherNameInputModal(true)}
+                            >
+                                <ul className="input-authors-list">
+                                    {isPublisher && <li className="user-is-author">{publisher.name}</li>}
+                                    {chosenPublishers.length > 0 && chosenPublishers.map(publisher => (
+                                        <li
+                                            key={publisher.id}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                deleteChosenPublisher(publisher.id);
+                                            }}
+                                        >
+                                            <span>{publisher.name}</span>
+                                            <span className="remove-btn">&times;</span>
+                                        </li>
+                                    ))}
+                                </ul>
+                                <button
+                                    type="button"
+                                    onClick={(e) => clearChosenPublishers(e)}
+                                    className="clear-btn"
+                                >&times;</button>
+                                <div className="divider"></div>
+                                <button type="button" className="caret-btn">
+                                    <div
+                                        className="caret"
+                                        onClick={() => setOpenPublisherNameInputModal(true)}
+                                    ></div>
+                                </button>
+                            </div>
+                        </div>}
 
                         <div className="control">
                             <label htmlFor="">Publish Date</label>
