@@ -277,27 +277,39 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
         const authorItems = () => {
             setTimeout(() => {
-                itemsCtx.fetchingAuthorBooks(publisher.id, "publisher", "CONSIDERATION");
-                itemsCtx.fetchingAuthorBooks(publisher.id, "publisher", "GOOD");
-                itemsCtx.fetchingAuthorBooks(publisher.id, "publisher", "BAD");
-            }, 500);
-        }
-
-        const publisherItems = () => {
-            setTimeout(() => {
                 itemsCtx.fetchingAuthorBooks(author.id, "author", "CONSIDERATION");
                 itemsCtx.fetchingAuthorBooks(author.id, "author", "GOOD");
                 itemsCtx.fetchingAuthorBooks(author.id, "author", "BAD");
             }, 500);
         }
 
+        const publisherItems = () => {
+            setTimeout(() => {
+                itemsCtx.fetchingAuthorBooks(publisher.id, "publisher", "CONSIDERATION");
+                itemsCtx.fetchingAuthorBooks(publisher.id, "publisher", "GOOD");
+                itemsCtx.fetchingAuthorBooks(publisher.id, "publisher", "BAD");
+            }, 500);
+        }
+
         if (authorModal) {
             itemsCtx.fetchingChangingBookItem(bookFields.id, body, bookFileInput);
-            authorItems();
+
+            if (isPublisher) {
+                publisherItems();
+            } else if (isAuthor) {
+                authorItems();
+            }
+
             closeModalHandler();
         } else if (publisherModal) {
             itemsCtx.fetchingChangingBookItem(bookFields.id, body, bookFileInput);
-            publisherItems();
+
+            if (isPublisher) {
+                publisherItems();
+            } else if (isAuthor) {
+                authorItems();
+            }
+
             closeModalHandler();
         } else {
             itemsCtx.fetchingAddingBookItem(body, bookFileInput);

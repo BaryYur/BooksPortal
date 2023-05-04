@@ -66,8 +66,10 @@ const AuthorBookItem = (props) => {
 
             if (user.role === "PUBLISHING") {
                 setPublisher(true);
+                setAuthor(false);
             } else if (user.role === "AUTHOR") {
                 setAuthor(true);
+                setPublisher(false);
             }
         }
     }, [author, publisher]);
