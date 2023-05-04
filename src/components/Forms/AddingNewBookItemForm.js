@@ -349,8 +349,8 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                         .then(response => response.json())
                         .then(author => {
                             setAuthor(author[0]);
-                        })
-                })
+                        });
+                });
         }
 
         if (isPublisher) {
@@ -363,7 +363,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                         .then(response => response.json())
                         .then(publisher => {
                             setPublisher(publisher[0]);
-                        })
+                        });
                 });
         }
 
@@ -399,9 +399,12 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
     return (
         <div className="adding-book-form-wrapper">
-            <div className="adding-item-form-container">
+            <div className={(authorModal || publisherModal) ? "adding-item-form-container modal-form-container" : "adding-item-form-container"}>
                 <form onSubmit={addingFormSubmitHandler}>
-                    <h2>What do you want to add?</h2>
+                    {(authorModal || publisherModal) ?
+                        <h2>Changing book</h2> :
+                        <h2>What do you want to add?</h2>
+                    }
                     <div className="adding-item-form-container__controls">
                         <div className="control">
                             <label htmlFor="name-input">Title</label>
