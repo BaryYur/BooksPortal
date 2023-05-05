@@ -14,7 +14,7 @@ const CategoryPage = () => {
     const categoryName = params.category.charAt(0).toUpperCase() + params.category.slice(1)
 
     const fetchingCategoryBookItems = () => {
-        fetch("http://localhost:8081/category")
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/category`)
             .then(response => response.json())
             .then(data => {
                 for (let category of data) {

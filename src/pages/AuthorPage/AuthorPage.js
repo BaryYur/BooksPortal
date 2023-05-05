@@ -18,7 +18,7 @@ const AuthorPage = ({ publisher, author }) => {
             user1 = "publishing";
         }
 
-        fetch(`http://localhost:8081/${user1}/all/${name}`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/${user1}/all/${name}`)
             .then(response => response.json())
             .then(author => {
                 fetchingAuthorBooks(author[0].id, user, "CONSIDERATION");
@@ -28,7 +28,7 @@ const AuthorPage = ({ publisher, author }) => {
     }
 
     const fetchingAuthorBooksData = () => {
-        fetch(`http://localhost:8081/user/${authorData.id}`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${authorData.id}`)
             .then(response => response.json())
             .then(data => {
                 if (publisher) {

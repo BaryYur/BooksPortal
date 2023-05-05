@@ -22,10 +22,10 @@ export const CartContextProvider = ({ children }) => {
     const fetchingCartItems = (userId) => {
         setCartItemsCounter(0);
 
-        fetch(`http://localhost:8081/user/${userId}`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${userId}`)
             .then(response => response.json())
             .then(data => {
-                fetch(`http://localhost:8081/book/ids?ids=${data.basket}`)
+                fetch(`${process.env.REACT_APP_MAIN_PATH}/book/ids?ids=${data.basket}`)
                     .then(response => response.json())
                     .then(data => {
                         setCartItems(data);
@@ -40,7 +40,7 @@ export const CartContextProvider = ({ children }) => {
     }
 
     const addingToCart = (userId, body) => {
-        fetch(`http://localhost:8081/user/${userId}`, {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${userId}`, {
             method: "PUT",
             body: JSON.stringify(body),
             headers: {
@@ -54,7 +54,7 @@ export const CartContextProvider = ({ children }) => {
     }
 
     const deleteFromCart = (userId, body) => {
-        fetch(`http://localhost:8081/user/${userId}`, {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${userId}`, {
             method: "PUT",
             body: JSON.stringify(body),
             headers: {

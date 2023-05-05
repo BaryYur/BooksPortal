@@ -48,13 +48,13 @@ const AuthForm = () => {
         }
 
         if (isLogin) {
-            url = "http://localhost:8081/user/login";
+            url = `${process.env.REACT_APP_MAIN_PATH}/user/login`;
             body = {
                 email: data.email,
                 password: data.password,
             }
         } else {
-            url = "http://localhost:8081/user/register";
+            url = `${process.env.REACT_APP_MAIN_PATH}/user/register`;
             body = {
                 name: data.firstName,
                 // secondName: data.lastName,

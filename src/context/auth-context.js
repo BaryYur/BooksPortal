@@ -150,7 +150,7 @@ export const AuthContextProvider = ({ children }) => {
                         active: true,
                     }
 
-                    fetch("http://localhost:8081/publishing", {
+                    fetch(`${process.env.REACT_APP_MAIN_PATH}/publishing`, {
                         method: "POST",
                         body: JSON.stringify(pubBody),
                         headers: {
@@ -171,7 +171,7 @@ export const AuthContextProvider = ({ children }) => {
                         active: true,
                     }
 
-                    fetch("http://localhost:8081/author", {
+                    fetch(`${process.env.REACT_APP_MAIN_PATH}/author`, {
                         method: "POST",
                         body: JSON.stringify(authorBody),
                         headers: {

@@ -19,7 +19,7 @@ const AuthorBookItem = (props) => {
     const { openModal, openModalHandler, closeModalHandler } = useOpenFormModal();
 
     const deleteAuthorBookHandler = () => {
-        fetch(`http://localhost:8081/book/${props.bookId}`, {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/${props.bookId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

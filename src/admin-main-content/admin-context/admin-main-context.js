@@ -31,7 +31,7 @@ export const AdminMainContextProvider = ({ children }) => {
     const handleMenu = () => setMenuIsOpen(active => !active);
 
     const fetchingUsersList = () => {
-        fetch("http://localhost:8081/user")
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/user`)
             .then(response => response.json())
             .then(data => {
                 setUsersList(data);
@@ -42,7 +42,7 @@ export const AdminMainContextProvider = ({ children }) => {
     const fetchingCategories = () => {
         setAdminLoading(true);
 
-        fetch("http://localhost:8081/category")
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/category`)
             .then(response => response.json())
             .then(data => {
                 setCategoriesList(data);
@@ -57,7 +57,7 @@ export const AdminMainContextProvider = ({ children }) => {
     }
 
     const fetchingSelectCategories = () => {
-        fetch("http://localhost:8081/category")
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/category`)
             .then(response => response.json())
             .then(data => {
                 setCategoriesForSelect([]);
@@ -80,7 +80,7 @@ export const AdminMainContextProvider = ({ children }) => {
     const fetchingAddingCategory = (body)  => {
         setAdminLoading(true);
 
-        fetch("http://localhost:8081/category", {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/category`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
@@ -109,7 +109,7 @@ export const AdminMainContextProvider = ({ children }) => {
     }
 
     const fetchingChangingCategory = async (id, name, newName, image) => {
-       await fetch(`http://localhost:8081/category/${id}`, {
+       await fetch(`${process.env.REACT_APP_MAIN_PATH}/category/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export const AdminMainContextProvider = ({ children }) => {
     }
 
     const fetchingDeleteCategory = async (id) => {
-        await  fetch(`http://localhost:8081/category/${id}`, {
+        await  fetch(`${process.env.REACT_APP_MAIN_PATH}/category/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json",
@@ -145,7 +145,7 @@ export const AdminMainContextProvider = ({ children }) => {
     }
 
     const fetchingUpdateUserStatus = async (id, status, email, name, password, role) => {
-        await fetch(`http://localhost:8081/user/${id}`, {
+        await fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

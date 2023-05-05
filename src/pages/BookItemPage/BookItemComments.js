@@ -12,7 +12,7 @@ const BookItemComments = ({ bookId, userId, userName }) => {
     const [comments, setComments] = useState([]);
 
     const fetchingBookComments = () => {
-        fetch(`http://localhost:8081/comment/book/${bookId}`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/comment/book/${bookId}`)
             .then(response => response.json())
             .then(comments => {
                 setComments(comments.reverse());
@@ -21,7 +21,7 @@ const BookItemComments = ({ bookId, userId, userName }) => {
     }
 
     const fetchingAddingComment = (commentBody) => {
-        fetch("http://localhost:8081/comment", {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/comment`, {
             method: "POST",
             body: JSON.stringify(commentBody),
             headers: {

@@ -43,7 +43,7 @@ export const ItemsContextProvider = ({ children }) => {
     const fetchingAllCategories = () => {
         setLoading(true);
 
-        fetch("http://localhost:8081/category")
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/category`)
             .then(response => response.json())
             .then(data => {
                 if (data !== []) {
@@ -75,7 +75,7 @@ export const ItemsContextProvider = ({ children }) => {
     const fetchingCategoryBooks = (categoryId) => {
         setLoading(true);
 
-        fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/category/${categoryId}/GOOD`)
             .then(response => response.json())
             .then(data => {
                 setCategoryBooks(data);
@@ -93,7 +93,7 @@ export const ItemsContextProvider = ({ children }) => {
         setSearchingItems1([]);
         setSearchingItems2([]);
 
-        fetch(`http://localhost:8081/book/all/${bookName}/GOOD`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/all/${bookName}/GOOD`)
             .then(response => response.json())
             .then(data => {
                 setSearchingItems1(data);
@@ -104,7 +104,7 @@ export const ItemsContextProvider = ({ children }) => {
             });
 
         if (isAdmin) {
-            fetch(`http://localhost:8081/book/all/${bookName}/BAD`)
+            fetch(`${process.env.REACT_APP_MAIN_PATH}/book/all/${bookName}/BAD`)
             .then(response => response.json())
             .then(data => {
                 setSearchingItems2(data);
@@ -120,7 +120,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingDeletingBookItem = (id) => {
-        fetch(`http://localhost:8081/book/${id}`, {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json",
@@ -142,7 +142,7 @@ export const ItemsContextProvider = ({ children }) => {
         formData.append("id", id);
         formData.append("file", file);
 
-        fetch("http://localhost:8081/attachment", {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/attachment`, {
             method: "POST",
             body: formData,
         })
@@ -157,7 +157,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingAddingBookItem = (body, bookFile) => {
-        fetch("http://localhost:8081/book", {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
@@ -186,7 +186,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingChangingBookItem = (bookId, body, bookFile) => {
-        fetch(`http://localhost:8081/book/${bookId}`, {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/${bookId}`, {
             method: "PUT",
             body: JSON.stringify(body),
             headers: {
@@ -215,7 +215,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingAdminBooks = () => {
-        fetch("http://localhost:8081/book/status/CONSIDERATION")
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/status/CONSIDERATION`)
             .then(response => response.json())
             .then(data => {
                 setAdminBooks(data);
@@ -223,7 +223,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingUnlockBook = (body, bookName) => {
-        fetch(`http://localhost:8081/book/${body.id}`, {
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/${body.id}`, {
             method: "PUT",
             body: JSON.stringify(body),
             headers: {
@@ -236,7 +236,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingCategoriesList = (categories) => {
-        fetch(`http://localhost:8081/category/ids?ids=${categories}`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/category/ids?ids=${categories}`)
             .then(response => response.json())
             .then(data => {
                 setBookItemCategoriesList(data);
@@ -244,7 +244,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingAuthorsList = (authors) => {
-        fetch(`http://localhost:8081/author/ids?ids=${authors}`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/author/ids?ids=${authors}`)
             .then(response => response.json())
             .then(data => {
                 setBookItemAuthorsList(data);
@@ -252,7 +252,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingPublishersList = (publishers) => {
-        fetch(`http://localhost:8081/publishing/ids?ids=${publishers}`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/publishing/ids?ids=${publishers}`)
             .then(response => response.json())
             .then(data => {
                 setBookItemPublishersList(data);
@@ -268,7 +268,7 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingBookItem = (id) => {
-        fetch(`http://localhost:8081/book/${id}`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/${id}`)
             .then(response => response.json())
             .then(data => {
                 setBookItem(data);
@@ -291,7 +291,7 @@ export const ItemsContextProvider = ({ children }) => {
     const [authorBadBooks, setAuthorBadBooks] = useState([]);
 
     const fetchingAuthorBooks = (id, user, status) => {
-        fetch(`http://localhost:8081/book/${user}/${id}/${status}`)
+        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/${user}/${id}/${status}`)
             .then(response => response.json())
             .then(data => {
                 if (status === "CONSIDERATION") {

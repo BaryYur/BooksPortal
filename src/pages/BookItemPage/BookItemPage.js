@@ -42,7 +42,7 @@ const BookItemPage = () => {
         if (user) {
            let userId = JSON.parse(localStorage.getItem("userData")).id;
 
-            fetch(`http://localhost:8081/user/${userId}`)
+            fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${userId}`)
                 .then(response => response.json())
                 .then(user => {
                     setUserData(user);
