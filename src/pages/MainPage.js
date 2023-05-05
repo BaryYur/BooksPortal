@@ -5,7 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import AuthContext from "../context/auth-context";
 
 import HomePage from "./HomePage/HomePage";
-import NewsPage from "./NewsPage";
+import NewsPage from "./NewsPage/NewsPage";
 import OrderPage from "./OrderPage";
 // import PublishingPage from "./PublishingPage";
 import AuthorPage from "./AuthorPage/AuthorPage";

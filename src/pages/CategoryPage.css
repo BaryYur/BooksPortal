@@ -6,3 +6,8 @@
     width: 232px;
     min-height: 355px;
 }
+
+.category-items-container .loading-box {
+    margin: 20px auto;
+    width: 45px;
+}

@@ -27,6 +27,7 @@ export const ItemsContextProvider = ({ children }) => {
     const [bookItem, setBookItem] = useState({});
     const [adminBooks, setAdminBooks] = useState([]);
     const [categoriesForSelect, setCategoriesForSelect] = useState([]);
+    const [newsItems, setNewsItems] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const alert = (title, text, icon) => {
@@ -72,12 +73,16 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingCategoryBooks = (categoryId) => {
+        setLoading(true);
+
         fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
             .then(response => response.json())
             .then(data => {
                 setCategoryBooks(data);
+                setLoading(false);
             })
             .catch(error => {
+                setLoading(false);
                 alert("Oops...", `Something went wrong!` , "error");
             })
     }
@@ -177,7 +182,7 @@ export const ItemsContextProvider = ({ children }) => {
             })
             .catch(error => {
                 alert("Oops...", `Something went wrong! ${error}` , "error");
-            })
+            });
     }
 
     const fetchingChangingBookItem = (bookId, body, bookFile) => {
@@ -190,7 +195,7 @@ export const ItemsContextProvider = ({ children }) => {
         })
             .then((res) => {
                 if (res.ok) {
-                    // alert("Great", "You successful add new book","success");
+                    // alert("Great", "You add new book","success");
 
                     return res.json();
                 } else {
@@ -251,7 +256,15 @@ export const ItemsContextProvider = ({ children }) => {
             .then(response => response.json())
             .then(data => {
                 setBookItemPublishersList(data);
-            })
+            });
+    }
+
+    const likeBookHandler = () => {
+
+    }
+
+    const fetchingBookItemLikes = () => {
+
     }
 
     const fetchingBookItem = (id) => {
@@ -294,29 +307,26 @@ export const ItemsContextProvider = ({ children }) => {
             })
     }
 
-    // const fetchingNews = () => {
-        // fetch("https://newsapi.org/v2/everything?q=Apple&from=2023-04-13&sortBy=popularity&apiKey=4269e448034e451d86c8fa22f9780efe")
-        //     .then(response => response.json())
-        //     .then(data => {
-        //         console.log(data);
-        //     })
-    // }
+    const fetchingNews = () => {
+        setLoading(true);
+
+        fetch("https://newsapi.org/v2/everything?q=literature&apiKey=892dcecff8bd4d2982d26aea2b850e57")
+            .then(response => response.json())
+            .then(data => {
+                setNewsItems(data.articles);
+                setLoading(false);
+            })
+            .catch(error => {
+                setLoading(false);
+                console.log("news error");
+            });
+    }
 
     useEffect(() => {
         fetchingAllCategories();
+        fetchingNews();
 
         setSearchingItems([ ...searchingItems1, ...searchingItems2 ]);
-        // const uniqueData = [];
-        // const ids = [];
-
-        // setSearchingItems(searchingItems.filter((item) => {
-        //     if (!ids.includes(item.id)) {
-        //       ids.push(item.id);
-        //       uniqueData.push(item);
-        //     }
-        // }));
-        // setSearchingItems(uniqueData);
-        // fetchingNews();
         // console.log(Dotenv.MAIN_PATH);
     }, [searchingItems1, searchingItems2]);
 
@@ -345,6 +355,7 @@ export const ItemsContextProvider = ({ children }) => {
                 adminBooks: adminBooks,
                 categoryBooks: categoryBooks,
                 categoriesForSelect: categoriesForSelect,
+                newsItems: newsItems,
                 loading: loading,
             }}
         >

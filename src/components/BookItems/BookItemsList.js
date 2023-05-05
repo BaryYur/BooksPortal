@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import BookItemCard from "./BookItemCard";
 import "./BookItemsList.css";
@@ -32,4 +32,4 @@ const BookItemsList = ({ booksData, adminItems, searchingName }) => {
     );
 }
 
-export default BookItemsList;
+export default memo(BookItemsList);
