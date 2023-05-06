@@ -7,7 +7,7 @@ const bookItemsSlice = createSlice({
     },
     reducers: {
         fetchingBooksGenres: (state) => {
-            fetch(`${process.env.REACT_APP_MAIN_PATH}/genre`)
+            fetch(`http://localhost:8081/genre`)
                 .then(response => response.json())
                 .then(data => {
                     // state.booksGenres = [...state.booksGenres, ...data];

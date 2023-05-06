@@ -78,7 +78,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const handleAuthorKeyPress = (event) => {
         if (event.key === "Enter" && authorNameInput.length > 3) {
             if (checkingExisting(true, false) === true) {
-                fetch(`${process.env.REACT_APP_MAIN_PATH}/author/all/${authorNameInput}`)
+                fetch(`http://localhost:8081/author/all/${authorNameInput}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.length !== 0 && data[0].name === authorNameInput) {
@@ -105,7 +105,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const handlePublisherKeyPress = (event) => {
         if (event.key === "Enter" && publisherNameInput.length > 3) {
             if (checkingExisting(false, true) === true) {
-                fetch(`${process.env.REACT_APP_MAIN_PATH}/publishing/all/${publisherNameInput}`)
+                fetch(`http://localhost:8081/publishing/all/${publisherNameInput}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.length !== 0 && data[0].name === publisherNameInput) {
@@ -131,7 +131,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
     const fetchingExistingAuthors = () => {
         if (authorNameInput !== "") {
-            fetch(`${process.env.REACT_APP_MAIN_PATH}/author/all/${authorNameInput}`)
+            fetch(`http://localhost:8081/author/all/${authorNameInput}`)
                 .then(response => response.json())
                 .then(data => {
                     setExistingAuthors(data);
@@ -143,7 +143,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
     const fetchingExistingPublishers = () => {
         if (publisherNameInput !== "") {
-            fetch(`${process.env.REACT_APP_MAIN_PATH}/publishing/all/${publisherNameInput}`)
+            fetch(`http://localhost:8081/publishing/all/${publisherNameInput}`)
                 .then(response => response.json())
                 .then(data => {
                     setExistingPublishers(data);
@@ -155,7 +155,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
     const createNewAuthorHandler = () => {
         if (checkingExisting(true, false) === true) {
-            fetch(`${process.env.REACT_APP_MAIN_PATH}/author`, {
+            fetch(`http://localhost:8081/author`, {
                 method: "POST",
                 body: JSON.stringify({
                     name: authorNameInput,
@@ -166,7 +166,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 },
             })
                 .then(() => {
-                    fetch(`${process.env.REACT_APP_MAIN_PATH}/author/all/${authorNameInput}`)
+                    fetch(`http://localhost:8081/author/all/${authorNameInput}`)
                         .then(response => response.json())
                         .then(data => {
                             setChosenAuthors(prevAuthor => {
@@ -182,7 +182,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
     const createNewPublisherHandler = () => {
         if (checkingExisting(true, false) === true) {
-            fetch(`${process.env.REACT_APP_MAIN_PATH}/publishing`, {
+            fetch(`http://localhost:8081/publishing`, {
                 method: "POST",
                 body: JSON.stringify({
                     name: publisherNameInput,
@@ -193,7 +193,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 },
             })
                 .then((response) => {
-                    fetch(`${process.env.REACT_APP_MAIN_PATH}/publishing/all/${publisherNameInput}`)
+                    fetch(`http://localhost:8081/publishing/all/${publisherNameInput}`)
                         .then(response => response.json())
                         .then(data => {
                             setChosenPublishers(prevPublisher => {
@@ -261,6 +261,14 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             bookStatus = "GOOD";
         }
 
+        let likes = 0;
+        let dislikes = 0;
+
+        if (authorModal || publisherModal) {
+            likes = bookFields.likes;
+            dislikes = bookFields.dislikes;
+        }
+
         let body = {
             name: bookNameInput,
             authors: selectedAuthors,
@@ -273,6 +281,8 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             pagesCount: Number(pagesCountInput),
             price: Number(priceInput),
             status: bookStatus,
+            likes: likes,
+            dislikes: dislikes,
         }
 
         const authorItems = () => {
@@ -342,13 +352,18 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         if (isAuthor) {
             let authorData = JSON.parse(localStorage.getItem("userData"));
 
-            fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${authorData.id}`)
+            fetch(`http://localhost:8081/user/${authorData.id}`)
                 .then(response => response.json())
                 .then(data => {
-                    fetch(`${process.env.REACT_APP_MAIN_PATH}/author/all/${data.name}`)
+                    console.log(data);
+                    fetch(`http://localhost:8081/author/all/${data.name}`)
                         .then(response => response.json())
                         .then(author => {
-                            setAuthor(author[0]);
+                            if (author.length !== 0) {
+                                setAuthor(author[0]);
+                            }
+
+                            console.log(author);
                         });
                 });
         }
@@ -356,10 +371,10 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         if (isPublisher) {
             let publisherData = JSON.parse(localStorage.getItem("userData"));
 
-            fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${publisherData.id}`)
+            fetch(`http://localhost:8081/user/${publisherData.id}`)
                 .then(response => response.json())
                 .then(data => {
-                    fetch(`${process.env.REACT_APP_MAIN_PATH}/publishing/all/${data.name}`)
+                    fetch(`http://localhost:8081/publishing/all/${data.name}`)
                         .then(response => response.json())
                         .then(publisher => {
                             setPublisher(publisher[0]);

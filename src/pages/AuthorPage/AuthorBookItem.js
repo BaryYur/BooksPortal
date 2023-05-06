@@ -12,14 +12,13 @@ import AddingNewBookItemForm from "../../components/Forms/AddingNewBookItemForm"
 
 const AuthorBookItem = (props) => {
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
-    const [openChangingBookModal, setOpenChangingBookModal] = useState(false);
     const [bookFields, setBookFields] = useState({});
     const [publisher, setPublisher] = useState(false);
     const [author, setAuthor] = useState(false);
     const { openModal, openModalHandler, closeModalHandler } = useOpenFormModal();
 
     const deleteAuthorBookHandler = () => {
-        fetch(`${process.env.REACT_APP_MAIN_PATH}/book/${props.bookId}`, {
+        fetch(`http://localhost:8081/book/${props.bookId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -50,6 +49,8 @@ const AuthorBookItem = (props) => {
             categories: props.categories,
             authors: props.authors,
             publishers: props.publishers,
+            likes: props.likes,
+            dislikes: props.dislikes,
         }
 
         setBookFields(bookBody);

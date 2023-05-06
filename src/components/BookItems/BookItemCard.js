@@ -30,6 +30,8 @@ const BookItemCard = ({
     language, 
     pagesCount,
     publishers,
+    likes,
+    dislikes,
     searchingName,
     adminItems,
 }) => {
@@ -47,7 +49,7 @@ const BookItemCard = ({
     const fetchingUserData = () => {
         let userId = JSON.parse(localStorage.getItem("userData")).id;
 
-        fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${userId}`)
+        fetch(`http://localhost:8081/user/${userId}`)
             .then(response => response.json())
             .then(user => {
                 setUserData(user);
@@ -119,6 +121,8 @@ const BookItemCard = ({
             categories: categories,
             authors: authors,
             publishers: publishers,
+            likes: likes,
+            dislikes: dislikes,
         }
 
         fetchingUnlockBook(body, searchingName);

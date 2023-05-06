@@ -25,6 +25,8 @@ const AuthorBooks = ({ books, status, fetchingAuthorBooksData }) => {
                         categories={book.categories}
                         authors={book.authors}
                         publishers={book.publishers}
+                        likes={book.likes}
+                        dislikes={book.dislikes}
                     />
                 ))}
             </ul>

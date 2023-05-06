@@ -18,17 +18,19 @@ const AuthorPage = ({ publisher, author }) => {
             user1 = "publishing";
         }
 
-        fetch(`${process.env.REACT_APP_MAIN_PATH}/${user1}/all/${name}`)
+        fetch(`http://localhost:8081/${user1}/all/${name}`)
             .then(response => response.json())
             .then(author => {
-                fetchingAuthorBooks(author[0].id, user, "CONSIDERATION");
-                fetchingAuthorBooks(author[0].id, user, "GOOD");
-                fetchingAuthorBooks(author[0].id, user, "BAD");
+                if (author.length !== 0) {
+                    fetchingAuthorBooks(author[0].id, user, "CONSIDERATION");
+                    fetchingAuthorBooks(author[0].id, user, "GOOD");
+                    fetchingAuthorBooks(author[0].id, user, "BAD");
+                }
             });
     }
 
     const fetchingAuthorBooksData = () => {
-        fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${authorData.id}`)
+        fetch(`http://localhost:8081/user/${authorData.id}`)
             .then(response => response.json())
             .then(data => {
                 if (publisher) {

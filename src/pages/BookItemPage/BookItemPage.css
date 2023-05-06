@@ -48,7 +48,7 @@
     font-weight: 600;
 }
 
-.book-item__image-container button {
+.book-item__image-container .add-cart-btn {
     width: 100%;
     margin-top: 10px;
     background-color: rgb(82, 168, 255);
@@ -133,4 +133,18 @@
 
 .book-item-details-container ul li .item:not(:nth-child(2)):before {
     content: ",  ";
+}
+
+.book-likes-box {
+    display: flex;
+    gap: 5px;
+    padding-top: 5px;
+}
+
+.book-likes-box button {
+    flex: 1;
+}
+
+.book-likes-box button {
+    color: grey;
 }

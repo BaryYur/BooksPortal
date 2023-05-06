@@ -18,7 +18,7 @@ const CartItem = ({ name, id, price, category, img, pagesCount, language }) => {
     const fetchingUserData = () => {
         let userId = JSON.parse(localStorage.getItem("userData")).id;
 
-        fetch(`${process.env.REACT_APP_MAIN_PATH}/user/${userId}`)
+        fetch(`http://localhost:8081/user/${userId}`)
             .then(response => response.json())
             .then(user => {
                 setUserData(user);

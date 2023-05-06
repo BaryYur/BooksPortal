@@ -48,25 +48,26 @@ const AuthForm = () => {
         }
 
         if (isLogin) {
-            url = `${process.env.REACT_APP_MAIN_PATH}/user/login`;
+            url = "http://localhost:8081/user/login";
             body = {
                 email: data.email,
                 password: data.password,
             }
         } else {
-            url = `${process.env.REACT_APP_MAIN_PATH}/user/register`;
+            url = "http://localhost:8081/user/register";
             body = {
                 name: data.firstName,
-                // secondName: data.lastName,
                 email: data.email,
                 password: data.password,
                 role: userRole,
+                basket: [],
+                likes: [],
+                dislikes: [],
                 status: "ACTIVE",
             }
         }
 
         authCtx.fetchingUser(url, body, isLogin);
-        // console.log(body);
     }
 
     return (
