@@ -222,9 +222,9 @@ const BookItemPage = () => {
                                 <ShoppingCartIcon />
                                 <span>Add to cart</span>
                             </Button>
-                            <div className="book-likes-box">
+                            {userData &&<div className="book-likes-box">
                                 {/* Raiting: 0/10 */}
-                                <Button onClick={likeBookHandler}> 
+                                <Button onClick={likeBookHandler}>
                                     {isActiveLikeBtn && <ThumbUpIcon />}
                                     {!isActiveLikeBtn && <ThumbUpOffAltIcon />}
                                 </Button>
@@ -232,7 +232,7 @@ const BookItemPage = () => {
                                     {isActiveDislikeBtn && <ThumbDownIcon />}
                                     {!isActiveDislikeBtn && <ThumbDownOffAltIcon />}
                                 </Button>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                     <div className="book-item__main-info">

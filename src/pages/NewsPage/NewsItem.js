@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 
 const NewsItem = ({ title, newsImg, url, author }) => {
     return (
-        <Card sx={{ maxWidth: 360 }} style={{ width: "288px" }} className="news-card">
+        <Card sx={{ maxWidth: 360 }} style={{ width: "286px" }} className="news-card">
             <a href={url} target="_blank">
                 <CardMedia
                     component="img"
