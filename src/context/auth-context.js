@@ -179,7 +179,6 @@ export const AuthContextProvider = ({ children }) => {
                         },
                     })
                         .then(res => {
-
                             console.log("everything is ok ", res);
                         })
                         .catch(error => {

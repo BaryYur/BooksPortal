@@ -143,6 +143,7 @@
 
 .book-likes-box button {
     flex: 1;
+    border: 1px solid;
 }
 
 .book-likes-box button {

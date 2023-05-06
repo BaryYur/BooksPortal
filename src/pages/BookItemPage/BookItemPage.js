@@ -213,15 +213,6 @@ const BookItemPage = () => {
                         </div>
                         <div>
                             <p>Price: {bookItem.price} $</p>
-                            <Button
-                                variant="contained"
-                                disabled={disabledAddingBtn}
-                                className="add-cart-btn"
-                                onClick={() => addToCartHandler(bookItem.id)}
-                            >
-                                <ShoppingCartIcon />
-                                <span>Add to cart</span>
-                            </Button>
                             {userData &&<div className="book-likes-box">
                                 {/* Raiting: 0/10 */}
                                 <Button onClick={likeBookHandler}>
@@ -233,6 +224,15 @@ const BookItemPage = () => {
                                     {!isActiveDislikeBtn && <ThumbDownOffAltIcon />}
                                 </Button>
                             </div>}
+                            <Button
+                                variant="contained"
+                                disabled={disabledAddingBtn}
+                                className="add-cart-btn"
+                                onClick={() => addToCartHandler(bookItem.id)}
+                            >
+                                <ShoppingCartIcon />
+                                <span>Add to cart</span>
+                            </Button>
                         </div>
                     </div>
                     <div className="book-item__main-info">
