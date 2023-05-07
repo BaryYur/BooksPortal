@@ -6,6 +6,7 @@ const ItemsContext = React.createContext({
     fetchingBookItem: (id, category) => {},
     fetchingAddingBookItem: (body, bookFile) => {},
     fetchingChangingBookItem: (body, bookFile) => {},
+    fetchingDownloadBook: (bookId) => {},
     fetchingSearchingItems: (book) => {},
     fetchingDeletingBookItem: () => {},
     fetchingCategoryBooks: (genreName) => {},
@@ -214,6 +215,21 @@ export const ItemsContextProvider = ({ children }) => {
             })
     }
 
+    const fetchingDownloadBook = (bookId) => {
+        fetch(`http://localhost:8081/attachment/download/${bookId}`)
+            .then(response => response.blob())
+            .then(blob => {
+                const file = new File([blob], "filename.pdf", { type: "application/pdf" });
+
+                // Відкриття файлу у новій вкладці браузера
+                const fileURL = URL.createObjectURL(file);
+                window.open(fileURL, "_blank");
+            })
+            .catch(error => {
+                console.error("Error with file", error);
+            });
+    }
+
     const fetchingAdminBooks = () => {
         fetch(`http://localhost:8081/book/status/CONSIDERATION`)
             .then(response => response.json())
@@ -257,14 +273,6 @@ export const ItemsContextProvider = ({ children }) => {
             .then(data => {
                 setBookItemPublishersList(data);
             });
-    }
-
-    const likeBookHandler = () => {
-
-    }
-
-    const fetchingBookItemLikes = () => {
-
     }
 
     const fetchingBookItem = (id) => {
@@ -337,6 +345,7 @@ export const ItemsContextProvider = ({ children }) => {
                 fetchingBookItem: fetchingBookItem,
                 fetchingAddingBookItem: fetchingAddingBookItem,
                 fetchingChangingBookItem: fetchingChangingBookItem,
+                fetchingDownloadBook: fetchingDownloadBook,
                 fetchingSearchingItems: fetchingSearchingItems,
                 fetchingDeletingBookItem: fetchingDeletingBookItem,
                 bookItem: bookItem,

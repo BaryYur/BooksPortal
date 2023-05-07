@@ -355,15 +355,12 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             fetch(`http://localhost:8081/user/${authorData.id}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     fetch(`http://localhost:8081/author/all/${data.name}`)
                         .then(response => response.json())
                         .then(author => {
                             if (author.length !== 0) {
                                 setAuthor(author[0]);
                             }
-
-                            console.log(author);
                         });
                 });
         }

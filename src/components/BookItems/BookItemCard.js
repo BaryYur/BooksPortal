@@ -158,7 +158,7 @@ const BookItemCard = ({
                 }}
             >
                 <Link
-                    to={adminItems ? "/admin/deleting-item" : link}
+                    to={adminItems ? `/admin/book/${id}` : link}
                     title={name}
                     onClick={scrollToTop}
                 >

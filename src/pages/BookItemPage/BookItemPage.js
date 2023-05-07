@@ -12,20 +12,24 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import DownloadIcon from "@mui/icons-material/Download";
 import TabsPanel from "../../components/Tabs/TabsPanel";
 import BookItemComments from "./BookItemComments";
 import "./BookItemPage.css";
 
-const BookItemPage = () => {
+const BookItemPage = ({ isAdmin }) => {
     const navigate = useNavigate();
     const itemId = useParams().id;
-    const { bookItem, fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList, bookItemPublishersList } = useContext(ItemsContext);
+    const { bookItem, fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList, bookItemPublishersList, fetchingDownloadBook } = useContext(ItemsContext);
     const { addToCart, cartItems } = useContext(CartContext);
     const { isLoggedIn } = useContext(AuthContext);
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(false);
     const [isActiveLikeBtn, setIsActiveLikeBtn] = useState(false);
     const [isActiveDislikeBtn, setIsActiveDislikeBtn] = useState(false);
     const [userData, setUserData] = useState({});
+    const [bookRating, setBookRating] = useState(0);
+    const [bookLikes, setBookLikes] = useState(bookItem.likes);
+    const [bookDislikes, setBookDislikes] = useState(bookItem.dislikes);
 
     let tabsInfo = [
         {
@@ -52,7 +56,7 @@ const BookItemPage = () => {
                 .then(response => response.json())
                 .then(user => {
                     setUserData(user);
-                })
+                });
         }
     }
 
@@ -98,6 +102,78 @@ const BookItemPage = () => {
         return setDisabledAddingBtn;
     }
 
+    const fetchingRatingBook = (like, number) => {
+        let bookLikes = bookItem.likes;
+        let bookDislikes = bookItem.dislikes;
+
+        if (like && number === 0) {
+            bookLikes = bookLikes + 1;
+            bookDislikes = bookDislikes - 1;
+        } else if (like && number === 1) {
+            bookLikes = bookLikes + 1;
+        } else if (like && number === -1) {
+            bookLikes = bookLikes - 1;
+        } else if (!like && number === 0) {
+            bookLikes = bookLikes - 1;
+            bookDislikes = bookDislikes + 1;
+        } else if (!like && number === 1) {
+            bookDislikes = bookDislikes + 1;
+        } else if (!like && number === -1) {
+            bookDislikes = bookDislikes - 1;
+        }
+
+        let bookBody = {
+            authors: bookItem.authors,
+            categories: bookItem.categories,
+            description: bookItem.description,
+            dislikes: bookDislikes,
+            file: bookItem.file,
+            language: bookItem.language,
+            likes: bookLikes,
+            name: bookItem.name,
+            pagesCount: bookItem.pagesCount,
+            price: bookItem.price,
+            publishDate: bookItem.publishDate,
+            publishers: bookItem.publishers,
+            status: bookItem.status,
+        }
+
+        fetch(`http://localhost:8081/book/${itemId}`, {
+            method: "PUT",
+            body: JSON.stringify(bookBody),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                calculateBookRating(data.likes, data.dislikes);
+                fetchingBookItem(itemId);
+            });
+    }
+
+    const calculateBookRating = (likes, dislikes) => {
+        let rating = 0;
+
+        if (likes > 0) {
+            rating = likes / (likes + dislikes) * 10;
+        } if (likes > 0 && dislikes === 0) {
+            rating = 10;
+        } else if (dislikes > 0 && likes === 0) {
+            rating = 0;
+        }
+
+        let rounded = 0;
+
+        if (rating.toFixed(1) % 2 === 0) {
+            rounded = rating;
+        } else {
+            rounded = rating.toFixed(1);
+        }
+
+        setBookRating(rounded);
+    }
+
     const checkingLikes = () => {
         if (userData.likes && userData.dislikes) {
             if (userData.likes.includes(itemId) && !userData.dislikes.includes(itemId)) {
@@ -113,55 +189,45 @@ const BookItemPage = () => {
         }
     }
 
-    const likeBookHandler = () => {
+    const likeBookHandler = (like) => {
         if (userData) {
             let userLikes = userData.likes;
             let userDislikes = userData.dislikes;
 
-            if (!userData.likes.includes(itemId)) {
-                userLikes.push(itemId);
-                userDislikes = userDislikes.filter(dis => dis !== itemId);
-            } else {
-                userLikes = userLikes.filter(like => like !== itemId);
-            }
+            if (like) {
+                if (!userData.likes.includes(itemId)) {
+                    userLikes.push(itemId);
+                    userDislikes = userDislikes.filter(dis => dis !== itemId);
 
-            let userBody = {
-                basket: userData.basket,
-                email: userData.email,
-                name: userData.name,
-                password: userData.password,
-                role: userData.role,
-                status: userData.status,
-                likes: userLikes,
-                dislikes: userDislikes,
-            }
-
-            fetch(`http://localhost:8081/user/${userData.id}`, {
-                method: "PUT",
-                body: JSON.stringify(userBody),
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            })
-                .then(response => {
-                    if (response.ok) {
-                        fetchingUserData();
-                        checkingLikes();
+                    if (userData.dislikes.includes(itemId)) {
+                        // likes + 1, dis - 1
+                        fetchingRatingBook(true, 0);
+                    } else {
+                        fetchingRatingBook(true, 1);
+                        // likes + 1
                     }
-                });
-        }
-    }
-
-    const dislikeBookHandler = () => {
-        if (userData) {
-            let userLikes = userData.likes;
-            let userDislikes = userData.dislikes;
-            
-            if (!userData.dislikes.includes(itemId)) {
-                userDislikes.push(itemId);
-                userLikes = userLikes.filter(dis => dis !== itemId);
+                } else {
+                    userLikes = userLikes.filter(like => like !== itemId);
+                    fetchingRatingBook(true, -1);
+                    // likes - 1
+                }
             } else {
-                userDislikes = userDislikes.filter(dis => dis !== itemId);
+                if (!userData.dislikes.includes(itemId)) {
+                    userDislikes.push(itemId);
+                    userLikes = userLikes.filter(dis => dis !== itemId);
+
+                    if (userData.likes.includes(itemId)) {
+                        // dis + 1, likes - 1
+                        fetchingRatingBook(false, 0);
+                    } else {
+                        fetchingRatingBook(false, 1);
+                        // dis + 1
+                    }
+                } else {
+                    userDislikes = userDislikes.filter(dis => dis !== itemId);
+                    fetchingRatingBook(false, -1);
+                    // dis - 1
+                }
             }
 
             let userBody = {
@@ -195,13 +261,17 @@ const BookItemPage = () => {
         btnIsActive();
         fetchingBookItem(itemId);
         fetchingUserData();
-    }, [itemId, disabledAddingBtn, cartItems, isActiveDislikeBtn, isActiveLikeBtn]);
+        calculateBookRating(bookLikes, bookDislikes);
+    }, [itemId, disabledAddingBtn, cartItems, isActiveDislikeBtn, isActiveLikeBtn, bookLikes, bookDislikes]);
 
     useEffect(() => {
         if (userData) {
             checkingLikes();
         }
-    }, [userData]);
+
+        setBookLikes(bookItem.likes);
+        setBookDislikes(bookItem.dislikes);
+    }, [userData, fetchingBookItem]);
 
     return (
         <div className="main-wrapper">
@@ -213,18 +283,20 @@ const BookItemPage = () => {
                         </div>
                         <div>
                             <p>Price: {bookItem.price} $</p>
+                            <p>Rating: {bookRating}/10</p>
                             {userData &&<div className="book-likes-box">
-                                {/* Raiting: 0/10 */}
-                                <Button onClick={likeBookHandler}>
+                                <Button onClick={() => likeBookHandler(true)}>
                                     {isActiveLikeBtn && <ThumbUpIcon />}
                                     {!isActiveLikeBtn && <ThumbUpOffAltIcon />}
+                                    <span>{bookLikes}</span>
                                 </Button>
-                                <Button onClick={dislikeBookHandler} color="error">
+                                <Button onClick={() => likeBookHandler(false)} color="error">
                                     {isActiveDislikeBtn && <ThumbDownIcon />}
                                     {!isActiveDislikeBtn && <ThumbDownOffAltIcon />}
+                                    <span>{bookDislikes}</span>
                                 </Button>
                             </div>}
-                            <Button
+                            {!isAdmin && <Button
                                 variant="contained"
                                 disabled={disabledAddingBtn}
                                 className="add-cart-btn"
@@ -232,7 +304,17 @@ const BookItemPage = () => {
                             >
                                 <ShoppingCartIcon />
                                 <span>Add to cart</span>
-                            </Button>
+                            </Button>}
+                            {isAdmin && (
+                                <Button
+                                    variant="contained"
+                                    className="download-btn"
+                                    onClick={() => fetchingDownloadBook(itemId)}
+                                >
+                                    <DownloadIcon />
+                                    <span>Download book</span>
+                                </Button>
+                            )}
                         </div>
                     </div>
                     <div className="book-item__main-info">

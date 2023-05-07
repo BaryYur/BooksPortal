@@ -42,13 +42,26 @@
     object-fit: cover;
 }
 
-.book-item__image-container p {
+.book-item__image-container div p:first-child {
     text-align: center;
     font-size: 19px;
     font-weight: 600;
+    margin-top: 15px;
+}
+
+.book-item__image-container div p:nth-child(2) {
+    text-align: center;
+    color: #333333;
+    margin-top: 5px;
 }
 
 .book-item__image-container .add-cart-btn {
+    width: 100%;
+    margin-top: 10px;
+    background-color: rgb(82, 168, 255);
+}
+
+.book-item__image-container .download-btn {
     width: 100%;
     margin-top: 10px;
     background-color: rgb(82, 168, 255);
