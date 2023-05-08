@@ -11,6 +11,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import { Button, Badge } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import LoginIcon from "@mui/icons-material/Login";
 // import MenuIcon from "@mui/icons-material/Menu";
 
 import Cart from "../Cart/Cart";
@@ -115,7 +116,10 @@ const Header = () => {
                                         title="Login page"
                                         className="login-link"
                                         onClick={scrollToTop}
-                                    >Login</NavLink>
+                                    >
+                                        <LoginIcon />
+                                        <span>Login</span>
+                                    </NavLink>
                                 </li>
                             )}
                             {isLoggedIn && (

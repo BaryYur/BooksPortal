@@ -165,10 +165,10 @@ const BookItemPage = ({ isAdmin }) => {
 
         let rounded = 0;
 
-        if (rating.toFixed(1) % 2 === 0) {
+        if (rating.toFixed(2) % 2 === 0) {
             rounded = rating;
         } else {
-            rounded = rating.toFixed(1);
+            rounded = rating.toFixed(2);
         }
 
         setBookRating(rounded);
@@ -274,7 +274,7 @@ const BookItemPage = ({ isAdmin }) => {
     }, [userData, fetchingBookItem]);
 
     return (
-        <div className="main-wrapper">
+        <div className={isAdmin ? "main-wrapper admin-book-wrapper" : "main-wrapper"}>
             <div className="book-item-page-container">
                 <div className="book-item-main-container">
                     <div className="book-item__image-container">

@@ -28,7 +28,7 @@
     font-size: 17px;
 }
 
-.news-page-container img:hover {
+.news-page-container a:hover img {
     width: 110%;
     margin-left: -5%;
     transition: all 0.2s ease-in-out;

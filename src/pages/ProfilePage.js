@@ -6,6 +6,7 @@ import AuthContext from "../context/auth-context";
 import CartContext from "../context/cart-context";
 
 import { Button } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -24,9 +25,12 @@ const ProfilePage = () => {
             <Button
                 variant="contained"
                 color="error"
-                style={{ display: "block", margin: "0 auto" }}
+                style={{ display: "flex", margin: "0 auto" }}
                 onClick={logoutHandler}
-            >Logout</Button>
+            >
+                <LogoutIcon />
+                Logout
+            </Button>
         </div>
     );
 }

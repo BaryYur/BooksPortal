@@ -6,7 +6,7 @@ import BookItemComment from "./BookItemComment";
 import { Button } from "@mui/material";
 import "./BookItemComments.css";
 
-const BookItemComments = ({ bookId, userId, userName }) => {
+const BookItemComments = ({ bookId, userId, userName}) => {
     const navigate = useNavigate();
     const [commentInput, setCommentInput] = useState("");
     const [comments, setComments] = useState([]);
@@ -69,6 +69,18 @@ const BookItemComments = ({ bookId, userId, userName }) => {
         }
     }
 
+    const deleteCommentHandler = (commentId) => {
+        fetch(`http://localhost:8081/comment/${commentId}`, {
+            method: "DELETE",
+        })
+            .then(response => {
+                if (response.ok) {
+                    setComments(comments.filter(c => c.id !== commentId))
+                }
+            })
+            .catch(() => console.log("deleting comment error"));
+    }
+
     useEffect(() => {
         fetchingBookComments();
     }, []);
@@ -91,9 +103,11 @@ const BookItemComments = ({ bookId, userId, userName }) => {
               {comments.map(comment => (
                   <BookItemComment
                       key={comment.id}
+                      commentId={comment.id}
                       userName={comment.name}
                       commentText={comment.text}
                       commentDate={comment.dateTime}
+                      onDeleteComment={() => deleteCommentHandler(comment.id)}
                   />
               ))}
           </ul>

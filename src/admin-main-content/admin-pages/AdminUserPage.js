@@ -7,6 +7,7 @@ import CartContext from "../../context/cart-context";
 
 import { Button } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import LogoutIcon from "@mui/icons-material/Logout";
 import "./AdminUserPage.js.css";
 
 const AdminUserPage = () => {
@@ -36,7 +37,10 @@ const AdminUserPage = () => {
             </div>
             <div className="admin-main-box-profile">
                 <h2>Account data</h2>
-                <Button variant="contained" color="error" onClick={logoutHandler}>Logout</Button>
+                <Button variant="contained" color="error" onClick={logoutHandler}>
+                    <LogoutIcon />
+                    Logout
+                </Button>
             </div>
         </div>
     );

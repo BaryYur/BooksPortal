@@ -53,3 +53,25 @@
 .comment-item .comment-item__text {
     padding: 10px;
 }
+
+.comment-item .comment-item__header div {
+    display: flex;
+    align-items: center;
+}
+
+.comment-item .comment-item__header div button {
+    color: indianred;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.comment-item .comment-item__header div button svg {
+    font-size: 20px;
+}
+
+.comment-item .comment-item__header div p {
+    font-size: 14px;
+    color: #5d5c5c;
+}

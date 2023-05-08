@@ -15,7 +15,8 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import BrushIcon from "@mui/icons-material/Brush";
 // import ChecklistRtlIcon from "@mui/icons-material/ChecklistRtl";
-import ListIcon from '@mui/icons-material/List';
+import ListIcon from "@mui/icons-material/List";
+import LogoutIcon from "@mui/icons-material/Logout";
 import  "./AdminNavBar.css";
 import booksShopLogo from "../../../images/book-icon.png";
 
@@ -136,6 +137,17 @@ const AdminNavBar = () => {
                             <BrushIcon />
                         </span>
                         <span className="link-text">Main page interface</span>
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
+                        to="/home"
+                        onClick={scrollToTop}
+                    >
+                        <span>
+                            <LogoutIcon />
+                        </span>
+                        <span className="link-text">Main page</span>
                     </NavLink>
                 </li>
             </ul>
