@@ -22,11 +22,10 @@ const BookItemPage = ({ isAdmin }) => {
     const itemId = useParams().id;
     const { bookItem, fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList, bookItemPublishersList, fetchingDownloadBook } = useContext(ItemsContext);
     const { addToCart, cartItems } = useContext(CartContext);
-    const { isLoggedIn } = useContext(AuthContext);
+    const { isLoggedIn, fetchingUserData, user } = useContext(AuthContext);
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(false);
     const [isActiveLikeBtn, setIsActiveLikeBtn] = useState(false);
     const [isActiveDislikeBtn, setIsActiveDislikeBtn] = useState(false);
-    const [userData, setUserData] = useState({});
     const [bookRating, setBookRating] = useState(0);
     const [bookLikes, setBookLikes] = useState(bookItem.likes);
     const [bookDislikes, setBookDislikes] = useState(bookItem.dislikes);
@@ -40,45 +39,31 @@ const BookItemPage = ({ isAdmin }) => {
             name: "comments",
             description: <BookItemComments
                 bookId={itemId}
-                userName={userData.name}
-                userId={userData.id}
+                userName={user.name}
+                userId={user.id}
             />,
         }
     ];
-
-    const fetchingUserData = () => {
-        let user = JSON.parse(localStorage.getItem("userData"));
-
-        if (user) {
-           let userId = JSON.parse(localStorage.getItem("userData")).id;
-
-            fetch(`http://localhost:8081/user/${userId}`)
-                .then(response => response.json())
-                .then(user => {
-                    setUserData(user);
-                });
-        }
-    }
 
     const addToCartHandler = (id) => {
         if (!isLoggedIn) {
             navigate("/home/auth");
         } else {
-            let newBasket = userData.basket;
+            let newBasket = user.basket;
             newBasket.push(id);
 
             let userBody = {
                 basket: newBasket,
-                email: userData.email,
-                name: userData.name,
-                password: userData.password,
-                role: userData.role,
-                status: userData.status,
-                likes: userData.likes,
-                dislikes: userData.dislikes,
+                email: user.email,
+                name: user.name,
+                password: user.password,
+                role: user.role,
+                status: user.status,
+                likes: user.likes,
+                dislikes: user.dislikes,
             }
 
-            addToCart(userData.id, userBody);
+            addToCart(user.id, userBody);
         }
 
         setDisabledAddingBtn(true);
@@ -175,14 +160,14 @@ const BookItemPage = ({ isAdmin }) => {
     }
 
     const checkingLikes = () => {
-        if (userData.likes && userData.dislikes) {
-            if (userData.likes.includes(itemId) && !userData.dislikes.includes(itemId)) {
+        if (user.likes && user.dislikes) {
+            if (user.likes.includes(itemId) && !user.dislikes.includes(itemId)) {
                 setIsActiveLikeBtn(true);
                 setIsActiveDislikeBtn(false);
-            } if (!userData.likes.includes(itemId) && userData.dislikes.includes(itemId)) {
+            } if (!user.likes.includes(itemId) && user.dislikes.includes(itemId)) {
                 setIsActiveLikeBtn(false);
                 setIsActiveDislikeBtn(true);
-            } else if (!userData.likes.includes(itemId) && !userData.dislikes.includes(itemId)) {
+            } else if (!user.likes.includes(itemId) && !user.dislikes.includes(itemId)) {
                 setIsActiveLikeBtn(false);
                 setIsActiveDislikeBtn(false);
             }
@@ -190,16 +175,16 @@ const BookItemPage = ({ isAdmin }) => {
     }
 
     const likeBookHandler = (like) => {
-        if (userData) {
-            let userLikes = userData.likes;
-            let userDislikes = userData.dislikes;
+        if (user) {
+            let userLikes = user.likes;
+            let userDislikes = user.dislikes;
 
             if (like) {
-                if (!userData.likes.includes(itemId)) {
+                if (!user.likes.includes(itemId)) {
                     userLikes.push(itemId);
                     userDislikes = userDislikes.filter(dis => dis !== itemId);
 
-                    if (userData.dislikes.includes(itemId)) {
+                    if (user.dislikes.includes(itemId)) {
                         // likes + 1, dis - 1
                         fetchingRatingBook(true, 0);
                     } else {
@@ -212,11 +197,11 @@ const BookItemPage = ({ isAdmin }) => {
                     // likes - 1
                 }
             } else {
-                if (!userData.dislikes.includes(itemId)) {
+                if (!user.dislikes.includes(itemId)) {
                     userDislikes.push(itemId);
                     userLikes = userLikes.filter(dis => dis !== itemId);
 
-                    if (userData.likes.includes(itemId)) {
+                    if (user.likes.includes(itemId)) {
                         // dis + 1, likes - 1
                         fetchingRatingBook(false, 0);
                     } else {
@@ -231,17 +216,17 @@ const BookItemPage = ({ isAdmin }) => {
             }
 
             let userBody = {
-                basket: userData.basket,
-                email: userData.email,
-                name: userData.name,
-                password: userData.password,
-                role: userData.role,
-                status: userData.status,
+                basket: user.basket,
+                email: user.email,
+                name: user.name,
+                password: user.password,
+                role: user.role,
+                status: user.status,
                 likes: userLikes,
                 dislikes: userDislikes,
             }
 
-            fetch(`http://localhost:8081/user/${userData.id}`, {
+            fetch(`http://localhost:8081/user/${user.id}`, {
                 method: "PUT",
                 body: JSON.stringify(userBody),
                 headers: {
@@ -265,13 +250,13 @@ const BookItemPage = ({ isAdmin }) => {
     }, [itemId, disabledAddingBtn, cartItems, isActiveDislikeBtn, isActiveLikeBtn, bookLikes, bookDislikes]);
 
     useEffect(() => {
-        if (userData) {
+        if (user) {
             checkingLikes();
         }
 
         setBookLikes(bookItem.likes);
         setBookDislikes(bookItem.dislikes);
-    }, [userData, fetchingBookItem]);
+    }, [user, fetchingBookItem]);
 
     return (
         <div className={isAdmin ? "main-wrapper admin-book-wrapper" : "main-wrapper"}>
@@ -284,7 +269,7 @@ const BookItemPage = ({ isAdmin }) => {
                         <div>
                             <p>Price: {bookItem.price} $</p>
                             <p>Rating: {bookRating}/10</p>
-                            {userData &&<div className="book-likes-box">
+                            {user &&<div className="book-likes-box">
                                 <Button onClick={() => likeBookHandler(true)}>
                                     {isActiveLikeBtn && <ThumbUpIcon />}
                                     {!isActiveLikeBtn && <ThumbUpOffAltIcon />}

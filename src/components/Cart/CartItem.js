@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import CartContext from "../../context/cart-context";
 // import ItemsContext from "../../context/items-context";
 
-import { Button, Card } from "@mui/material";
+import { Card } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AuthContext from "../../context/auth-context";
 import "./CartItem.css";
@@ -83,11 +83,6 @@ const CartItem = ({ name, id, price, category, img, pagesCount, language }) => {
                         <button className="price-box__delete-btn" title="Delete item" onClick={() => deleteCartItemHandler(id)}>
                             <DeleteIcon fontSize="small" />
                         </button>
-                    </div>
-                    <div className="order-box">
-                        <Link onClick={cartCtx.closeCart} to="/home/order" className="order-cart-item-box">
-                            <Button variant="contained">Order</Button>
-                        </Link>
                     </div>
                 </div>
             </Card>

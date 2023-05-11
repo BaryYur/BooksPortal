@@ -4,6 +4,7 @@ const CartContext = React.createContext({
     fetchingCartItems: (id) => {},
     addingToCart: () => {},
     deleteFromCart: (id) => {},
+    fetchingBuyingOrder: (body) => {},
     dropCart: () => {},
 });
 
@@ -77,6 +78,20 @@ export const CartContextProvider = ({ children }) => {
         }
     }
 
+    const fetchingBuyingOrder = (body) => {
+        fetch(`http://localhost:8081/pay?id=${body.id}&ids=${body.ids}`, {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("pay-btn").innerHTML = html;
+            });
+    }
+
     const dropCart = () => {
         setCartItemsCounter(0);
         setCartItems([]);
@@ -98,6 +113,7 @@ export const CartContextProvider = ({ children }) => {
                 cartTotalPrice: cartTotalPrice,
                 deleteFromCart: deleteFromCart,
                 fetchingCartItems: fetchingCartItems,
+                fetchingBuyingOrder: fetchingBuyingOrder,
                 dropCart: dropCart,
             }}
         >

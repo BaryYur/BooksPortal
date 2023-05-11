@@ -75,3 +75,8 @@
     font-size: 14px;
     color: #5d5c5c;
 }
+
+.comment-item__text {
+    font-size: 15px;
+    color: #4f4e4e;
+}

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, {useContext, useEffect} from "react";
 
 import AuthContext from "../../context/auth-context";
 import CartContext from "../../context/cart-context";
@@ -38,6 +38,12 @@ const Header = () => {
         }
     }
 
+    useEffect(() => {
+        if (!isLoggedIn) {
+            cartCtx.dropCart();
+        }
+    }, [isLoggedIn]);
+
     // const activeMenuBarHandler = () => setActiveMenu(active => !active);
 
     return (
@@ -52,6 +58,9 @@ const Header = () => {
                 </Link>
                 <nav> 
                     <ul>
+                        <li>
+                            {isLoggedIn && <Link to="/home/user-books">Your books</Link>}
+                        </li>
                         <li>
                             <Link to="/home/shop">Categories</Link>
                         </li>

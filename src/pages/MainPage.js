@@ -6,7 +6,8 @@ import AuthContext from "../context/auth-context";
 
 import HomePage from "./HomePage/HomePage";
 import NewsPage from "./NewsPage/NewsPage";
-import OrderPage from "./OrderPage";
+import OrderPage from "./OrderPage/OrderPage";
+import UserBooksPage from "./UserBooksPage/UserBooksPage";
 // import PublishingPage from "./PublishingPage";
 import AuthorPage from "./AuthorPage/AuthorPage";
 import AuthPage from "./AuthPage";
@@ -27,7 +28,8 @@ const MainPage = () => {
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/news" element={<NewsPage />} />
-                    <Route path="/order" element={<OrderPage />} />
+                    {isLoggedIn && <Route path="/order" element={<OrderPage />} />}
+                    {isLoggedIn && <Route path="/user-books" element={<UserBooksPage />} />}
                     {(isUserIsAuthor || isUserIsPublisher) &&<Route path="/notifications" element={<NotificationsPage />} />}
                     {isUserIsPublisher && <Route path="/publishing" element={<AuthorPage publisher={true} author={false} />} />}
                     {isUserIsAuthor && <Route path="/author" element={<AuthorPage publisher={false} author={true} />} />}

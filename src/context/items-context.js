@@ -220,9 +220,8 @@ export const ItemsContextProvider = ({ children }) => {
             .then(response => response.blob())
             .then(blob => {
                 const file = new File([blob], "filename.pdf", { type: "application/pdf" });
-
-                // Відкриття файлу у новій вкладці браузера
                 const fileURL = URL.createObjectURL(file);
+
                 window.open(fileURL, "_blank");
             })
             .catch(error => {

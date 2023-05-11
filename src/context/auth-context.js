@@ -14,6 +14,7 @@ const AuthContext = React.createContext({
     login: (token, id) => {},
     logout: () => {},
     fetchingUser: (url, body) => {},
+    fetchingUserData: () => {},
 });
 
 const calculateRemainingTime = (expirationTime) => {
@@ -58,6 +59,7 @@ export const AuthContextProvider = ({ children }) => {
     const [isUserIsAuthor, setIsUserIsAuthor] = useState(false);
     const [isUserIsPublisher, setIsUserIsPublisher] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [user, setUser] = useState({});
     const tokenData = retrieveStoredToken();
     const navigate = useNavigate();
 
@@ -198,6 +200,19 @@ export const AuthContextProvider = ({ children }) => {
             });
     }
 
+    const fetchingUserData = () => {
+        let userData = JSON.parse(localStorage.getItem("userData")) || {};
+
+        if (userData) {
+            fetch(`http://localhost:8081/user/${userData.id}`)
+                .then(response => response.json())
+                .then(data => {
+                    setUser(data);
+                })
+                .catch(() => console.log("user error"));
+        }
+    }
+
     useEffect(() => {
         if (tokenData) {
             logoutTimer = setTimeout(logoutHandler, tokenData.duration);
@@ -218,6 +233,7 @@ export const AuthContextProvider = ({ children }) => {
 
     const contextValue = {
         token: token,
+        user: user,
         isLoggedIn: userIsLoggedIn,
         isUserIsAdmin: isUserIsAdmin,
         isUserIsAuthor: isUserIsAuthor,
@@ -226,8 +242,9 @@ export const AuthContextProvider = ({ children }) => {
         logout: logoutHandler,
         userInfo: userInfo,
         fetchingUser: fetchingUser,
+        fetchingUserData: fetchingUserData,
         authLoading: isLoading,
-    };
+    }
 
     return (
         <AuthContext.Provider value={contextValue}>

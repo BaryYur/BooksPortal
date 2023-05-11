@@ -1,5 +1,4 @@
 {
-  "homepage": "https://baryyur.github.io/BooksPortal",
   "name": "books-shop",
   "version": "0.1.0",
   "private": true,
@@ -18,6 +17,7 @@
     "dotenv": "^16.0.3",
     "jwt-decode": "^3.1.2",
     "mui-tel-input": "^3.0.2",
+    "pdf-lib": "^1.17.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dotenv": "^0.1.3",

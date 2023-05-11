@@ -1,0 +1,48 @@
+.order-page-container {
+    width: 900px;
+    margin: 0 auto;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.order-page-container ul {
+    padding: 0;
+}
+
+.order-page__order-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 20px;
+}
+
+.pay-book-btn {
+    position: relative;
+    z-index: var(--ui-index-2);
+}
+
+.order-page__order-box form input[type="image"] {
+    opacity: 0;
+    margin: 0;
+    z-index: var(--ui-index-2);
+}
+
+.order-page__order-box form {
+    height: 50px;
+    width: 175px;
+}
+
+.order-page__order-box h2 {
+    display: block;
+    padding: 3px 15px;
+    font-size: 20px;
+    background-color: rgba(144, 238, 144, 0.13);
+    border: 1px solid lightgreen;
+    border-radius: 5px;
+}
+
+.buy-books-btn span {
+    margin-left: 5px;
+    font-weight: normal;
+}
