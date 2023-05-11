@@ -22,6 +22,16 @@
     font-size: 17px;
     color: #333333;
     font-weight: 600;
+    display: flex;
+    align-items: flex-start;
+}
+
+.purchased-book-item p svg {
+    font-size: 25px;
+}
+
+.purchased-book-item p span {
+    margin-left: 10px;
 }
 
 .purchased-book-item button {

@@ -5,7 +5,7 @@ import CartContext from "../../context/cart-context";
 
 import { Link, NavLink } from "react-router-dom";
 
-import ImportContactsOutlinedIcon from "@mui/icons-material/ImportContactsOutlined";
+// import ImportContactsOutlinedIcon from "@mui/icons-material/ImportContactsOutlined";
 import PersonIcon from "@mui/icons-material/Person";
 
 import { Button, Badge } from "@mui/material";
@@ -16,7 +16,7 @@ import LoginIcon from "@mui/icons-material/Login";
 
 import Cart from "../Cart/Cart";
 import "./Header.css";
-// import bookLogoIcon from "../../images/book-icon.png";
+import bookLogoIcon from "../../images/book-icon.png";
 
 const Header = () => {
     const { isLoggedIn, isUserIsAdmin, isUserIsAuthor, isUserIsPublisher } = useContext(AuthContext);
@@ -51,8 +51,8 @@ const Header = () => {
             <div className="header-wrapper">
                 <Link to="/" title="Books shop home" onClick={scrollToTop}>
                     <div className="logo-box">
-                        <ImportContactsOutlinedIcon style={{ color: "#5d5c5c" }} fontSize="large" />
-                        {/* <img src={bookLogoIcon} alt="Logo" style={{ width: "35px" }} /> */}
+                        {/*<ImportContactsOutlinedIcon style={{ color: "#5d5c5c" }} fontSize="large" />*/}
+                         <img src={bookLogoIcon} alt="Logo" style={{ width: "35px" }} />
                         <span>Books portal</span>
                     </div>
                 </Link>

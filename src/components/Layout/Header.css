@@ -62,7 +62,7 @@
 .main-header ul {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 13px;
 }
 
 .main-header ul li a {
