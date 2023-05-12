@@ -116,6 +116,15 @@
     -webkit-user-select: auto;
 }
 
+.book-title-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.book-title-box div button:last-child {
+    margin-left: 10px;
+}
+
 .book-item-details-container {
     padding: 10px;
     border: 1px solid #ddd;

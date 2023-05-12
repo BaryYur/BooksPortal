@@ -54,20 +54,6 @@ export const CartContextProvider = ({ children }) => {
             .catch(error => console.log(error));
     }
 
-    const deleteFromCart = (userId, body) => {
-        fetch(`http://localhost:8081/user/${userId}`, {
-            method: "PUT",
-            body: JSON.stringify(body),
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-            .then(response => {
-                fetchingCartItems(userId);
-            })
-            .catch(error => console.log(error));
-    }
-
     const countTotalPrice = () => {
         setCartTotalPrice(0);
 
@@ -90,6 +76,20 @@ export const CartContextProvider = ({ children }) => {
             .then(html => {
                 document.getElementById("pay-btn").innerHTML = html;
             });
+    }
+
+    const deleteFromCart = (userId, body) => {
+        fetch(`http://localhost:8081/user/${userId}`, {
+            method: "PUT",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(response => {
+                fetchingCartItems(userId);
+            })
+            .catch(error => console.log(error));
     }
 
     const dropCart = () => {

@@ -38,7 +38,7 @@ const BookItemCard = ({
     const navigate = useNavigate();
     const { addToCart, cartItems } = useContext(CartContext);
     const { isLoggedIn } = useContext(AuthContext);
-    const { fetchingDeletingBookItem, fetchingUnlockBook, fetchingSearchingItems } = useContext(ItemsContext);
+    const { fetchingDeletingBookItem, fetchingUnlockBook, fetchingSearchingItems, purchasedBooks } = useContext(ItemsContext);
     const [activeAddingBtn, setActiveAddingBtn] = useState(false);
     const [openDeletingModal, setOpenDeletingModal] = useState(false);
     const [userData, setUserData] = useState({});
@@ -53,7 +53,7 @@ const BookItemCard = ({
             .then(response => response.json())
             .then(user => {
                 setUserData(user);
-            })
+            });
     }
 
     const addToCartHandler = () => {
@@ -89,8 +89,16 @@ const BookItemCard = ({
             idArr.push(item.id);
         }
 
-        if (!idArr.includes(id)) {
+        let pArr = [];
+
+        for (let book of purchasedBooks) {
+            pArr.push(book.bookName);
+        }
+
+        if (!idArr.includes(id) && !pArr.includes(name)) {
             setActiveAddingBtn(false);
+        } else {
+            setActiveAddingBtn(true);
         }
 
         return activeAddingBtn;
@@ -172,7 +180,7 @@ const BookItemCard = ({
                         <h3>{price}</h3>
                         <span>$</span>
                     </div>}
-                    {!adminItems && <Button
+                    {!adminItems && price !== 0 && <Button
                         variant="contained"
                         disabled={activeAddingBtn}
                         className="adding-to-cart-btn"
@@ -206,12 +214,6 @@ const BookItemCard = ({
                         disabled={status === "GOOD"}
                         onClick={() => blockBookHandler("GOOD")}
                     >Unblock</Button>}
-                    {/*{adminItems && (status === "GOOD" || status === "BAD") && (*/}
-                    {/*    <p className={status === "GOOD" ? "active-book-status" : "inactive-book-status"}>*/}
-                    {/*        {status === "GOOD" && <span>active</span>}*/}
-                    {/*        {status === "BAD" && <span>not active</span>}*/}
-                    {/*    </p>*/}
-                    {/*)}*/}
                     {adminItems && status === "CONSIDERATION" &&
                         <p className="book-status">
                             <span>consideration</span>

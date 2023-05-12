@@ -18,7 +18,7 @@
     min-height: 70px;
 }
 
-.purchased-book-item p {
+.purchased-book-item .book-name {
     font-size: 17px;
     color: #333333;
     font-weight: 600;
@@ -26,17 +26,23 @@
     align-items: flex-start;
 }
 
-.purchased-book-item p svg {
+.purchased-book-item .book-name svg {
     font-size: 25px;
 }
 
-.purchased-book-item p span {
+.purchased-book-item .book-name span {
     margin-left: 10px;
 }
 
-.purchased-book-item button {
+.purchased-book-item div p {
+    color: grey;
+    font-size: 13px;
+}
+
+.purchased-book-item div button {
     align-self: flex-end;
     font-weight: normal;
+    margin-top: 13px;
 }
 
 .purchased-book-item button span {

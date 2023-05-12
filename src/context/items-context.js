@@ -14,6 +14,7 @@ const ItemsContext = React.createContext({
     fetchingUnlockBook: (id) => {},
     fetchingAdminBooks: () => {},
     fetchingAuthorBooks: (id, status) => {},
+    fetchingPurchasedBooks: () => {},
 });
 
 export const ItemsContextProvider = ({ children }) => {
@@ -237,7 +238,7 @@ export const ItemsContextProvider = ({ children }) => {
             });
     }
 
-    const fetchingUnlockBook = (body, bookName) => {
+    const fetchingUnlockBook = (body) => {
         fetch(`http://localhost:8081/book/${body.id}`, {
             method: "PUT",
             body: JSON.stringify(body),
@@ -245,8 +246,12 @@ export const ItemsContextProvider = ({ children }) => {
                 "Content-Type": "application/json",
             }
         })
-            .then(() => {
+            .then((response) => {
+                response.json();
                 fetchingAdminBooks();
+            })
+            .then(data => {
+                console.log(data);
             });
     }
 
@@ -329,12 +334,26 @@ export const ItemsContextProvider = ({ children }) => {
             });
     }
 
+    const [purchasedBooks, setPurchasedBooks] = useState([]);
+
+    const fetchingPurchasedBooks = () => {
+        let userData = JSON.parse(localStorage.getItem("userData"));
+
+        if (userData) {
+            fetch(`http://localhost:8081/shopping/id?id=${userData.id}`)
+                .then(response => response.json())
+                .then(data => {
+                    setPurchasedBooks(data);
+                });
+        }
+    }
+
     useEffect(() => {
         fetchingAllCategories();
         fetchingNews();
+        fetchingPurchasedBooks();
 
         setSearchingItems([ ...searchingItems1, ...searchingItems2 ]);
-        // console.log(Dotenv.MAIN_PATH);
     }, [searchingItems1, searchingItems2]);
 
     return (
@@ -352,6 +371,8 @@ export const ItemsContextProvider = ({ children }) => {
                 bookItemAuthorsList: bookItemAuthorsList,
                 bookItemPublishersList: bookItemPublishersList,
                 fetchingAuthorBooks: fetchingAuthorBooks,
+                fetchingPurchasedBooks: fetchingPurchasedBooks,
+                purchasedBooks: purchasedBooks,
                 authorConsiderationBooks: authorConsiderationBooks,
                 authorGoodBooks: authorGoodBooks,
                 authorBadBooks: authorBadBooks,

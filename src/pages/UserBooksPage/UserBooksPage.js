@@ -1,21 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
+
+import ItemsContext from "../../context/items-context";
 
 import PurchasedBookItem from "./PurchasedBookItem";
 
 const UserBooksPage = () => {
-    const [purchasedBooks, setPurchasedBooks] = useState([]);
-
-    const fetchingPurchasedBooks = () => {
-        let userData = JSON.parse(localStorage.getItem("userData"));
-
-        if (userData) {
-            fetch(`http://localhost:8081/shopping/id?id=${userData.id}`)
-                .then(response => response.json())
-                .then(data => {
-                    setPurchasedBooks(data);
-                });
-        }
-    }
+    const { purchasedBooks, fetchingPurchasedBooks } = useContext(ItemsContext);
 
     useEffect(() => {
         fetchingPurchasedBooks();
@@ -30,6 +20,7 @@ const UserBooksPage = () => {
                         key={book.id}
                         bookName={book.bookName}
                         file={book.file}
+                        purchasedDate={book.date}
                     />
                 ))}
                 {purchasedBooks.length === 0 && <p className="no-items-paragraph">Nothing here yet</p>}

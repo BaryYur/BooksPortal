@@ -20,7 +20,7 @@ import "./BookItemPage.css";
 const BookItemPage = ({ isAdmin }) => {
     const navigate = useNavigate();
     const itemId = useParams().id;
-    const { bookItem, fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList, bookItemPublishersList, fetchingDownloadBook } = useContext(ItemsContext);
+    const { bookItem, fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList, bookItemPublishersList, fetchingDownloadBook, purchasedBooks, fetchingUnlockBook } = useContext(ItemsContext);
     const { addToCart, cartItems } = useContext(CartContext);
     const { isLoggedIn, fetchingUserData, user } = useContext(AuthContext);
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(false);
@@ -80,8 +80,16 @@ const BookItemPage = ({ isAdmin }) => {
             idArr.push(item.id);
         }
 
-        if (!idArr.includes(itemId)) {
+        let pArr = [];
+
+        for (let book of purchasedBooks) {
+            pArr.push(book.bookName);
+        }
+
+        if (!idArr.includes(itemId) && !pArr.includes(bookItem.name)) {
             setDisabledAddingBtn(false);
+        } else {
+            setDisabledAddingBtn(true);
         }
 
         return setDisabledAddingBtn;
@@ -242,6 +250,31 @@ const BookItemPage = ({ isAdmin }) => {
         }
     }
 
+    const blockBookHandler = (status) => {
+        let body = {
+            id: bookItem.id,
+            name: bookItem.name,
+            price: bookItem.price,
+            status: status,
+            file: bookItem.file,
+            description: bookItem.description,
+            publishDate: bookItem.publishDate,
+            pagesCount: bookItem.pagesCount,
+            language: bookItem.language,
+            categories: bookItem.categories,
+            authors: bookItem.authors,
+            publishers: bookItem.publishers,
+            likes: bookItem.likes,
+            dislikes: bookItem.dislikes,
+        }
+
+        fetchingUnlockBook(body);
+
+        setTimeout(() => {
+            fetchingBookItem(itemId);
+        }, 200);
+    }
+
     useEffect(() => {
         btnIsActive();
         fetchingBookItem(itemId);
@@ -281,7 +314,7 @@ const BookItemPage = ({ isAdmin }) => {
                                     <span>{bookDislikes}</span>
                                 </Button>
                             </div>}
-                            {!isAdmin && <Button
+                            {!isAdmin && bookItem.price !== 0 && <Button
                                 variant="contained"
                                 disabled={disabledAddingBtn}
                                 className="add-cart-btn"
@@ -290,7 +323,7 @@ const BookItemPage = ({ isAdmin }) => {
                                 <ShoppingCartIcon />
                                 <span>Add to cart</span>
                             </Button>}
-                            {isAdmin && (
+                            {(isAdmin || bookItem.price === 0) && (
                                 <Button
                                     variant="contained"
                                     className="download-btn"
@@ -303,8 +336,24 @@ const BookItemPage = ({ isAdmin }) => {
                         </div>
                     </div>
                     <div className="book-item__main-info">
-                        <div>
+                        <div className="book-title-box">
                             <h1>{bookItem.name}</h1>
+
+                            <div>
+                                {isAdmin && <Button
+                                    title="Block this book"
+                                    variant="contained"
+                                    color="error"
+                                    disabled={bookItem.status === "BAD"}
+                                    onClick={() => blockBookHandler("BAD")}
+                                >Block</Button>}
+                                {isAdmin && <Button
+                                    title="Unlock this book"
+                                    variant="contained"
+                                    disabled={bookItem.status === "GOOD"}
+                                    onClick={() => blockBookHandler("GOOD")}
+                                >Unblock</Button>}
+                            </div>
                         </div>
                         <div className="main-info__top">
                             <ul>
