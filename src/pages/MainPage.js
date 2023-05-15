@@ -8,6 +8,7 @@ import HomePage from "./HomePage/HomePage";
 import NewsPage from "./NewsPage/NewsPage";
 import OrderPage from "./OrderPage/OrderPage";
 import UserBooksPage from "./UserBooksPage/UserBooksPage";
+import AuthorInfoPage from "./AuthorInfoPage";
 // import PublishingPage from "./PublishingPage";
 import AuthorPage from "./AuthorPage/AuthorPage";
 import AuthPage from "./AuthPage";
@@ -38,6 +39,7 @@ const MainPage = () => {
                     <Route path="/shop/*" element={<ShopPage />} />
                     <Route path="/shop/categories/:category" element={<CategoryPage />} />
                     <Route path="/shop/categories/:category/:id" element={<BookItemPage />} />
+                    <Route path="/author-info/:id" element={<AuthorInfoPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Layout>

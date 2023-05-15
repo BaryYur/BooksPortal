@@ -1,0 +1,36 @@
+.author-wrapper {
+    display: flex;
+    align-items: flex-start;
+}
+
+.author-info-container {
+    flex: 1;
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.author-info-container p {
+    display: flex;
+    align-items: center;
+    line-height: 30px;
+    font-size: 17px;
+}
+
+.author-info-container p svg {
+    color: #318CE7;
+}
+
+.author-info-container p span {
+    margin-left: 10px;
+    color: #5d5c5c;
+}
+
+.author-info-container-books {
+    flex: 4;
+    margin-left: 5px;
+}
+
+.author-info-container-books ul li {
+    width: 230px;
+}

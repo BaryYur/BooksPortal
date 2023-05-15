@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 
 import ItemsContext from "../../context/items-context";
 import CartContext from "../../context/cart-context";
@@ -20,7 +20,16 @@ import "./BookItemPage.css";
 const BookItemPage = ({ isAdmin }) => {
     const navigate = useNavigate();
     const itemId = useParams().id;
-    const { bookItem, fetchingBookItem, bookItemCategoriesList, bookItemAuthorsList, bookItemPublishersList, fetchingDownloadBook, purchasedBooks, fetchingUnlockBook } = useContext(ItemsContext);
+    const {
+        bookItem,
+        fetchingBookItem,
+        bookItemCategoriesList,
+        bookItemAuthorsList,
+        bookItemPublishersList,
+        fetchingDownloadBook,
+        purchasedBooks,
+        fetchingUnlockBook
+    } = useContext(ItemsContext);
     const { addToCart, cartItems } = useContext(CartContext);
     const { isLoggedIn, fetchingUserData, user } = useContext(AuthContext);
     const [disabledAddingBtn, setDisabledAddingBtn] = useState(false);
@@ -379,7 +388,9 @@ const BookItemPage = ({ isAdmin }) => {
                                     <li>
                                         <span>Authors:</span>
                                         {bookItemAuthorsList.map((author => (
-                                            <span key={author.id} className="item">{author.name}</span>
+                                            <span key={author.id} className="item">
+                                                <Link to={`/home/author-info/${author.id}`}>{author.name}</Link>
+                                            </span>
                                         )))}
                                     </li>
                                     <li>
