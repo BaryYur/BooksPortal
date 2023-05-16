@@ -18,8 +18,9 @@
     flex: 1.5;
     background-color: white;
     border-radius: 4px;
-    padding: 5px;
+    padding: 8px;
     box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 20%), 0px 0px 1px 0px rgb(0 0 0 / 20%);
+    margin-top: 10px;
 }
 
 .searching-items-container {
@@ -30,4 +31,36 @@
 .searching-page__items-box {
     min-height: 700px;
     border-radius: 4px;
+    /*margin-top: 10px;*/
+}
+
+.filtering-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filtering-head p {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.filtering-head svg {
+    font-size: 28px;
+    color: #1976d2;
+}
+
+.filtering-box {
+    margin-top: 10px;
+}
+
+.range-input-controller {
+    padding: 10px;
+}
+
+.max-min-numbers-box {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    color: #5d5c5c;
 }

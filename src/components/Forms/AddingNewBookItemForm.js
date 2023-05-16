@@ -28,6 +28,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const [publisherNameInput, setPublisherNameInput] = useState("");
     const [pagesCountInput, setPagesCountInput] = useState(0);
     const [priceInput, setPriceInput] = useState(0);
+    const [bookPreviewPagesInput, setBookPreviewPagesInput] = useState(0);
     const [descriptionInput, setDescriptionInput] = useState("");
     const [publishDateInput, setPublishDateInput] = useState("");
     const [languageInput, setLanguageInput] = useState("");
@@ -222,8 +223,33 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         setChosenPublishers([]);
     }
 
-    const bookFileHandler = (e) => {
-        setBookFileInput(e.target.files[0]);
+    const bookFileHandler = (e) => setBookFileInput(e.target.files[0]);
+
+    const handlePreviewUpload = async (event) => {
+        const file = event.target.files[0];
+        const parsedString = await parsePDFToString(file);
+        setBookPreviewPagesInput(parsedString);
+        console.log(parsedString);
+    }
+
+    const parsePDFToString = (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+
+            reader.onload = (event) => {
+                const arrayBuffer = event.target.result;
+                const base64String = btoa(
+                    String.fromCharCode.apply(null, new Uint8Array(arrayBuffer))
+                );
+                resolve(base64String);
+            };
+
+            reader.onerror = (event) => {
+                reject(event.target.error);
+            };
+
+            reader.readAsArrayBuffer(file);
+        });
     }
 
     const addingFormSubmitHandler = (event) => {
@@ -280,6 +306,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             file: image,
             pagesCount: Number(pagesCountInput),
             price: Number(priceInput),
+            demoFile1: bookPreviewPagesInput,
             status: bookStatus,
             likes: likes,
             dislikes: dislikes,
@@ -334,8 +361,8 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
     useEffect(() => {
         if (
-            bookNameInput.length > 3
-            && publishDateInput !== "" &&
+            bookNameInput !== "" &&
+            publishDateInput !== "" && bookPreviewPagesInput !== "" &&
             languageInput !== "" && image !== "" &&
             pagesCountInput !== "" && priceInput !== "" &&
             descriptionInput !== "" && chosenCategories.length > 0
@@ -550,6 +577,16 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                                 onChange={bookFileHandler}
                             />
                         </div>
+                        <div className="control">
+                            <label htmlFor="">Book preview pages</label>
+                            <input
+                                id="book-preview-file"
+                                type="file"
+                                className="book-file-input"
+                                accept="application/pdf"
+                                onChange={handlePreviewUpload}
+                            />
+                        </div>
                         <div className="number-inputs">
                             <div className="control">
                                 <label htmlFor="">Price ($)</label>
@@ -647,7 +684,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 </Modal>
             </div>
 
-            {/*// publisher*/}
+            {/* publisher*/}
             <div className="modal-name-input-container">
                 <Modal
                     open={openPublisherNameInputModal}

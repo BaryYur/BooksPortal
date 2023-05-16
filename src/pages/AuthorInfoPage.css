@@ -8,6 +8,7 @@
     background-color: white;
     border-radius: 5px;
     padding: 10px;
+    box-shadow: var(--main-shadow);
 }
 
 .author-info-container p {

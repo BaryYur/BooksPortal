@@ -14,6 +14,8 @@ const ItemsContext = React.createContext({
     fetchingUnlockBook: (id) => {},
     fetchingAdminBooks: () => {},
     fetchingAuthorBooks: (id, status) => {},
+    fetchingAuthorsList: (ids) => {},
+    fetchingPublishersList: (ids) => {},
     fetchingPurchasedBooks: () => {},
 });
 
@@ -366,6 +368,8 @@ export const ItemsContextProvider = ({ children }) => {
                 fetchingDownloadBook: fetchingDownloadBook,
                 fetchingSearchingItems: fetchingSearchingItems,
                 fetchingDeletingBookItem: fetchingDeletingBookItem,
+                fetchingAuthorsList: fetchingAuthorsList,
+                fetchingPublishersList: fetchingPublishersList,
                 bookItem: bookItem,
                 bookItemCategoriesList: bookItemCategoriesList,
                 bookItemAuthorsList: bookItemAuthorsList,

@@ -4,8 +4,13 @@ import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 
 import ItemsContext from "../../context/items-context";
 
+import TuneIcon from "@mui/icons-material/Tune";
 import SearchingItemsPage from "./SearchingItemsPage";
+import AuthorFiltering from "./AuthorFiltering";
 import "./SearchingPage.css";
+import PriceFiltering from "./PriceFiltering";
+import YearFiltering from "./YearFiltering";
+import PublisherFiltering from "./PublisherFiltering";
 
 const SearchingPage = () => {
     const navigate = useNavigate();
@@ -35,9 +40,20 @@ const SearchingPage = () => {
                 <h2>Found <span>{itemsLength}</span> {itemsLength !== 1 ? <span>items</span> : <span>item</span>}</h2>
             </div>
             <div className="searching-page__main-container">
-                <div className="searching-page__filtering-box">
-                    <p>filters</p>
-                </div>
+                {itemsLength !== 0 && (<div className="searching-page__filtering-box">
+                    <div className="filtering-head">
+                        <p>Filters</p>
+                        <TuneIcon />
+                    </div>
+                    <div className="filtering-box">
+                            <div>
+                                <AuthorFiltering />
+                                <PublisherFiltering />
+                                <PriceFiltering />
+                                <YearFiltering />
+                            </div>
+                    </div>
+                </div>)}
                 <Routes>
                     <Route path="/" element={<SearchingItemsPage search={location.search} searchingText={searchingText} />} />
                 </Routes>

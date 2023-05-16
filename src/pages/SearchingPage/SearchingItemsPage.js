@@ -52,7 +52,10 @@ const SearchingItemsPage = ({ search, searchingText }) => {
     return (
         <div className="searching-items-container">
             <div className="searching-page__items-box">
-                <BookItemsList booksData={currentBookItems} />
+                {currentBookItems.length !== 0 ?
+                    <BookItemsList booksData={currentBookItems} />:
+                    <p className="no-items-paragraph">Books not found</p>
+                }
             </div>
             {searchingPagesCounter > 1 && (
                 <Stack spacing={2} className="pagination-stack">

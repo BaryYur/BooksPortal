@@ -166,12 +166,13 @@ const BookItemPage = ({ isAdmin }) => {
         }
 
         let rounded = 0;
+        rounded = rating.toFixed(1);
 
-        if (rating.toFixed(2) % 2 === 0) {
-            rounded = rating;
-        } else {
-            rounded = rating.toFixed(2);
-        }
+        // if (rating.toFixed(2) % 2 === 0) {
+        //     rounded = rating;
+        // } else {
+            // rounded = rating.toFixed(1);
+        // }
 
         setBookRating(rounded);
     }
@@ -275,6 +276,7 @@ const BookItemPage = ({ isAdmin }) => {
             publishers: bookItem.publishers,
             likes: bookItem.likes,
             dislikes: bookItem.dislikes,
+            demoFile1: bookItem.demoFile1,
         }
 
         fetchingUnlockBook(body);
@@ -282,6 +284,20 @@ const BookItemPage = ({ isAdmin }) => {
         setTimeout(() => {
             fetchingBookItem(itemId);
         }, 200);
+    }
+
+    const fetchingDownloadBookPreview = () => {
+        const byteCharacters = atob(bookItem.demoFile1);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+
+        const blob = new Blob([byteArray], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+
+        window.open(url, "_blank");
     }
 
     useEffect(() => {
@@ -405,6 +421,16 @@ const BookItemPage = ({ isAdmin }) => {
                                             <span key={publisher.id} className="item">{publisher.name}</span>
                                         )))}
                                         {bookItemPublishersList.length === 0 && <span>-</span>}
+                                    </li>
+                                    <li>
+                                        <span>Read preview:</span>
+                                        <Button
+                                            onClick={() => fetchingDownloadBookPreview(itemId)}
+                                            style={{ fontWeight: "normal", marginLeft: "10px" }}
+                                        >
+                                            <DownloadIcon />
+                                            <span>Download preview</span>
+                                        </Button>
                                     </li>
                                 </ul>
                             </div>

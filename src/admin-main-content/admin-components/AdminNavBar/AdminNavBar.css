@@ -20,6 +20,11 @@
     top: 15px;
 }
 
+.admin-nav-bar ul {
+    display: flex;
+    flex-direction: column;
+}
+
 .admin-nav-bar-container ul li a {
     justify-content: center;
 }
