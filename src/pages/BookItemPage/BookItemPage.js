@@ -138,6 +138,8 @@ const BookItemPage = ({ isAdmin }) => {
             publishDate: bookItem.publishDate,
             publishers: bookItem.publishers,
             status: bookItem.status,
+            publisherId: bookItem.publisherId,
+            authorId: bookItem.authorId,
         }
 
         fetch(`http://localhost:8081/book/${itemId}`, {
@@ -277,6 +279,8 @@ const BookItemPage = ({ isAdmin }) => {
             likes: bookItem.likes,
             dislikes: bookItem.dislikes,
             demoFile1: bookItem.demoFile1,
+            publisherId: bookItem.publisherId,
+            authorId: bookItem.authorId,
         }
 
         fetchingUnlockBook(body);
@@ -429,7 +433,7 @@ const BookItemPage = ({ isAdmin }) => {
                                             style={{ fontWeight: "normal", marginLeft: "10px" }}
                                         >
                                             <DownloadIcon />
-                                            <span>Download preview</span>
+                                            <span>Open preview</span>
                                         </Button>
                                     </li>
                                 </ul>

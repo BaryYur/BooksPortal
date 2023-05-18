@@ -390,7 +390,7 @@ export const ItemsContextProvider = ({ children }) => {
     const [authorBadBooks, setAuthorBadBooks] = useState([]);
 
     const fetchingAuthorBooks = (id, user, status) => {
-        fetch(`http://localhost:8081/book/${user}/${id}/${status}`)
+        fetch(`http://localhost:8081/book/${user}/books/${id}/${status}`)
             .then(response => response.json())
             .then(data => {
                 if (status === "CONSIDERATION") {
