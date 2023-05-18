@@ -234,6 +234,19 @@ export const ItemsContextProvider = ({ children }) => {
         let prices = getMinMaxPricesFromUrlString(params);
         let years = getMinMaxYearsFromUrlString(params);
 
+        let searchingText = "";
+
+        const extractText = (urlString) => {
+            const regex = /\/text=([^/&]+)/;
+            const match = urlString.match(regex);
+            if (match && match[1]) {
+                return match[1];
+            }
+            return null;
+        }
+
+        searchingText = extractText(params);
+
         if ((params[params.length - 2] + params[params.length - 1] === "/1")) {
             fetchingSearchingItems(bookName, false);
             fetch(`http://localhost:8081/book/all/${bookName}/GOOD`)
@@ -245,8 +258,8 @@ export const ItemsContextProvider = ({ children }) => {
                 .catch(error => {
                     alert("Oops...", `Something went wrong!` , "error");
                 });
-        } else if (bookName) {
-            fetch(`http://localhost:8081/book/all/${bookName}/GOOD`)
+        } else {
+            fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
                 .then(response => response.json())
                 .then(data => {
                     let books = [];
