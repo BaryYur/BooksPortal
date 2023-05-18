@@ -26,11 +26,13 @@ export const CartContextProvider = ({ children }) => {
         fetch(`http://localhost:8081/user/${userId}`)
             .then(response => response.json())
             .then(data => {
-                fetch(`http://localhost:8081/book/ids?ids=${data.basket}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        setCartItems(data);
-                    })
+                if (data.basket.length !== 0) {
+                    fetch(`http://localhost:8081/book/ids?ids=${data.basket}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            setCartItems(data);
+                        })
+                }
 
                 setCartItemsCounter(0);
 

@@ -14,7 +14,7 @@ import "./SearchingForm.css";
 const SearchingForm = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { fetchingSearchingItems } = useContext(ItemsContext);
+    const { fetchingFilteringSearching } = useContext(ItemsContext);
     const [searchingInput, setSearchingInput] = useState("");
     const { scrollToTop } = useScrollToTop();
 
@@ -23,9 +23,11 @@ const SearchingForm = () => {
 
         if (searchingInput === "") return;
 
-        fetchingSearchingItems(searchingInput);
         localStorage.setItem("search", JSON.stringify(searchingInput));
         navigate(`/home/shop/search/?text=${searchingInput}/page/1`);
+        setTimeout(() => {
+            fetchingFilteringSearching(`/home/shop/search/?text=${searchingInput}/page/1`, searchingInput);
+        }, 200);
         scrollToTop();
     }
 

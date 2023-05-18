@@ -7,26 +7,23 @@ import ItemsContext from "../../context/items-context";
 import TuneIcon from "@mui/icons-material/Tune";
 import SearchingItemsPage from "./SearchingItemsPage";
 import AuthorFiltering from "./AuthorFiltering";
-import "./SearchingPage.css";
 import PriceFiltering from "./PriceFiltering";
 import YearFiltering from "./YearFiltering";
-import PublisherFiltering from "./PublisherFiltering";
+// import PublisherFiltering from "./PublisherFiltering";
+import "./SearchingPage.css";
+import CategoryFiltering from "./CategoryFiltering";
 
 const SearchingPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { searchingItems } = useContext(ItemsContext);
+    const { searchingFilteringItems, searchingItems, fetchingSearchingItems } = useContext(ItemsContext);
     const [searchingText, setSearchingText] = useState("");
 
-    const itemsLength = useMemo(() => searchingItems.length, [searchingItems]);
+    const itemsLength = useMemo(() => searchingFilteringItems.length, [searchingFilteringItems]);
 
     useEffect(() => {
-        if (location.search.split("").includes("=")) {
-            setSearchingText(location.search.split("=")[1].split("%20").join(" ").split("/")[0]);
-        } else {
-            setSearchingText("");
-            navigate("/home");
-        }
+        setSearchingText(window.location.href.split("?text=")[1].split("/")[0].replace(/%20/g, ' '));
+        fetchingSearchingItems(window.location.href.split("?text=")[1].split("/")[0].replace(/%20/g, ' '));
 
         if (location.search.length < 7) navigate("/home");
     }, [navigate, location, searchingText])
@@ -40,7 +37,7 @@ const SearchingPage = () => {
                 <h2>Found <span>{itemsLength}</span> {itemsLength !== 1 ? <span>items</span> : <span>item</span>}</h2>
             </div>
             <div className="searching-page__main-container">
-                {itemsLength !== 0 && (<div className="searching-page__filtering-box">
+                {searchingItems.length !== 0 && (<div className="searching-page__filtering-box">
                     <div className="filtering-head">
                         <p>Filters</p>
                         <TuneIcon />
@@ -48,7 +45,8 @@ const SearchingPage = () => {
                     <div className="filtering-box">
                             <div>
                                 <AuthorFiltering />
-                                <PublisherFiltering />
+                                {/*<PublisherFiltering />*/}
+                                <CategoryFiltering />
                                 <PriceFiltering />
                                 <YearFiltering />
                             </div>

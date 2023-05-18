@@ -229,7 +229,6 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         const file = event.target.files[0];
         const parsedString = await parsePDFToString(file);
         setBookPreviewPagesInput(parsedString);
-        console.log(parsedString);
     }
 
     const parsePDFToString = (file) => {
@@ -295,13 +294,15 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             dislikes = bookFields.dislikes;
         }
 
+        let date = publishDateInput[0] + publishDateInput[1] + publishDateInput[2] + publishDateInput[3];
+
         let body = {
             name: bookNameInput,
             authors: selectedAuthors,
             categories: categories,
             publishers: selectedPublishers,
             description: descriptionInput,
-            publishDate: publishDateInput,
+            publishDate: Number(date),
             language: languageInput,
             file: image,
             pagesCount: Number(pagesCountInput),
@@ -310,6 +311,22 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             status: bookStatus,
             likes: likes,
             dislikes: dislikes,
+        }
+
+        let newBody = {};
+
+        if (isAuthor) {
+            newBody = {
+                authorId: author.id,
+                ...body,
+            }
+        } else if (isPublisher) {
+            newBody = {
+                publisherId: publisher.id,
+                ...body,
+            }
+        } else {
+            newBody = body;
         }
 
         const authorItems = () => {
@@ -329,7 +346,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         }
 
         if (authorModal) {
-            itemsCtx.fetchingChangingBookItem(bookFields.id, body, bookFileInput);
+            itemsCtx.fetchingChangingBookItem(bookFields.id, newBody, bookFileInput);
 
             if (isPublisher) {
                 publisherItems();
@@ -339,7 +356,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
             closeModalHandler();
         } else if (publisherModal) {
-            itemsCtx.fetchingChangingBookItem(bookFields.id, body, bookFileInput);
+            itemsCtx.fetchingChangingBookItem(bookFields.id, newBody, bookFileInput);
 
             if (isPublisher) {
                 publisherItems();
@@ -349,7 +366,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
             closeModalHandler();
         } else {
-            itemsCtx.fetchingAddingBookItem(body, bookFileInput);
+            itemsCtx.fetchingAddingBookItem(newBody, bookFileInput);
 
             if (isPublisher) {
                 publisherItems();

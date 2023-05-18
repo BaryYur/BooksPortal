@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import ItemsContext from "../../context/items-context";
 
@@ -8,48 +8,46 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Checkbox, FormControlLabel } from "@mui/material";
-import {useParams} from "react-router-dom";
 
-const AuthorFiltering = () => {
-    const params = useParams();
-    const { searchingFilteringItems, fetchingAuthorsList, bookItemAuthorsList, fetchingFilteringSearching } = useContext(ItemsContext);
+const CategoryFiltering = () => {
+    const { searchingFilteringItems, bookItemCategoriesList, fetchingCategoriesList, fetchingFilteringSearching } = useContext(ItemsContext);
 
-    const fetchingAuthors = () => {
+    const fetchingCategories = () => {
         let search = window.location.href.split("?text=")[1].split("/")[0];
 
         fetch(`http://localhost:8081/book/all/${search}/GOOD`)
             .then(response => response.json())
             .then(data => {
-                let authorIds = [];
+                let categoryIds = [];
 
                 for (let book of data) {
-                    authorIds.push(...book.authors);
+                    categoryIds.push(...book.categories);
                 }
 
-                let ids = [...new Set(authorIds)];
-                fetchingAuthorsList(ids);
+                let ids = [...new Set(categoryIds)];
+                fetchingCategoriesList(ids);
             })
             .catch(error => {
                 alert("Oops...");
             });
     }
 
-    const [aIds, setAIds] = useState([]);
+    const [cIds, setCIds] = useState([]);
 
-    const getAuthors = (id) => {
-        if (!aIds.includes(id)) {
-            setAIds(prevId => {
+    const getCategories = (id) => {
+        if (!cIds.includes(id)) {
+            setCIds(prevId => {
                 return [...prevId, id];
             });
 
             const currentUrl = window.location.href;
-            const updatedUrl = `${currentUrl}&authors=${id}`;
+            const updatedUrl = `${currentUrl}&category=${id}`;
             window.history.replaceState(null, "", updatedUrl);
         } else {
-            setAIds(aIds.filter(aid => aid !== id));
+            setCIds(cIds.filter(cid => cid !== id));
 
             const currentUrl = window.location.href;
-            const updatedUrl = currentUrl.replace(`&authors=${id}`, "").replace("?&", "?");
+            const updatedUrl = currentUrl.replace(`&category=${id}`, "").replace("?&", "?");
             window.history.replaceState(null, "", updatedUrl);
         }
 
@@ -58,36 +56,31 @@ const AuthorFiltering = () => {
         }, 100);
     }
 
-    const checkingAuthors = (id) => {
-        if (window.location.href.split("&authors=").includes(id)) {
-            return true;
-        } else return false;
-    }
-
     useEffect(() => {
-        fetchingAuthors();
-    }, [searchingFilteringItems, aIds]);
+        fetchingCategories();
+    }, [searchingFilteringItems]);
 
     return (
-        <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey" }}>
+        <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey", marginTop: "3px" }}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
             >
-                <Typography style={{ fontWeight: "600" }}>By authors</Typography>
+                <Typography style={{ fontWeight: "600" }}>By category</Typography>
             </AccordionSummary>
             <AccordionDetails style={{ padding: "0px 10px 5px 10px" }}>
-                {bookItemAuthorsList.map((author => (
-                    <p key={author.id} className="item">
+                {bookItemCategoriesList.map((category => (
+                    <p key={category.id} className="item">
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={window.location.href.split("&authors=").includes(author.id)}
+                                    checked={window.location.href.split("&category=").includes(category.id)}
                                     onChange={() => {
-                                        getAuthors(author.id)}
+                                        getCategories(category.id)}
                                     }
                                 />
                             }
-                            label={author.name}
+                            label={category.name}
+                            onChange={() => console.log(category.id)}
                         />
                     </p>
                 )))}
@@ -96,4 +89,4 @@ const AuthorFiltering = () => {
     );
 }
 
-export default AuthorFiltering;
+export default CategoryFiltering;

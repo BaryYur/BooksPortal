@@ -13,8 +13,8 @@ import BookItemsList from "../../components/BookItems/BookItemsList";
 const SearchingItemsPage = ({ search, searchingText }) => {
     const navigate = useNavigate();
     const itemsCtx = useContext(ItemsContext);
-    const searchingBooks = useMemo(() => itemsCtx.searchingItems, [itemsCtx.searchingItems]);
-    const page = Number(search.split("/")[2]);
+    const searchingBooks = useMemo(() => itemsCtx.searchingFilteringItems, [itemsCtx.searchingFilteringItems]);
+    const page = Number(1);
     const [currentBookItems, setCurrentBookItems] = useState([]);
     const [searchingPagesCounter, setSearchingPagesCounter] = useState(1);
     const { scrollToTop } = useScrollToTop();
@@ -44,10 +44,12 @@ const SearchingItemsPage = ({ search, searchingText }) => {
     }, [search, searchingBooks, searchingPagesCounter, navigate, page]);
 
     useEffect(() => {
+        let currentUrl = window.location.href;
+
         if (searchingText !== "") {
-            itemsCtx.fetchingSearchingItems(searchingText);
+            itemsCtx.fetchingFilteringSearching(currentUrl, searchingText);
         }
-    }, [searchingText]);
+    }, [searchingText, window.location.href]);
 
     return (
         <div className="searching-items-container">
@@ -57,19 +59,19 @@ const SearchingItemsPage = ({ search, searchingText }) => {
                     <p className="no-items-paragraph">Books not found</p>
                 }
             </div>
-            {searchingPagesCounter > 1 && (
-                <Stack spacing={2} className="pagination-stack">
-                    <Pagination
-                        count={searchingPagesCounter}
-                        page={page}
-                        shape="rounded"
-                        onChange={(e, value) => {
-                            navigate(`/home/shop/search/${search.split('/')[0]}/page/${value}`);
-                            scrollToTop();
-                        }}
-                    />
-                </Stack>
-            )}
+            {/*{searchingPagesCounter > 1 && (*/}
+            {/*    <Stack spacing={2} className="pagination-stack">*/}
+            {/*        <Pagination*/}
+            {/*            count={searchingPagesCounter}*/}
+            {/*            page={page}*/}
+            {/*            shape="rounded"*/}
+            {/*            onChange={(e, value) => {*/}
+            {/*                navigate(`/home/shop/search/${search.split('/')[0]}/page/${value}`);*/}
+            {/*                scrollToTop();*/}
+            {/*            }}*/}
+            {/*        />*/}
+            {/*    </Stack>*/}
+            {/*)}*/}
         </div>
     );
 };
