@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 import ItemsContext from "../../context/items-context";
 
-import Stack from "@mui/material/Stack";
-import Pagination from "@mui/material/Pagination";
+// import Stack from "@mui/material/Stack";
+// import Pagination from "@mui/material/Pagination";
 import BookItemsList from "../../components/BookItems/BookItemsList";
 
 const SearchingItemsPage = ({ search, searchingText }) => {

@@ -1,21 +1,31 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
 
-import ItemsContext from "../context/items-context";
+import ItemsContext from "../../context/items-context";
 
-import BookItemsList from "../components/BookItems/BookItemsList";
+import BookItemsList from "../../components/BookItems/BookItemsList";
 import CircularProgress from "@mui/material/CircularProgress";
-import AuthorFiltering from "./SearchingPage/AuthorFiltering";
-import PriceFiltering from "./SearchingPage/PriceFiltering";
-import YearFiltering from "./SearchingPage/YearFiltering";
-import "./CategoryPage.css";
 import TuneIcon from "@mui/icons-material/Tune";
+import CategoryAuthorFiltering from "./CategoryAuthorFiltering";
+import "./CategoryPage.css";
 
 const CategoryPage = () => {
     const { fetchingCategoryBooks, categoryBooks, loading } = useContext(ItemsContext);
     const params = useParams();
-    const categoryName = params.category.charAt(0).toUpperCase() + params.category.slice(1)
+
+    const extractCategory = (urlString) => {
+        const regex = /\/categories\/([^&/]+)/;
+        const match = urlString.match(regex);
+
+        if (match && match[1]) {
+            return match[1];
+        }
+
+        return null;
+    }
+
+    const categoryName = extractCategory(window.location.href);
 
     const fetchingCategoryBookItems = () => {
         fetch(`http://localhost:8081/category`)
@@ -23,7 +33,7 @@ const CategoryPage = () => {
             .then(data => {
                 for (let category of data) {
                     if (params.category === category.name.toLowerCase()) {
-                        fetchingCategoryBooks(category.id);
+                        fetchingCategoryBooks(category.id, window.location.href);
                     }
                 }
             });
@@ -42,7 +52,7 @@ const CategoryPage = () => {
                         <p>Filters</p>
                         <TuneIcon />
                     </div>
-                    {/*<AuthorFiltering />*/}
+                    <CategoryAuthorFiltering category={params.category} />
                     {/*<PriceFiltering />*/}
                     {/*<YearFiltering />*/}
                 </div>

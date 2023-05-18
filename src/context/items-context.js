@@ -78,19 +78,81 @@ export const ItemsContextProvider = ({ children }) => {
             })
     }
 
-    const fetchingCategoryBooks = (categoryId) => {
+    const fetchingCategoryBooks = (categoryId, params) => {
         setLoading(true);
 
-        fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
-            .then(response => response.json())
-            .then(data => {
-                setCategoryBooks(data);
-                setLoading(false);
-            })
-            .catch(error => {
-                setLoading(false);
-                alert("Oops...", `Something went wrong!` , "error");
-            })
+        let authorsIds = [];
+
+        for (let i = 0; i < params.split("&authors=").length; i++) {
+            if (i !== 0) {
+                authorsIds.push(params.split("&authors=")[i]);
+            }
+        }
+
+        const getMinMaxPricesFromUrlString = (urlString) => {
+            const url = new URL(urlString);
+            const searchParams = url.searchParams;
+
+            const minPrice = searchParams.get('minPrice');
+            const maxPrice = searchParams.get('maxPrice');
+
+            return {
+                minPrice: minPrice ? parseFloat(minPrice) : 0,
+                maxPrice: maxPrice ? parseFloat(maxPrice) : 0
+            }
+        }
+
+        const getMinMaxYearsFromUrlString = (urlString) => {
+            const url = new URL(urlString);
+            const searchParams = url.searchParams;
+
+            const minYear = searchParams.get('minYear');
+            const maxYear = searchParams.get('maxYear');
+
+            return {
+                minYear: minYear ? parseFloat(minYear) : 0,
+                maxYear: maxYear ? parseFloat(maxYear) : 0
+            }
+        }
+
+        let prices = getMinMaxPricesFromUrlString(params);
+        let years = getMinMaxYearsFromUrlString(params);
+
+        if ((params[params.length - 2] + params[params.length - 1] === "sy")) {
+            fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
+                .then(response => response.json())
+                .then(data => {
+                    setCategoryBooks(data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    setLoading(false);
+                    alert("Oops...", `Something went wrong!` , "error");
+                })
+        } else {
+            fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
+                .then(response => response.json())
+                .then(data => {
+                    let books = [];
+
+                    for (let ids of data) {
+                        books.push(data.id);
+                    }
+
+                    fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${books}&category=${categoryId}&maxPrice=${Number(prices.maxPrice)}&maxYear=${Number(years.maxYear)}&minPrice=${Number(prices.minPrice)}&minYear=${Number(years.minYear)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            setSearchingFilteringItems(data);
+                        })
+                        .catch(error => {
+                            alert("Oops...", `Something went wrong filtering` , "error");
+                        });
+                })
+                .catch(error => {
+                    setLoading(false);
+                    alert("Oops...", `Something went wrong!` , "error");
+                });
+        }
     }
 
     const fetchingSearchingItems = (bookName, isAdmin) => {
@@ -177,20 +239,23 @@ export const ItemsContextProvider = ({ children }) => {
             fetch(`http://localhost:8081/book/all/${bookName}/GOOD`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data, "1");
                     setSearchingFilteringItems(data);
                 })
                 .catch(error => {
                     alert("Oops...", `Something went wrong!` , "error");
                 });
-        } else {
+        } else if (bookName) {
             fetch(`http://localhost:8081/book/all/${bookName}/GOOD`)
                 .then(response => response.json())
                 .then(data => {
                     let books = [];
 
                     for (let ids of data) {
-                        books.push(data.id);
+                        books.push(ids.id);
                     }
+
+                    console.log(books);
 
                     fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${books}&category=${categoriesIds}&maxPrice=${Number(prices.maxPrice)}&maxYear=${Number(years.maxYear)}&minPrice=${Number(prices.minPrice)}&minYear=${Number(years.minYear)}`)
                         .then(response => response.json())

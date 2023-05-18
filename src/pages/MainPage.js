@@ -16,7 +16,7 @@ import ProfilePage from "./ProfilePage";
 import NotificationsPage from "./NotificationsPage";
 import ShopPage from "./ShopPage/ShopPage";
 import Layout from "../components/Layout/Layout";
-import CategoryPage from "./CategoryPage";
+import CategoryPage from "./CategoryPage/CategoryPage";
 import BookItemPage from "./BookItemPage/BookItemPage";
 import NotFoundPage from "./NotFoundPage";
 
@@ -37,7 +37,7 @@ const MainPage = () => {
                     {!isLoggedIn && <Route path="/auth" element={<AuthPage />} />}
                     {isLoggedIn && <Route path="/profile" element={<ProfilePage />} />}
                     <Route path="/shop/*" element={<ShopPage />} />
-                    <Route path="/shop/categories/:category" element={<CategoryPage />} />
+                    <Route path="/shop/categories/:category/" element={<CategoryPage />} />
                     <Route path="/shop/categories/:category/:id" element={<BookItemPage />} />
                     <Route path="/author-info/:id" element={<AuthorInfoPage />} />
                     <Route path="*" element={<NotFoundPage />} />

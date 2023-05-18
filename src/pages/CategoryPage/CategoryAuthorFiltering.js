@@ -1,36 +1,41 @@
 import React, {useContext, useEffect, useState} from "react";
 
+import AccordionSummary from "@mui/material/AccordionSummary";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Typography from "@mui/material/Typography";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import {Checkbox, FormControlLabel} from "@mui/material";
+import Accordion from "@mui/material/Accordion";
 import ItemsContext from "../../context/items-context";
 
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Checkbox, FormControlLabel } from "@mui/material";
-import {useParams} from "react-router-dom";
-
-const AuthorFiltering = () => {
-    const params = useParams();
-    const { searchingFilteringItems, fetchingAuthorsList, bookItemAuthorsList, fetchingFilteringSearching } = useContext(ItemsContext);
+const CategoryAuthorFiltering = ({ category }) => {
+    const { bookItemAuthorsList, fetchingAuthorsList, fetchingCategoryBooks, categoryBooks } = useContext(ItemsContext);
+    const [catId, setCatId] = useState("");
 
     const fetchingAuthors = () => {
-        let search = window.location.href.split("?text=")[1].split("/")[0];
-
-        fetch(`http://localhost:8081/book/all/${search}/GOOD`)
+        fetch(`http://localhost:8081/category`)
             .then(response => response.json())
             .then(data => {
-                let authorIds = [];
+                for (let cat of data) {
+                    if (category === cat.name.toLowerCase()) {
+                        setCatId(cat.id);
+                        fetch(`http://localhost:8081/book/category/${cat.id}/GOOD`)
+                            .then(response => response.json())
+                            .then(data => {
+                                let authorIds = [];
 
-                for (let book of data) {
-                    authorIds.push(...book.authors);
+                                for (let book of data) {
+                                    authorIds.push(...book.authors);
+                                }
+
+                                let ids = [...new Set(authorIds)];
+                                fetchingAuthorsList(ids);
+                            })
+                            .catch(error => {
+                                alert("Oops...");
+                            });
+                    }
                 }
-
-                let ids = [...new Set(authorIds)];
-                fetchingAuthorsList(ids);
-            })
-            .catch(error => {
-                alert("Oops...");
             });
     }
 
@@ -53,14 +58,14 @@ const AuthorFiltering = () => {
             window.history.replaceState(null, "", updatedUrl);
         }
 
-        setTimeout(() => {
-            fetchingFilteringSearching(window.location.href);
-        }, 100);
+        // setTimeout(() => {
+        //     fetchingCategoryBooks(catId, window.location.href);
+        // }, 100);
     }
 
     useEffect(() => {
         fetchingAuthors();
-    }, [searchingFilteringItems, aIds]);
+    }, [categoryBooks, aIds]);
 
     return (
         <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey" }}>
@@ -77,8 +82,8 @@ const AuthorFiltering = () => {
                                 <Checkbox
                                     checked={window.location.href.split("&authors=").includes(author.id)}
                                     onChange={() => {
-                                        getAuthors(author.id)}
-                                    }
+                                        getAuthors(author.id)
+                                    }}
                                 />
                             }
                             label={author.name}
@@ -90,4 +95,4 @@ const AuthorFiltering = () => {
     );
 }
 
-export default AuthorFiltering;
+export default CategoryAuthorFiltering;
