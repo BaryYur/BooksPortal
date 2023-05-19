@@ -70,27 +70,27 @@ const PriceFiltering = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
 
-        const currentUrl = window.location.href;
-        const url = new URL(currentUrl);
-
-        let params = new URLSearchParams(url.search);
-
-        if (!params.has("minPrice") || !params.has("maxPrice")) {
-            params.set("minPrice", newValue[0]);
-            params.set("maxPrice", newValue[1]);
-        } else {
-            params.set("minPrice", newValue[0]);
-            params.set("maxPrice", newValue[1]);
-        }
-
-        const updatedParams = params.toString();
-        const updatedUrl = `${url.origin}${url.pathname}${updatedParams ? `?${updatedParams}` : ""}`.replace(/%2F/g, "/");
-
-        window.history.replaceState(null, "", updatedUrl);
-
         setTimeout(() => {
+            const currentUrl = window.location.href;
+            const url = new URL(currentUrl);
+
+            let params = new URLSearchParams(url.search);
+
+            if (!params.has("minPrice") || !params.has("maxPrice")) {
+                params.set("minPrice", newValue[0]);
+                params.set("maxPrice", newValue[1]);
+            } else {
+                params.set("minPrice", newValue[0]);
+                params.set("maxPrice", newValue[1]);
+            }
+
+            const updatedParams = params.toString();
+            const updatedUrl = `${url.origin}${url.pathname}${updatedParams ? `?${updatedParams}` : ""}`.replace(/%2F/g, "/");
+
+            window.history.replaceState(null, "", updatedUrl);
+
             fetchingFilteringSearching(window.location.href, "");
-        }, 500);
+        }, 400);
     }
 
     const valuetext = (value) => {

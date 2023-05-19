@@ -8,10 +8,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Checkbox, FormControlLabel } from "@mui/material";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 
 const AuthorFiltering = () => {
-    const params = useParams();
+    const navigate = useNavigate();
     const { searchingFilteringItems, fetchingAuthorsList, bookItemAuthorsList, fetchingFilteringSearching } = useContext(ItemsContext);
 
     const fetchingAuthors = () => {
@@ -45,16 +45,21 @@ const AuthorFiltering = () => {
             const currentUrl = window.location.href;
             const updatedUrl = `${currentUrl}&authors=${id}`;
             window.history.replaceState(null, "", updatedUrl);
+            // navigate("?" + updatedUrl.split("?")[1]);
         } else {
             setAIds(aIds.filter(aid => aid !== id));
 
             const currentUrl = window.location.href;
             const updatedUrl = currentUrl.replace(`&authors=${id}`, "").replace("?&", "?");
             window.history.replaceState(null, "", updatedUrl);
+            // navigate("?" + updatedUrl.split("?")[1]);
         }
 
         fetchingFilteringSearching(window.location.href, "");
     }
+
+    const urlParams = new URLSearchParams(window.location.href.substring(window.location.href.indexOf("?") + 1));
+    const authorsIds = urlParams.getAll("authors");
 
     useEffect(() => {
         fetchingAuthors();
@@ -74,7 +79,7 @@ const AuthorFiltering = () => {
                             <FormControlLabel
                                 control={
                                     <Checkbox
-                                        checked={window.location.href.split("&authors=").includes(author.id)}
+                                        checked={authorsIds.includes(author.id)}
                                         onChange={() => {
                                             getAuthors(author.id)}
                                         }

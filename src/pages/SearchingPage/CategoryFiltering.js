@@ -51,11 +51,15 @@ const CategoryFiltering = () => {
             window.history.replaceState(null, "", updatedUrl);
         }
 
-        fetchingFilteringSearching(window.location.href);
+        fetchingFilteringSearching(window.location.href, "");
     }
+
+    const urlParams = new URLSearchParams(window.location.href.substring(window.location.href.indexOf("?") + 1));
+    const categoriesIds = urlParams.getAll("category");
 
     useEffect(() => {
         fetchingCategories();
+        console.log('rendeer')
     }, [searchingFilteringItems]);
 
     return (
@@ -71,7 +75,7 @@ const CategoryFiltering = () => {
                         <FormControlLabel
                             control={
                                 <Checkbox
-                                    checked={window.location.href.split("&category=").includes(category.id)}
+                                    checked={categoriesIds.includes(category.id)}
                                     onChange={() => {
                                         getCategories(category.id)}
                                     }

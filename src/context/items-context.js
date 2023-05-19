@@ -207,15 +207,19 @@ export const ItemsContextProvider = ({ children }) => {
 
         for (let i = 0; i < params.split("&authors=").length; i++) {
             if (i !== 0) {
-                authorsIds.push(params.split("&authors=")[i]);
+                // authorsIds.push(params.split("&authors=")[i]);
             }
         }
 
         for (let i = 0; i < params.split("&category=").length; i++) {
             if (i !== 0) {
-                categoriesIds.push(params.split("&category=")[i]);
+                // categoriesIds.push(params.split("&category=")[i]);
             }
         }
+
+        const urlParams = new URLSearchParams(params.substring(params.indexOf("?") + 1));
+        categoriesIds = urlParams.getAll("category");
+        authorsIds = urlParams.getAll("authors");
 
         const getMinMaxPricesFromUrlString = (urlString) => {
             const url = new URL(urlString);
@@ -226,7 +230,7 @@ export const ItemsContextProvider = ({ children }) => {
 
             return {
                 minPrice: minPrice ? parseFloat(minPrice) : 0,
-                maxPrice: maxPrice ? parseFloat(maxPrice) : 0
+                maxPrice: maxPrice ? parseFloat(maxPrice) : 1000
             }
         }
 
@@ -239,7 +243,7 @@ export const ItemsContextProvider = ({ children }) => {
 
             return {
                 minYear: minYear ? parseFloat(minYear) : 0,
-                maxYear: maxYear ? parseFloat(maxYear) : 0
+                maxYear: maxYear ? parseFloat(maxYear) : 2023
             }
         }
 
@@ -262,7 +266,7 @@ export const ItemsContextProvider = ({ children }) => {
 
         searchingText = extractText(params.toString());
 
-        if ((params[params.length - 2] + params[params.length - 1] === "/1") && bookName) {
+        if ((params[params.length - 2] + params[params.length - 1] === "/1") && bookName !== "") {
             setTimeout(() => {
                 fetchingSearchingItems(bookName, false);
                 fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
@@ -276,7 +280,7 @@ export const ItemsContextProvider = ({ children }) => {
                         alert("Oops...", `Something went wrong!` , "error");
                     });
             }, 500);
-        } else if (bookName === "") {
+        } else {
             setTimeout(() => {
                 fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
                     .then(response => response.json())
@@ -287,7 +291,7 @@ export const ItemsContextProvider = ({ children }) => {
                             ids.push(book.id);
                         }
 
-                        console.log(ids, "2");
+                        console.log("books" ,ids, "authors", authorsIds, "categories" , categoriesIds, "2");
 
                         fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${ids}&category=${categoriesIds}&maxPrice=${Number(prices.maxPrice)}&maxYear=${Number(years.maxYear)}&minPrice=${Number(prices.minPrice)}&minYear=${Number(years.minYear)}`)
                             .then(response => response.json())
