@@ -11,6 +11,7 @@ const AuthorPage = ({ publisher, author }) => {
         JSON.parse(localStorage.getItem("userData")) || ""
     );
     const { fetchingAuthorBooks, authorConsiderationBooks, authorGoodBooks, authorBadBooks } = useContext(ItemsContext);
+    const [authorScore, setAuthorScore] = useState({});
     const fetchingAllBooks = (name, user) => {
         let user1 = user;
 
@@ -39,6 +40,20 @@ const AuthorPage = ({ publisher, author }) => {
                     fetchingAllBooks(data.name, "author");
                 }
             })
+    }
+
+    const fetchingScore = () => {
+        fetch(`http://localhost:8081/user/${authorData.id}`)
+            .then(response => response.json())
+            .then(data => {
+                fetch(`http://localhost:8081/author/all/${data.name}`)
+                    .then(response => response.json())
+                    .then(authorData => {
+                        if (authorData) {
+                            setAuthorScore(authorData[0]);
+                        }
+                    });
+            });
     }
 
     let tabsInfo = [
@@ -73,12 +88,14 @@ const AuthorPage = ({ publisher, author }) => {
     useEffect(() => {
         if (authorData) {
             fetchingAuthorBooksData();
+            fetchingScore();
         }
     }, [authorData]);
 
     return (
         <div className="main-wrapper">
             <h1>Here you can add your new book</h1>
+            <h2>Score {authorScore.score}$</h2>
             <TabsPanel tabsInfo={tabsInfo} />
         </div>
     );

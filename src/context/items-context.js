@@ -252,17 +252,19 @@ export const ItemsContextProvider = ({ children }) => {
         searchingText = extractText(params.toString());
 
         if ((params[params.length - 2] + params[params.length - 1] === "/1") && bookName) {
-            fetchingSearchingItems(bookName, false);
-            fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data, "1");
-                    setSearchingFilteringItems(data);
-                })
-                .catch(error => {
-                    setLoading(false);
-                    alert("Oops...", `Something went wrong!` , "error");
-                });
+            setTimeout(() => {
+                fetchingSearchingItems(bookName, false);
+                fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data, "1");
+                        setSearchingFilteringItems(data);
+                    })
+                    .catch(error => {
+                        setLoading(false);
+                        alert("Oops...", `Something went wrong!` , "error");
+                    });
+            }, 500);
         } else {
             setTimeout(() => {
                 fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
