@@ -33,7 +33,8 @@ const CategoryPage = () => {
             .then(data => {
                 for (let category of data) {
                     if (params.category === category.name.toLowerCase()) {
-                        fetchingCategoryBooks(category.id, window.location.href);
+                        // fetchingCategoryBooks(category.id, window.location.href);
+                        fetchingCategoryBooks(category.id);
                     }
                 }
             });

@@ -118,41 +118,52 @@ export const ItemsContextProvider = ({ children }) => {
         let prices = getMinMaxPricesFromUrlString(params);
         let years = getMinMaxYearsFromUrlString(params);
 
-        if ((params[params.length - 2] + params[params.length - 1] === "sy")) {
-            fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
-                .then(response => response.json())
-                .then(data => {
-                    setCategoryBooks(data);
-                    setLoading(false);
-                })
-                .catch(error => {
-                    setLoading(false);
-                    alert("Oops...", `Something went wrong!` , "error");
-                })
-        } else {
-            fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
-                .then(response => response.json())
-                .then(data => {
-                    let books = [];
+        fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
+            .then(response => response.json())
+            .then(data => {
+                setCategoryBooks(data);
+                setLoading(false);
+            })
+            .catch(error => {
+                setLoading(false);
+                alert("Oops...", `Something went wrong!` , "error");
+            })
 
-                    for (let ids of data) {
-                        books.push(data.id);
-                    }
-
-                    fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${books}&category=${categoryId}&maxPrice=${Number(prices.maxPrice)}&maxYear=${Number(years.maxYear)}&minPrice=${Number(prices.minPrice)}&minYear=${Number(years.minYear)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            setSearchingFilteringItems(data);
-                        })
-                        .catch(error => {
-                            alert("Oops...", `Something went wrong filtering` , "error");
-                        });
-                })
-                .catch(error => {
-                    setLoading(false);
-                    alert("Oops...", `Something went wrong!` , "error");
-                });
-        }
+        // if ((params[params.length - 2] + params[params.length - 1] === "sy")) {
+        //     fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             setCategoryBooks(data);
+        //             setLoading(false);
+        //         })
+        //         .catch(error => {
+        //             setLoading(false);
+        //             alert("Oops...", `Something went wrong!` , "error");
+        //         })
+        // } else {
+        //     fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             let books = [];
+        //
+        //             for (let ids of data) {
+        //                 books.push(data.id);
+        //             }
+        //
+        //             fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${books}&category=${categoryId}&maxPrice=${Number(prices.maxPrice)}&maxYear=${Number(years.maxYear)}&minPrice=${Number(prices.minPrice)}&minYear=${Number(years.minYear)}`)
+        //                 .then(response => response.json())
+        //                 .then(data => {
+        //                     setSearchingFilteringItems(data);
+        //                 })
+        //                 .catch(error => {
+        //                     alert("Oops...", `Something went wrong filtering` , "error");
+        //                 });
+        //         })
+        //         .catch(error => {
+        //             setLoading(false);
+        //             alert("Oops...", `Something went wrong!` , "error");
+        //         });
+        // }
     }
 
     const fetchingSearchingItems = (bookName, isAdmin) => {
@@ -265,7 +276,7 @@ export const ItemsContextProvider = ({ children }) => {
                         alert("Oops...", `Something went wrong!` , "error");
                     });
             }, 500);
-        } else {
+        } else if (bookName === "") {
             setTimeout(() => {
                 fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
                     .then(response => response.json())
