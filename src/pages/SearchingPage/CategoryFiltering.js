@@ -59,7 +59,6 @@ const CategoryFiltering = () => {
 
     useEffect(() => {
         fetchingCategories();
-        console.log('rendeer')
     }, [searchingFilteringItems]);
 
     return (

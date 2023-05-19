@@ -104,7 +104,7 @@ const PriceFiltering = () => {
 
     return (
         <div className="range-input-controller">
-            {(minPrice !== maxPrice) && <div>
+            {<div>
                 <p style={{ fontWeight: "600" }}>By price:</p>
                 <Box sx={{ width: "100%" }}>
                     <Slider

@@ -102,7 +102,7 @@ const YearFiltering = () => {
 
     return (
         <div className="range-input-controller">
-            {(minYear !== maxYear) && <div>
+            {<div>
                 <p style={{ fontWeight: "600" }}>By year:</p>
                 <Box sx={{ width: "100%" }}>
                     <Slider
