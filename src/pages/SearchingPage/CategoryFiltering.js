@@ -51,9 +51,7 @@ const CategoryFiltering = () => {
             window.history.replaceState(null, "", updatedUrl);
         }
 
-        setTimeout(() => {
-            fetchingFilteringSearching(window.location.href);
-        }, 100);
+        fetchingFilteringSearching(window.location.href);
     }
 
     useEffect(() => {

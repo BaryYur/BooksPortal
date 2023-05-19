@@ -190,6 +190,7 @@ export const ItemsContextProvider = ({ children }) => {
     const [searchingFilteringItems, setSearchingFilteringItems] = useState([]);
 
     const fetchingFilteringSearching = (params, bookName) => {
+        setLoading(true);
         let authorsIds = [];
         let categoriesIds = [];
 
@@ -237,52 +238,60 @@ export const ItemsContextProvider = ({ children }) => {
         let searchingText = "";
 
         const extractText = (urlString) => {
-            const regex = /\/text=([^/&]+)/;
+            const regex = /text=([^&/]+)/;
             const match = urlString.match(regex);
-            if (match && match[1]) {
-                return match[1];
+
+            if (match) {
+                const decodedText = decodeURIComponent(match[1]);
+                return decodedText;
             }
+
             return null;
         }
 
-        searchingText = extractText(params);
+        searchingText = extractText(params.toString());
 
-        if ((params[params.length - 2] + params[params.length - 1] === "/1")) {
+        if ((params[params.length - 2] + params[params.length - 1] === "/1") && bookName) {
             fetchingSearchingItems(bookName, false);
-            fetch(`http://localhost:8081/book/all/${bookName}/GOOD`)
+            fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data, "1");
                     setSearchingFilteringItems(data);
                 })
                 .catch(error => {
-                    alert("Oops...", `Something went wrong!` , "error");
-                });
-        } else {
-            fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
-                .then(response => response.json())
-                .then(data => {
-                    let books = [];
-
-                    for (let ids of data) {
-                        books.push(ids.id);
-                    }
-
-                    console.log(books);
-
-                    fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${books}&category=${categoriesIds}&maxPrice=${Number(prices.maxPrice)}&maxYear=${Number(years.maxYear)}&minPrice=${Number(prices.minPrice)}&minYear=${Number(years.minYear)}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            setSearchingFilteringItems(data);
-                        })
-                        .catch(error => {
-                            alert("Oops...", `Something went wrong filtering` , "error");
-                        });
-                })
-                .catch(error => {
                     setLoading(false);
                     alert("Oops...", `Something went wrong!` , "error");
                 });
+        } else {
+            setTimeout(() => {
+                fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let ids = [];
+
+                        for (let book of data) {
+                            ids.push(book.id);
+                        }
+
+                        console.log(ids, "2");
+
+                        fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${ids}&category=${categoriesIds}&maxPrice=${Number(prices.maxPrice)}&maxYear=${Number(years.maxYear)}&minPrice=${Number(prices.minPrice)}&minYear=${Number(years.minYear)}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                setLoading(false);
+                                setSearchingFilteringItems(data);
+                            })
+                            .catch(error => {
+                                setLoading(false);
+                                alert("Oops...", `Something went wrong filtering` , "error");
+                            });
+                    })
+                    .catch(error => {
+                        setLoading(false);
+                        alert("Oops...", `Something went wrong!` , "error");
+                    });
+            }, 1000);
         }
     }
 

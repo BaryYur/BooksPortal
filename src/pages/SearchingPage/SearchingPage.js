@@ -43,13 +43,14 @@ const SearchingPage = () => {
                         <TuneIcon />
                     </div>
                     <div className="filtering-box">
-                            <div>
-                                <AuthorFiltering />
-                                {/*<PublisherFiltering />*/}
-                                <CategoryFiltering />
-                                <PriceFiltering />
-                                <YearFiltering />
-                            </div>
+                        {searchingItems.length !== 1 ? <div>
+                            <AuthorFiltering />
+                            {/*<PublisherFiltering />*/}
+                            <CategoryFiltering />
+                            <PriceFiltering />
+                            <YearFiltering />
+                        </div>:
+                        <p className="no-items-paragraph" style={{ marginTop: 0 }}>No filters</p>}
                     </div>
                 </div>)}
                 <Routes>

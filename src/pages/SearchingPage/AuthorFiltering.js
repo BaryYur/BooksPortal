@@ -53,9 +53,7 @@ const AuthorFiltering = () => {
             window.history.replaceState(null, "", updatedUrl);
         }
 
-        setTimeout(() => {
-            fetchingFilteringSearching(window.location.href);
-        }, 100);
+        fetchingFilteringSearching(window.location.href, "");
     }
 
     useEffect(() => {
@@ -63,30 +61,32 @@ const AuthorFiltering = () => {
     }, [searchingFilteringItems, aIds]);
 
     return (
-        <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey" }}>
-            <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-            >
-                <Typography style={{ fontWeight: "600" }}>By authors</Typography>
-            </AccordionSummary>
-            <AccordionDetails style={{ padding: "0px 10px 5px 10px" }}>
-                {bookItemAuthorsList.map((author => (
-                    <p key={author.id} className="item">
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={window.location.href.split("&authors=").includes(author.id)}
-                                    onChange={() => {
-                                        getAuthors(author.id)}
-                                    }
-                                />
-                            }
-                            label={author.name}
-                        />
-                    </p>
-                )))}
-            </AccordionDetails>
-        </Accordion>
+        <>
+            <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey" }}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                >
+                    <Typography style={{ fontWeight: "600" }}>By authors</Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{ padding: "0px 10px 5px 10px" }}>
+                    {bookItemAuthorsList.map((author => (
+                        <p key={author.id} className="item">
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={window.location.href.split("&authors=").includes(author.id)}
+                                        onChange={() => {
+                                            getAuthors(author.id)}
+                                        }
+                                    />
+                                }
+                                label={author.name}
+                            />
+                        </p>
+                    )))}
+                </AccordionDetails>
+            </Accordion>
+        </>
     );
 }
 

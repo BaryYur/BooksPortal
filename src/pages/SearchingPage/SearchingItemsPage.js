@@ -9,6 +9,9 @@ import ItemsContext from "../../context/items-context";
 // import Stack from "@mui/material/Stack";
 // import Pagination from "@mui/material/Pagination";
 import BookItemsList from "../../components/BookItems/BookItemsList";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
+import Modal from "@mui/material/Modal";
 
 const SearchingItemsPage = ({ search, searchingText }) => {
     const navigate = useNavigate();
@@ -72,6 +75,11 @@ const SearchingItemsPage = ({ search, searchingText }) => {
             {/*        />*/}
             {/*    </Stack>*/}
             {/*)}*/}
+            <Modal open={itemsCtx.loading}>
+                <Box className="searching-modal">
+                    <CircularProgress />
+                </Box>
+            </Modal>
         </div>
     );
 };

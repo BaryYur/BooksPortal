@@ -62,6 +62,7 @@ const YearFiltering = () => {
 
         setCurrentMinYear(years.minYear);
         setCurrentMaxYear(years.maxYear);
+        setValue([years.minYear, years.maxYear]);
     }
 
     const handleChange = (event, newValue) => {
@@ -86,8 +87,8 @@ const YearFiltering = () => {
         window.history.replaceState(null, "", updatedUrl);
 
         setTimeout(() => {
-            fetchingFilteringSearching(window.location.href);
-        }, 200);
+            fetchingFilteringSearching(window.location.href, "");
+        }, 500);
     }
 
     const valuetext = (value) => {
@@ -100,22 +101,24 @@ const YearFiltering = () => {
 
     return (
         <div className="range-input-controller">
-            <p style={{ fontWeight: "600" }}>By year:</p>
-            <Box sx={{ width: "100%" }}>
-                <Slider
-                    getAriaLabel={() => "years"}
-                    value={value}
-                    onChange={handleChange}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={valuetext}
-                    min={minYear}
-                    max={maxYear}
-                />
-            </Box>
-            <div className="max-min-numbers-box">
-                <p>{minYear}</p>
-                <p>{maxYear}</p>
-            </div>
+            {(minYear !== maxYear) && <div>
+                <p style={{ fontWeight: "600" }}>By year:</p>
+                <Box sx={{ width: "100%" }}>
+                    <Slider
+                        getAriaLabel={() => "years"}
+                        value={value}
+                        onChange={handleChange}
+                        valueLabelDisplay="auto"
+                        getAriaValueText={valuetext}
+                        min={minYear}
+                        max={maxYear}
+                    />
+                </Box>
+                <div className="max-min-numbers-box">
+                    <p>{minYear}</p>
+                    <p>{maxYear}</p>
+                </div>
+            </div>}
         </div>
     );
 }

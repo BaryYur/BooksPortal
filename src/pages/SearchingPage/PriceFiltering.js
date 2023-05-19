@@ -58,10 +58,11 @@ const PriceFiltering = () => {
             }
         }
 
-        let years = getMinMaxPricesFromUrlString(window.location.href);
+        let prices = getMinMaxPricesFromUrlString(window.location.href);
 
-        setMinCurrentPrice(years.minPrice);
-        setMaxCurrentPrice(years.maxPrice);
+        setMinCurrentPrice(prices.minPrice);
+        setMaxCurrentPrice(prices.maxPrice);
+        setValue([prices.minPrice, prices.maxPrice]);
     }
 
     const [value, setValue] = useState([minCurrentPrice, maxCurrentPrice]);
@@ -88,8 +89,8 @@ const PriceFiltering = () => {
         window.history.replaceState(null, "", updatedUrl);
 
         setTimeout(() => {
-            fetchingFilteringSearching(window.location.href);
-        }, 100);
+            fetchingFilteringSearching(window.location.href, "");
+        }, 500);
     }
 
     const valuetext = (value) => {
@@ -98,26 +99,29 @@ const PriceFiltering = () => {
 
     useEffect(() => {
         gettingPrices();
+
     }, [searchingFilteringItems]);
 
     return (
         <div className="range-input-controller">
-            <p style={{ fontWeight: "600" }}>By price:</p>
-            <Box sx={{ width: "100%" }}>
-                <Slider
-                    getAriaLabel={() => "price"}
-                    value={value}
-                    onChange={handleChange}
-                    valueLabelDisplay="auto"
-                    getAriaValueText={valuetext}
-                    min={minPrice}
-                    max={maxPrice}
-                />
-            </Box>
-            <div className="max-min-numbers-box">
-                <p>{minPrice}$</p>
-                <p>{maxPrice}$</p>
-            </div>
+            {(minPrice !== maxPrice) && <div>
+                <p style={{ fontWeight: "600" }}>By price:</p>
+                <Box sx={{ width: "100%" }}>
+                    <Slider
+                        getAriaLabel={() => "price"}
+                        value={value}
+                        onChange={handleChange}
+                        valueLabelDisplay="auto"
+                        getAriaValueText={valuetext}
+                        min={minPrice}
+                        max={maxPrice}
+                    />
+                </Box>
+                <div className="max-min-numbers-box">
+                    <p>{minPrice}$</p>
+                    <p>{maxPrice}$</p>
+                </div>
+            </div>}
         </div>
     );
 }
