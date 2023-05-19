@@ -230,7 +230,7 @@ export const ItemsContextProvider = ({ children }) => {
 
             return {
                 minPrice: minPrice ? parseFloat(minPrice) : 0,
-                maxPrice: maxPrice ? parseFloat(maxPrice) : 1000
+                maxPrice: maxPrice ? parseFloat(maxPrice) : 0
             }
         }
 
@@ -243,7 +243,7 @@ export const ItemsContextProvider = ({ children }) => {
 
             return {
                 minYear: minYear ? parseFloat(minYear) : 0,
-                maxYear: maxYear ? parseFloat(maxYear) : 2023
+                maxYear: maxYear ? parseFloat(maxYear) : 0
             }
         }
 
