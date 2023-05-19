@@ -52,7 +52,7 @@ const CategoryPage = () => {
                         <p>Filters</p>
                         <TuneIcon />
                     </div>
-                    <CategoryAuthorFiltering category={params.category} />
+                    {/*<CategoryAuthorFiltering category={params.category} />*/}
                     {/*<PriceFiltering />*/}
                     {/*<YearFiltering />*/}
                 </div>
