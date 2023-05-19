@@ -200,55 +200,14 @@ export const ItemsContextProvider = ({ children }) => {
 
     const [searchingFilteringItems, setSearchingFilteringItems] = useState([]);
 
-    const fetchingFilteringSearching = (params, bookName) => {
+    const fetchingFilteringSearching = (params, bookName, minY, maxY) => {
         setLoading(true);
         let authorsIds = [];
         let categoriesIds = [];
 
-        for (let i = 0; i < params.split("&authors=").length; i++) {
-            if (i !== 0) {
-                // authorsIds.push(params.split("&authors=")[i]);
-            }
-        }
-
-        for (let i = 0; i < params.split("&category=").length; i++) {
-            if (i !== 0) {
-                // categoriesIds.push(params.split("&category=")[i]);
-            }
-        }
-
         const urlParams = new URLSearchParams(params.substring(params.indexOf("?") + 1));
         categoriesIds = urlParams.getAll("category");
         authorsIds = urlParams.getAll("authors");
-
-        const getMinMaxPricesFromUrlString = (urlString) => {
-            const url = new URL(urlString);
-            const searchParams = url.searchParams;
-
-            const minPrice = searchParams.get('minPrice');
-            const maxPrice = searchParams.get('maxPrice');
-
-            return {
-                minPrice: minPrice ? parseFloat(minPrice) : 0,
-                maxPrice: maxPrice ? parseFloat(maxPrice) : 0
-            }
-        }
-
-        const getMinMaxYearsFromUrlString = (urlString) => {
-            const url = new URL(urlString);
-            const searchParams = url.searchParams;
-
-            const minYear = searchParams.get('minYear');
-            const maxYear = searchParams.get('maxYear');
-
-            return {
-                minYear: minYear ? parseFloat(minYear) : 0,
-                maxYear: maxYear ? parseFloat(maxYear) : 0
-            }
-        }
-
-        let prices = getMinMaxPricesFromUrlString(params);
-        let years = getMinMaxYearsFromUrlString(params);
 
         let searchingText = "";
 
@@ -266,13 +225,43 @@ export const ItemsContextProvider = ({ children }) => {
 
         searchingText = extractText(params.toString());
 
+        const getMinMaxPricesFromUrlString = (urlString) => {
+            const url = new URL(urlString);
+            const searchParams = url.searchParams;
+
+            const minPrice = searchParams.get('minPrice');
+            const maxPrice = searchParams.get('maxPrice');
+
+            return {
+                minPrice: minPrice ? parseFloat(minPrice) : 0,
+                maxPrice: maxPrice ? parseFloat(maxPrice) : 1000
+            }
+        }
+
+        const getMinMaxYearsFromUrlString = (urlString) => {
+            const url = new URL(urlString);
+            const searchParams = url.searchParams;
+
+            const minYear = searchParams.get("minYear");
+            const maxYear = searchParams.get("maxYear");
+
+            return {
+                minYear: minYear ? parseFloat(minYear) : 0,
+                maxYear: maxYear ? parseFloat(maxYear) : 2023
+            }
+        }
+
+        let prices = getMinMaxPricesFromUrlString(params);
+        let years = getMinMaxYearsFromUrlString(params);
+        console.log("prices", prices, "years", years);
+
         if ((params[params.length - 2] + params[params.length - 1] === "/1") && bookName !== "") {
             setTimeout(() => {
                 fetchingSearchingItems(bookName, false);
                 fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data, "1");
+                        // console.log(data, "1");
                         setSearchingFilteringItems(data);
                     })
                     .catch(error => {
