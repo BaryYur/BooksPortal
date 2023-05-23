@@ -1,11 +1,15 @@
 import React, {useContext, useEffect, useState} from "react";
 
+import {useNavigate} from "react-router-dom";
+
 import ItemsContext from "../../context/items-context";
 
 import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
+import { Button } from "@mui/material";
 
 const YearFiltering = () => {
+    const navigate = useNavigate();
     const { searchingFilteringItems, fetchingFilteringSearching } = useContext(ItemsContext);
     const [minYear, setMinYear] = useState(0);
     const [maxYear, setMaxYear] = useState(0);
@@ -68,32 +72,35 @@ const YearFiltering = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
 
-        setTimeout(() => {
-            const currentUrl = window.location.href;
-            const url = new URL(currentUrl);
+        const currentUrl = window.location.href;
+        const url = new URL(currentUrl);
 
-            let params = new URLSearchParams(url.search);
+        let params = new URLSearchParams(url.search);
 
-            if (!params.has("minYear") || !params.has("maxYear")) {
-                params.set("minYear", newValue[0]);
-                params.set("maxYear", newValue[1]);
-            } else {
-                params.set("minYear", newValue[0]);
-                params.set("maxYear", newValue[1]);
-            }
+        if (!params.has("minYear") || !params.has("maxYear")) {
+            params.set("minYear", newValue[0]);
+            params.set("maxYear", newValue[1]);
+        } else {
+            params.set("minYear", newValue[0]);
+            params.set("maxYear", newValue[1]);
+        }
 
-            const updatedParams = params.toString();
-            const updatedUrl = `${url.origin}${url.pathname}${updatedParams ? `?${updatedParams}` : ""}`.replace(/%2F/g, "/");
+        const updatedParams = params.toString();
+        const updatedUrl = `${url.origin}${url.pathname}${updatedParams ? `?${updatedParams}` : ""}`.replace(/%2F/g, "/");
 
-            window.history.replaceState(null, "", updatedUrl);
-
-
-            fetchingFilteringSearching(window.location.href, "");
-        }, 400);
+        window.history.replaceState(null, "", updatedUrl);
     }
 
     const valuetext = (value) => {
         return `${value}`;
+    }
+
+    const submitYears = () => {
+        navigate("?" + window.location.href.split("?")[1]);
+
+        setTimeout(() => {
+            fetchingFilteringSearching(window.location.href);
+        }, 200);
     }
 
     useEffect(() => {
@@ -120,6 +127,9 @@ const YearFiltering = () => {
                     <p>{maxYear}</p>
                 </div>
             </div>}
+            <div style={{ display: "flex", justifyContent: "center", paddingTop: "5px" }}>
+                <Button onClick={submitYears} variant="contained">ok</Button>
+            </div>
         </div>
     );
 }

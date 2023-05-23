@@ -13,7 +13,7 @@ const BookItemsList = ({ booksData, adminItems, searchingName }) => {
                         id={bookItem.id}
                         name={bookItem.name}
                         price={bookItem.price}
-                        link={`/home/shop/categories/${bookItem.categories[0]}/${bookItem.id}`}
+                        link={`/home/shop/books/${bookItem.categories[0]}/${bookItem.id}`}
                         adminItems={adminItems}
                         status={bookItem.status}
                         img={bookItem.file}

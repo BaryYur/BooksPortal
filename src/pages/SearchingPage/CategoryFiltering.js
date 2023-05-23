@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 import ItemsContext from "../../context/items-context";
 
 import Accordion from "@mui/material/Accordion";
@@ -10,6 +12,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Checkbox, FormControlLabel } from "@mui/material";
 
 const CategoryFiltering = () => {
+    const navigate = useNavigate();
     const { searchingFilteringItems, bookItemCategoriesList, fetchingCategoriesList, fetchingFilteringSearching } = useContext(ItemsContext);
 
     const fetchingCategories = () => {
@@ -42,16 +45,18 @@ const CategoryFiltering = () => {
 
             const currentUrl = window.location.href;
             const updatedUrl = `${currentUrl}&category=${id}`;
-            window.history.replaceState(null, "", updatedUrl);
+            navigate("?" + updatedUrl.split("?")[1]);
         } else {
             setCIds(cIds.filter(cid => cid !== id));
 
             const currentUrl = window.location.href;
             const updatedUrl = currentUrl.replace(`&category=${id}`, "").replace("?&", "?");
-            window.history.replaceState(null, "", updatedUrl);
+            navigate("?" + updatedUrl.split("?")[1]);
         }
 
-        fetchingFilteringSearching(window.location.href, "");
+        setTimeout(() => {
+            fetchingFilteringSearching(window.location.href);
+        }, 200);
     }
 
     const urlParams = new URLSearchParams(window.location.href.substring(window.location.href.indexOf("?") + 1));

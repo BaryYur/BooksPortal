@@ -13,7 +13,7 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
 
-const SearchingItemsPage = ({ search, searchingText }) => {
+const SearchingItemsPage = ({ search }) => {
     const navigate = useNavigate();
     const itemsCtx = useContext(ItemsContext);
     const searchingBooks = useMemo(() => itemsCtx.searchingFilteringItems, [itemsCtx.searchingFilteringItems]);
@@ -49,16 +49,14 @@ const SearchingItemsPage = ({ search, searchingText }) => {
     useEffect(() => {
         let currentUrl = window.location.href;
 
-        if (searchingText !== "") {
-            itemsCtx.fetchingFilteringSearching(currentUrl, searchingText);
-        }
-    }, [searchingText, window.location.href]);
+        itemsCtx.fetchingFilteringSearching(currentUrl);
+    }, []);
 
     return (
         <div className="searching-items-container">
             <div className="searching-page__items-box">
                 {currentBookItems.length !== 0 ?
-                    <BookItemsList booksData={currentBookItems} />:
+                    <BookItemsList booksData={itemsCtx.searchingFilteringItems} />:
                     <p className="no-items-paragraph">Books not found</p>
                 }
             </div>

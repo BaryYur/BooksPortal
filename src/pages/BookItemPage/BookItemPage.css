@@ -121,6 +121,10 @@
     justify-content: space-between;
 }
 
+.book-title-box h1 {
+    max-width: 500px;
+}
+
 .book-title-box div button:last-child {
     margin-left: 10px;
 }

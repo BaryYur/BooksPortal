@@ -54,7 +54,7 @@ const AdminAddingCategoryPage = () => {
     }
 
     useEffect(() => {
-        fetchingCategories();
+        fetchingCategories("genre");
         setCategoryImageInput(image);
     }, [image]);
 

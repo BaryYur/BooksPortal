@@ -23,21 +23,24 @@ const SearchingForm = () => {
 
         if (searchingInput === "") return;
 
-        localStorage.setItem("search", JSON.stringify(searchingInput));
         navigate(`/home/shop/search/?text=${searchingInput}/page/1`);
         setTimeout(() => {
-            fetchingFilteringSearching(`/home/shop/search/?text=${searchingInput}/page/1`, searchingInput);
+            fetchingFilteringSearching(window.location.href);
         }, 200);
         scrollToTop();
     }
 
     useEffect(() => {
         if (location.pathname === "/home/shop/search/" && location.search.split("").includes("=")) {
-             setSearchingInput(location.search.split("=")[1].split("%20").join(" ").split("/")[0]);
+             let searching = window.location.href.split("?text=")[1].split("/")[0].replace(/%20/g, ' ');
+
+             setSearchingInput(searching);
         } else {
             setSearchingInput("");
         }
-    }, [location]);
+
+        console.log('render');
+    }, []);
 
     return (
         <form onSubmit={searchingSubmitHandler} className="searching-form">

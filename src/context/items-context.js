@@ -11,7 +11,9 @@ const ItemsContext = React.createContext({
     fetchingFilteringSearching: () => {},
     fetchingDeletingBookItem: () => {},
     fetchingCategoryBooks: (genreName) => {},
-    fetchingAllCategories: () => {},
+    fetchingAllSubcategories: () => {},
+    fetchingSubcategories: (categoryId) => {},
+    fetchingCategories: () => {},
     fetchingUnlockBook: (id) => {},
     fetchingAdminBooks: () => {},
     fetchingAuthorBooks: (id, status) => {},
@@ -26,6 +28,8 @@ export const ItemsContextProvider = ({ children }) => {
     const [searchingItems1, setSearchingItems1] = useState([]);
     const [searchingItems2, setSearchingItems2] = useState([]);
     const [booksCategories, setBooksCategories] = useState([]);
+    const [booksSubcategories, setBooksSubcategories] = useState([]);
+    const [categorySubcategories, setCategorySubcategories] = useState([]);
     const [categoryBooks, setCategoryBooks] = useState([]);
     const [bookItemCategoriesList, setBookItemCategoriesList] = useState([]);
     const [bookItemAuthorsList, setBookItemAuthorsList] = useState([]);
@@ -46,14 +50,14 @@ export const ItemsContextProvider = ({ children }) => {
         })
     }
 
-    const fetchingAllCategories = () => {
+    const fetchingAllSubcategories = () => {
         setLoading(true);
 
         fetch(`http://localhost:8081/category`)
             .then(response => response.json())
             .then(data => {
                 if (data !== []) {
-                    setBooksCategories(data);
+                    setBooksSubcategories(data);
                     setCategoriesForSelect([]);
 
                     for (let i = 0; i < data.length; i++) {
@@ -68,6 +72,42 @@ export const ItemsContextProvider = ({ children }) => {
                             ];
                         });
                     }
+                }
+
+                setLoading(false);
+            })
+            .catch(error => {
+                // console.log(error);
+                setLoading(false);
+            })
+    }
+
+    const fetchingCategories = () => {
+        setLoading(true);
+
+        fetch(`http://localhost:8081/genre`)
+            .then(response => response.json())
+            .then(data => {
+                if (data !== []) {
+                    setBooksCategories(data);
+                }
+
+                setLoading(false);
+            })
+            .catch(error => {
+                // console.log(error);
+                setLoading(false);
+            })
+    }
+
+    const fetchingSubcategories = (categoryId) => {
+        setLoading(true);
+
+        fetch(`http://localhost:8081/category/all/${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data !== []) {
+                    setCategorySubcategories(data);
                 }
 
                 setLoading(false);
@@ -127,7 +167,7 @@ export const ItemsContextProvider = ({ children }) => {
             .catch(error => {
                 setLoading(false);
                 alert("Oops...", `Something went wrong!` , "error");
-            })
+            });
 
         // if ((params[params.length - 2] + params[params.length - 1] === "sy")) {
         //     fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
@@ -200,7 +240,7 @@ export const ItemsContextProvider = ({ children }) => {
 
     const [searchingFilteringItems, setSearchingFilteringItems] = useState([]);
 
-    const fetchingFilteringSearching = (params, bookName, minY, maxY) => {
+    const fetchingFilteringSearching = (params) => {
         setLoading(true);
         let authorsIds = [];
         let categoriesIds = [];
@@ -229,12 +269,12 @@ export const ItemsContextProvider = ({ children }) => {
             const url = new URL(urlString);
             const searchParams = url.searchParams;
 
-            const minPrice = searchParams.get('minPrice');
-            const maxPrice = searchParams.get('maxPrice');
+            const minPrice = searchParams.get("minPrice");
+            const maxPrice = searchParams.get("maxPrice");
 
             return {
                 minPrice: minPrice ? parseFloat(minPrice) : 0,
-                maxPrice: maxPrice ? parseFloat(maxPrice) : 1000
+                maxPrice: maxPrice ? parseFloat(maxPrice) : 0,
             }
         }
 
@@ -247,42 +287,66 @@ export const ItemsContextProvider = ({ children }) => {
 
             return {
                 minYear: minYear ? parseFloat(minYear) : 0,
-                maxYear: maxYear ? parseFloat(maxYear) : 2023
+                maxYear: maxYear ? parseFloat(maxYear) : 0
             }
         }
 
         let prices = getMinMaxPricesFromUrlString(params);
         let years = getMinMaxYearsFromUrlString(params);
-        console.log("prices", prices, "years", years);
 
-        if ((params[params.length - 2] + params[params.length - 1] === "/1") && bookName !== "") {
-            setTimeout(() => {
-                fetchingSearchingItems(bookName, false);
-                fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
-                    .then(response => response.json())
-                    .then(data => {
-                        // console.log(data, "1");
-                        setSearchingFilteringItems(data);
-                    })
-                    .catch(error => {
-                        setLoading(false);
-                        alert("Oops...", `Something went wrong!` , "error");
-                    });
-            }, 500);
+        console.log(searchingFilteringItems);
+
+        if (params[params.length - 2] + params[params.length - 1] === "/1") {
+            fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
+                .then(response => response.json())
+                .then(data => {
+                    setSearchingFilteringItems(data);
+                    setSearchingItems(data);
+                    setLoading(false);
+                })
+                .catch(error => {
+                    setLoading(false);
+                    alert("Oops...", `Something went wrong!` , "error");
+                });
         } else {
             setTimeout(() => {
                 fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
                     .then(response => response.json())
                     .then(data => {
                         let ids = [];
+                        let booksPrices = [];
+                        let booksYears = [];
 
                         for (let book of data) {
                             ids.push(book.id);
+                            booksPrices.push(book.price);
+                            booksYears.push(book.year);
                         }
 
-                        console.log("books" ,ids, "authors", authorsIds, "categories" , categoriesIds, "2");
+                        let minP = 0;
+                        let maxP = 0;
+                        let minY = 0;
+                        let maxY = 0;
 
-                        fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${ids}&category=${categoriesIds}&maxPrice=${Number(prices.maxPrice)}&maxYear=${Number(years.maxYear)}&minPrice=${Number(prices.minPrice)}&minYear=${Number(years.minYear)}`)
+                        if (prices.maxPrice === 0 && prices.minPrice === 0) {
+                            minP = Math.min(...booksPrices);
+                            maxP = Math.max(...booksPrices);
+                        } else {
+                            minP = prices.minPrice;
+                            maxP = prices.maxPrice;
+                        }
+
+                        if (years.minYear == 0 && years.maxYear === 0) {
+                            minY = Math.min(...booksPrices);
+                            maxY = Math.max(...booksPrices);
+                        } else {
+                            minY = years.minYear;
+                            maxY = years.maxYear;
+                        }
+
+                        setSearchingItems(data);
+
+                        fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${ids}&category=${categoriesIds}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`)
                             .then(response => response.json())
                             .then(data => {
                                 setLoading(false);
@@ -529,9 +593,9 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        fetchingAllCategories();
         fetchingNews();
         fetchingPurchasedBooks();
+        fetchingAllSubcategories();
 
         setSearchingItems([ ...searchingItems1, ...searchingItems2 ]);
     }, [searchingItems1, searchingItems2]);
@@ -550,6 +614,9 @@ export const ItemsContextProvider = ({ children }) => {
                 fetchingAuthorsList: fetchingAuthorsList,
                 fetchingPublishersList: fetchingPublishersList,
                 fetchingCategoriesList: fetchingCategoriesList,
+                fetchingCategories: fetchingCategories,
+                categorySubcategories: categorySubcategories,
+                fetchingSubcategories: fetchingSubcategories,
                 bookItem: bookItem,
                 bookItemCategoriesList: bookItemCategoriesList,
                 bookItemAuthorsList: bookItemAuthorsList,
@@ -560,9 +627,10 @@ export const ItemsContextProvider = ({ children }) => {
                 authorConsiderationBooks: authorConsiderationBooks,
                 authorGoodBooks: authorGoodBooks,
                 authorBadBooks: authorBadBooks,
+                booksSubcategories: booksSubcategories,
                 booksCategories: booksCategories,
                 fetchingCategoryBooks: fetchingCategoryBooks,
-                fetchingAllCategories: fetchingAllCategories,
+                fetchingAllCategories: fetchingAllSubcategories,
                 fetchingAdminBooks: fetchingAdminBooks,
                 fetchingUnlockBook: fetchingUnlockBook,
                 adminBooks: adminBooks,

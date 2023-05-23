@@ -7,6 +7,7 @@ import AdminNavBar from "../admin-components/AdminNavBar/AdminNavBar";
 import AdminStartingPage from "./AdminStartingPage";
 import ProfilePage from "../../pages/ProfilePage";
 import AdminAddingCategoryPage from "./AddingCategoryPage/AdminAddingCategoryPage";
+import AdminAddingSubcategoryPage from "./AdminAddingSubcategoryPage";
 import AddingCategoryNewPage from "./AddingCategoryPage/AddingCategoryNewPage";
 import AdminAddingBookItemPage from "./AddingItemPage/AdminAddingBookItemPage";
 import DeletingItemPage from "./DeletingItemPage/DeletingItemPage";
@@ -30,6 +31,7 @@ const AdminHomePage = () => {
                     <Route path="/user-admin" element={<ProfilePage isAdmin={true} />} />
                     <Route path="/adding-category" element={<AdminAddingCategoryPage />} />
                     <Route path="/adding-category/new" element={<AddingCategoryNewPage />} />
+                    <Route path="/adding-category/:categoryId/subcategory" element={<AdminAddingSubcategoryPage />} />
                     <Route path="/adding-item" element={<AdminAddingBookItemPage />} />
                     <Route path="/check-books" element={<AdminCheckingPage />} />
                     <Route path="/book/:id" element={<AdminBookPage isAdmin={true} />} />

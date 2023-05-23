@@ -89,6 +89,10 @@ export const CartContextProvider = ({ children }) => {
             }
         })
             .then(response => {
+                if (body.basket.length === 0) {
+                    setCartItems([]);
+                }
+
                 fetchingCartItems(userId);
             })
             .catch(error => console.log(error));

@@ -6,7 +6,10 @@ const AdminMainContext = React.createContext({
     fetchingUpdateUserStatus: (id, status, email, name, password, role) => {},
     fetchingUsersList: () => {},
     fetchingCategories: () => {},
+    fetchingSubcategories: (categoryId) => {},
+    fetchingDeleteSubcategory: (subcategoryId) => {},
     fetchingAddingCategory: (body) => {},
+    fetchingAddingSubcategory: (body) => {},
     fetchingDeleteCategory: (id) => {},
     fetchingChangingCategory: (id, name, newName) => {},
 });
@@ -17,6 +20,8 @@ export const AdminMainContextProvider = ({ children }) => {
     const [menuIsOpen, setMenuIsOpen] = useState(JSON.parse(localStorage.getItem("menuIsOpen")));
     const [categoriesList, setCategoriesList] = useState([]);
     const [categoriesForSelect, setCategoriesForSelect] = useState([]);
+    const [subcategoriesList, setSubcategoriesList] = useState([]);
+    const [categorySubcategoriesList, setCategorySubcategoriesList] = useState([]);
 
     const alert = (title, text, icon ) => {
         Swal.fire({
@@ -39,13 +44,17 @@ export const AdminMainContextProvider = ({ children }) => {
             .catch(error => console.log(error))
     }
 
-    const fetchingCategories = () => {
+    const fetchingCategories = (categories) => {
         setAdminLoading(true);
 
-        fetch(`http://localhost:8081/category`)
+        fetch(`http://localhost:8081/${categories}`)
             .then(response => response.json())
             .then(data => {
-                setCategoriesList(data);
+                if (categories === "genre") {
+                    setCategoriesList(data);
+                } else if (categories === "category") {
+                    setSubcategoriesList(data);
+                }
 
                 setAdminLoading(false);
             })
@@ -53,7 +62,32 @@ export const AdminMainContextProvider = ({ children }) => {
                 setAdminLoading(false);
 
                 alert("Oops...", "Something went wrong!", "error");
+            });
+    }
+
+    const fetchingSubcategories = (categoryId) => {
+        fetch(`http://localhost:8081/category/all/${categoryId}`)
+            .then(response => response.json())
+            .then(data => {
+                setCategorySubcategoriesList([...data]);
+                setAdminLoading(false);
             })
+            .catch(error => {
+                setAdminLoading(false);
+
+                alert("Oops...", "Something went wrong!", "error");
+            });
+    }
+
+    const fetchingDeleteSubcategory = (subcategoryId) => {
+        fetch(`http://localhost:8081/category/${subcategoryId}`, {
+            method: "DELETE",
+        })
+            .catch(error => {
+                setAdminLoading(false);
+
+                alert("Oops...", "Something went wrong!", "error");
+            });
     }
 
     const fetchingSelectCategories = () => {
@@ -80,7 +114,7 @@ export const AdminMainContextProvider = ({ children }) => {
     const fetchingAddingCategory = (body)  => {
         setAdminLoading(true);
 
-        fetch(`http://localhost:8081/category`, {
+        fetch(`http://localhost:8081/genre`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
@@ -108,8 +142,39 @@ export const AdminMainContextProvider = ({ children }) => {
             })
     }
 
+    const fetchingAddingSubcategory = (body)  => {
+        setAdminLoading(true);
+
+        fetch(`http://localhost:8081/category`, {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((res) => {
+                if (res.ok) {
+                    setAdminLoading(false);
+                    alert("Great", "You successful add new category","success");
+
+                    return res.json();
+                } else {
+                    return res.json().then((data) => {
+                        let errorMessage = "Adding failed!";
+
+                        throw new Error(errorMessage);
+                    });
+                }
+            })
+            .catch(error => {
+                setAdminLoading(false);
+
+                alert("Oops...", "Something went wrong!", "error");
+            })
+    }
+
     const fetchingChangingCategory = async (id, name, newName, image) => {
-       await fetch(`http://localhost:8081/category/${id}`, {
+       await fetch(`http://localhost:8081/genre/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -120,24 +185,24 @@ export const AdminMainContextProvider = ({ children }) => {
             }),
         })
             .then(response => {
-                if (response.ok) fetchingCategories();
+                if (response.ok) fetchingCategories("genre");
             })
             .catch(error => {
                 setAdminLoading(false);
 
-                alert("Oops...", "Something went wrong!", "error");
+                alert("Oops...", "Something went wrong! changing", "error");
             })
     }
 
     const fetchingDeleteCategory = async (id) => {
-        await  fetch(`http://localhost:8081/category/${id}`, {
+        await  fetch(`http://localhost:8081/genre/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-type": "application/json",
             },
         })
             .then(response => {
-                if (response.ok) fetchingCategories();
+                if (response.ok) fetchingCategories("genre");
             })
             .catch(error => {
                 alert("Oops...", "Something went wrong!", "error");
@@ -169,7 +234,6 @@ export const AdminMainContextProvider = ({ children }) => {
     useEffect(() => {
         fetchingUsersList();
         fetchingSelectCategories();
-        // fetchingCategories();
 
         if (!JSON.parse(localStorage.getItem("menuIsOpen"))) {
             localStorage.setItem("menuIsOpen", JSON.stringify(false));
@@ -189,9 +253,14 @@ export const AdminMainContextProvider = ({ children }) => {
                 fetchingUpdateUserStatus: fetchingUpdateUserStatus,
                 fetchingCategories: fetchingCategories,
                 fetchingAddingCategory: fetchingAddingCategory,
+                fetchingAddingSubcategory: fetchingAddingSubcategory,
+                fetchingSubcategories: fetchingSubcategories,
+                fetchingDeleteSubcategory: fetchingDeleteSubcategory,
                 fetchingDeleteCategory: fetchingDeleteCategory,
                 fetchingChangingCategory:fetchingChangingCategory,
                 categories: categoriesList,
+                subcategories: subcategoriesList,
+                categorySubcategories: categorySubcategoriesList,
                 categoriesForSelect: categoriesForSelect,
             }}
         >

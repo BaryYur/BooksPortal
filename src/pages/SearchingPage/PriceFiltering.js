@@ -2,11 +2,15 @@ import React, {useContext, useEffect, useState} from "react";
 
 import ItemsContext from "../../context/items-context";
 
+import { useNavigate } from "react-router-dom";
+
 import RangeInput from "../../components/Forms/RangeInput";
 import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
+import {Button} from "@mui/material";
 
 const PriceFiltering = () => {
+    const navigate = useNavigate();
     const { searchingFilteringItems, fetchingFilteringSearching } = useContext(ItemsContext);
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(0);
@@ -70,31 +74,35 @@ const PriceFiltering = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
 
-        setTimeout(() => {
-            const currentUrl = window.location.href;
-            const url = new URL(currentUrl);
+        const currentUrl = window.location.href;
+        const url = new URL(currentUrl);
 
-            let params = new URLSearchParams(url.search);
+        let params = new URLSearchParams(url.search);
 
-            if (!params.has("minPrice") || !params.has("maxPrice")) {
-                params.set("minPrice", newValue[0]);
-                params.set("maxPrice", newValue[1]);
-            } else {
-                params.set("minPrice", newValue[0]);
-                params.set("maxPrice", newValue[1]);
-            }
+        if (!params.has("minPrice") || !params.has("maxPrice")) {
+            params.set("minPrice", newValue[0]);
+            params.set("maxPrice", newValue[1]);
+        } else {
+            params.set("minPrice", newValue[0]);
+            params.set("maxPrice", newValue[1]);
+        }
 
-            const updatedParams = params.toString();
-            const updatedUrl = `${url.origin}${url.pathname}${updatedParams ? `?${updatedParams}` : ""}`.replace(/%2F/g, "/");
+        const updatedParams = params.toString();
+        const updatedUrl = `${url.origin}${url.pathname}${updatedParams ? `?${updatedParams}` : ""}`.replace(/%2F/g, "/");
 
-            window.history.replaceState(null, "", updatedUrl);
-
-            fetchingFilteringSearching(window.location.href, "");
-        }, 400);
+        window.history.replaceState(null, "", updatedUrl);
     }
 
     const valuetext = (value) => {
         return `${value}`;
+    }
+
+    const submitPrices = () => {
+        navigate("?" + window.location.href.split("?")[1]);
+
+        setTimeout(() => {
+            fetchingFilteringSearching(window.location.href);
+        }, 200);
     }
 
     useEffect(() => {
@@ -122,6 +130,9 @@ const PriceFiltering = () => {
                     <p>{maxPrice}$</p>
                 </div>
             </div>}
+            <div style={{ display: "flex", justifyContent: "center", paddingTop: "5px", paddingBottom: "5px" }}>
+                <Button onClick={submitPrices} variant="contained">ok</Button>
+            </div>
         </div>
     );
 }

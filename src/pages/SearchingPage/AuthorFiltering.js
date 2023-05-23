@@ -44,18 +44,18 @@ const AuthorFiltering = () => {
 
             const currentUrl = window.location.href;
             const updatedUrl = `${currentUrl}&authors=${id}`;
-            window.history.replaceState(null, "", updatedUrl);
-            // navigate("?" + updatedUrl.split("?")[1]);
+            navigate("?" + updatedUrl.split("?")[1]);
         } else {
             setAIds(aIds.filter(aid => aid !== id));
 
             const currentUrl = window.location.href;
             const updatedUrl = currentUrl.replace(`&authors=${id}`, "").replace("?&", "?");
-            window.history.replaceState(null, "", updatedUrl);
-            // navigate("?" + updatedUrl.split("?")[1]);
+            navigate("?" + updatedUrl.split("?")[1]);
         }
 
-        fetchingFilteringSearching(window.location.href, "");
+        setTimeout(() => {
+            fetchingFilteringSearching(window.location.href);
+        }, 200);
     }
 
     const urlParams = new URLSearchParams(window.location.href.substring(window.location.href.indexOf("?") + 1));

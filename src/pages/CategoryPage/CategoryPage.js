@@ -9,9 +9,10 @@ import CircularProgress from "@mui/material/CircularProgress";
 import TuneIcon from "@mui/icons-material/Tune";
 import CategoryAuthorFiltering from "./CategoryAuthorFiltering";
 import "./CategoryPage.css";
+import CategoryItem from "../ShopPage/CategoryItemCard";
 
 const CategoryPage = () => {
-    const { fetchingCategoryBooks, categoryBooks, loading } = useContext(ItemsContext);
+    const { fetchingSubcategories, categorySubcategories, loading } = useContext(ItemsContext);
     const params = useParams();
 
     const extractCategory = (urlString) => {
@@ -27,44 +28,41 @@ const CategoryPage = () => {
 
     const categoryName = extractCategory(window.location.href);
 
-    const fetchingCategoryBookItems = () => {
-        fetch(`http://localhost:8081/category`)
+    const fetchingCategoryItems = () => {
+        fetch(`http://localhost:8081/genre`)
             .then(response => response.json())
             .then(data => {
                 for (let category of data) {
                     if (params.category === category.name.toLowerCase()) {
-                        // fetchingCategoryBooks(category.id, window.location.href);
-                        fetchingCategoryBooks(category.id);
+
+                        fetchingSubcategories(category.id);
                     }
                 }
             });
     }
 
     useEffect(() => {
-        fetchingCategoryBookItems();
+        fetchingCategoryItems();
     }, [params.category]);
 
     return (
         <div className="main-wrapper">
-            <h2>{categoryName} Category</h2>
+            <h2>{params.category} subcategories</h2>
             <div className="category-main-container">
-                <div className="filtering-box">
-                    <div className="filtering-head">
-                        <p>Filters</p>
-                        <TuneIcon />
-                    </div>
-                    {/*<CategoryAuthorFiltering category={params.category} />*/}
-                    {/*<PriceFiltering />*/}
-                    {/*<YearFiltering />*/}
-                </div>
-                <div className="category-items-container">
-                    {!loading && <BookItemsList booksData={categoryBooks} />}
-                    {loading && (
-                        <div className="loading-box">
-                            <CircularProgress />
-                        </div>
-                    )}
-                </div>
+                <ul className="shop-categories-list">
+                    {categorySubcategories.map(genre => (
+                        <CategoryItem
+                            key={genre.id}
+                            id={genre.id}
+                            title={genre.name}
+                            img={genre.file}
+                            subcategories={true}
+                        />
+                    ))}
+                </ul>
+                {loading && <div className="loading-box">
+                    <CircularProgress />
+                </div>}
             </div>
         </div>
     );

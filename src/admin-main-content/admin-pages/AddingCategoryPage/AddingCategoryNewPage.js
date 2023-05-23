@@ -8,7 +8,7 @@ import AdminMainContext from "../../admin-context/admin-main-context";
 import { Button } from "@mui/material";
 import "./AddingCategoryNewPage.css";
 
-const AddingCategoryNewPage = () => {
+const AddingCategoryNewPage = ({ subcategory, categoryId }) => {
     const itemsCtx = useContext(ItemsContext);
     const mainAdminCtx = useContext(AdminMainContext);
     const [categoryNameInput, setCategoryNameInput] = useState("");
@@ -18,12 +18,25 @@ const AddingCategoryNewPage = () => {
     const addingNewCategoryHandler = (event) => {
         event.preventDefault();
 
-        let body = {
+        let body;
+        body = {
             name: categoryNameInput,
             file: image,
         }
 
-        mainAdminCtx.fetchingAddingCategory(body);
+        if (subcategory) {
+            body = {
+                genreId: categoryId,
+                ...body,
+            }
+        }
+
+        if (subcategory) {
+            mainAdminCtx.fetchingAddingSubcategory(body);
+        } else {
+            mainAdminCtx.fetchingAddingCategory(body);
+        }
+
         setTimeout(() => {
             itemsCtx.fetchingAllCategories();
         }, 500);
@@ -45,9 +58,11 @@ const AddingCategoryNewPage = () => {
         <div className="admin-page-wrapper">
             <div className="adding-category-form-container">
                 <form onSubmit={addingNewCategoryHandler}>
-                    <h2>Add new category</h2>
+                    <h2>Add new {subcategory ? <span>subcategory</span> : <span>category</span>}</h2>
                     <div className="control">
-                        <label htmlFor="category-name-input">Category name</label>
+                        <label htmlFor="category-name-input">
+                            {subcategory ? <span>Subcategory</span> : <span>Category</span>} name
+                        </label>
                         <input
                             id="category-name-input"
                             type="text"
@@ -56,7 +71,7 @@ const AddingCategoryNewPage = () => {
                         />
                     </div>
                     <div className="control">
-                        <label htmlFor="category-image-input">Categories image cover</label>
+                        <label htmlFor="category-image-input">{subcategory ? <span>Subcategory</span> : <span>Category</span>} image cover</label>
                         <input
                             id="category-image-input"
                             type="file"

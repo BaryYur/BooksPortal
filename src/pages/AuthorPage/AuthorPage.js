@@ -95,7 +95,7 @@ const AuthorPage = ({ publisher, author }) => {
     return (
         <div className="main-wrapper">
             <h1>Here you can add your new book</h1>
-            <h2>Score {authorScore.score}$</h2>
+            <h2>Score {authorScore?.score ? <span>{authorScore.score}</span>: <span>0</span>}$</h2>
             <TabsPanel tabsInfo={tabsInfo} />
         </div>
     );
