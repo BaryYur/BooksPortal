@@ -294,8 +294,6 @@ export const ItemsContextProvider = ({ children }) => {
         let prices = getMinMaxPricesFromUrlString(params);
         let years = getMinMaxYearsFromUrlString(params);
 
-        console.log(searchingFilteringItems);
-
         if (params[params.length - 2] + params[params.length - 1] === "/1") {
             fetch(`http://localhost:8081/book/all/${searchingText}/GOOD`)
                 .then(response => response.json())
@@ -346,7 +344,9 @@ export const ItemsContextProvider = ({ children }) => {
 
                         setSearchingItems(data);
 
-                        fetch(`http://localhost:8081/book/filter?authors=${authorsIds}&books=${ids}&category=${categoriesIds}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`)
+                        let path = `http://localhost:8081/book/filter?authors=${authorsIds}&books=${ids}&category=${categoriesIds}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`;
+
+                        fetch(path)
                             .then(response => response.json())
                             .then(data => {
                                 setLoading(false);
