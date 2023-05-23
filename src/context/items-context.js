@@ -181,10 +181,10 @@ export const ItemsContextProvider = ({ children }) => {
                     for (let book of books) {
                         booksIds.push(book.id);
                         booksPrices.push(book.price);
-                        booksYears.push(book.year);
+                        booksYears.push(book.publishDate);
                     }
 
-                    console.log(booksYears);
+                    console.log(books);
 
                     let minP = 0;
                     let maxP = 0;
@@ -354,7 +354,7 @@ export const ItemsContextProvider = ({ children }) => {
                         for (let book of data) {
                             ids.push(book.id);
                             booksPrices.push(book.price);
-                            booksYears.push(book.year);
+                            booksYears.push(book.publishDate);
                         }
 
                         let minP = 0;
@@ -379,6 +379,7 @@ export const ItemsContextProvider = ({ children }) => {
                         }
 
                         setSearchingItems(data);
+                        console.log(maxY, minY);
 
                         let path = `http://localhost:8081/book/filter?authors=${authorsIds}&books=${ids}&category=${categoriesIds}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`;
 
