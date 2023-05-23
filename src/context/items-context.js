@@ -173,16 +173,18 @@ export const ItemsContextProvider = ({ children }) => {
 
             fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
                 .then(response => response.json())
-                .then(data => {
+                .then(books => {
                     let booksIds = [];
                     let booksPrices = [];
                     let booksYears = [];
 
-                    for (let book of data) {
+                    for (let book of books) {
                         booksIds.push(book.id);
                         booksPrices.push(book.price);
                         booksYears.push(book.year);
                     }
+
+                    console.log(booksYears);
 
                     let minP = 0;
                     let maxP = 0;

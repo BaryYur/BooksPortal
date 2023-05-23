@@ -203,7 +203,7 @@ export const AuthContextProvider = ({ children }) => {
     const fetchingUserData = () => {
         let userData = JSON.parse(localStorage.getItem("userData")) || {};
 
-        if (userData) {
+        if (userData.id) {
             fetch(`http://localhost:8081/user/${userData.id}`)
                 .then(response => response.json())
                 .then(data => {

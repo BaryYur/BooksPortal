@@ -19,8 +19,6 @@ const SubcategoryPriceFiltering = ({ subcategory }) => {
     const [catId, setCatId] = useState("");
 
     const gettingPrices = () => {
-        let search = window.location.href.split("?text=")[1].split("/")[0];
-
         fetch(`http://localhost:8081/category`)
             .then(response => response.json())
             .then(data => {
@@ -37,8 +35,8 @@ const SubcategoryPriceFiltering = ({ subcategory }) => {
                                     prices.push(book.price);
                                 }
 
-                                let min = 0;
-                                let max = 0;
+                                let min = Math.min(...prices);
+                                let max = Math.max(...prices);
 
                                 setMinPrice(min);
                                 setMaxPrice(max);
@@ -102,7 +100,7 @@ const SubcategoryPriceFiltering = ({ subcategory }) => {
         // navigate(window.location.href.split("?")[1]);
 
         setTimeout(() => {
-            fetchingFilteringSearching(window.location.href);
+            fetchingFilteringSearching(catId, window.location.href);
         }, 200);
     }
 

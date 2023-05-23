@@ -9,6 +9,7 @@ import BookItemsList from "../../components/BookItems/BookItemsList";
 import TuneIcon from "@mui/icons-material/Tune";
 import SubcategoryAuthorFiltering from "./SubcategoryAuthorFiltering";
 import "./SubcategoryPage.css";
+import SubcategoryPriceFiltering from "./SubcategoryPriceFiltering";
 
 const SubcategoryPage = () => {
     const params = useParams();
@@ -45,6 +46,7 @@ const SubcategoryPage = () => {
                     </div>
                     <div>
                         <SubcategoryAuthorFiltering subcategory={params.subcategoryId.split("&")[0]} />
+                        {/*<SubcategoryPriceFiltering subcategory={params.subcategoryId.split("&")[0]} />*/}
                     </div>
                 </div>
 
