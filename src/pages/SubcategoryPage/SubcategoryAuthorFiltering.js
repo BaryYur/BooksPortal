@@ -8,7 +8,7 @@ import {Checkbox, FormControlLabel} from "@mui/material";
 import Accordion from "@mui/material/Accordion";
 import ItemsContext from "../../context/items-context";
 
-const CategoryAuthorFiltering = ({ category }) => {
+const SubcategoryAuthorFiltering = ({ subcategory }) => {
     const { bookItemAuthorsList, fetchingAuthorsList, fetchingCategoryBooks, categoryBooks } = useContext(ItemsContext);
     const [catId, setCatId] = useState("");
 
@@ -17,14 +17,15 @@ const CategoryAuthorFiltering = ({ category }) => {
             .then(response => response.json())
             .then(data => {
                 for (let cat of data) {
-                    if (category === cat.name.toLowerCase()) {
+                    if (subcategory === cat.name.toLowerCase()) {
                         setCatId(cat.id);
+
                         fetch(`http://localhost:8081/book/category/${cat.id}/GOOD`)
                             .then(response => response.json())
-                            .then(data => {
+                            .then(books => {
                                 let authorIds = [];
 
-                                for (let book of data) {
+                                for (let book of books) {
                                     authorIds.push(...book.authors);
                                 }
 
@@ -58,9 +59,9 @@ const CategoryAuthorFiltering = ({ category }) => {
             window.history.replaceState(null, "", updatedUrl);
         }
 
-        // setTimeout(() => {
-        //     fetchingCategoryBooks(catId, window.location.href);
-        // }, 100);
+        setTimeout(() => {
+            fetchingCategoryBooks(catId, window.location.href);
+        }, 100);
     }
 
     useEffect(() => {
@@ -68,7 +69,7 @@ const CategoryAuthorFiltering = ({ category }) => {
     }, [categoryBooks, aIds]);
 
     return (
-        <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey" }}>
+        <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey", marginTop: "10px" }}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
             >
@@ -95,4 +96,4 @@ const CategoryAuthorFiltering = ({ category }) => {
     );
 }
 
-export default CategoryAuthorFiltering;
+export default SubcategoryAuthorFiltering;

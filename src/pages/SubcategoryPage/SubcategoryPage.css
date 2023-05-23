@@ -1,0 +1,15 @@
+.subcategory-items-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.subcategory-items-container .searching-page__filtering-box {
+    flex: 1;
+    margin-top: 0;
+    max-width: 250px;
+}
+
+.subcategory-items-container .list-of-book-items-container {
+    flex: 4;
+}

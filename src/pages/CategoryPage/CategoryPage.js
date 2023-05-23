@@ -7,7 +7,7 @@ import ItemsContext from "../../context/items-context";
 import BookItemsList from "../../components/BookItems/BookItemsList";
 import CircularProgress from "@mui/material/CircularProgress";
 import TuneIcon from "@mui/icons-material/Tune";
-import CategoryAuthorFiltering from "./CategoryAuthorFiltering";
+import SubcategoryAuthorFiltering from "../SubcategoryPage/SubcategoryAuthorFiltering";
 import "./CategoryPage.css";
 import CategoryItem from "../ShopPage/CategoryItemCard";
 

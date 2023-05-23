@@ -17,7 +17,7 @@ import NotificationsPage from "./NotificationsPage";
 import ShopPage from "./ShopPage/ShopPage";
 import Layout from "../components/Layout/Layout";
 import CategoryPage from "./CategoryPage/CategoryPage";
-import SubcategoryPage from "./SubcategoryPage";
+import SubcategoryPage from "./SubcategoryPage/SubcategoryPage";
 import BookItemPage from "./BookItemPage/BookItemPage";
 import NotFoundPage from "./NotFoundPage";
 
