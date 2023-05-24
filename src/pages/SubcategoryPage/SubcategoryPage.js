@@ -8,8 +8,11 @@ import CircularProgress from "@mui/material/CircularProgress";
 import BookItemsList from "../../components/BookItems/BookItemsList";
 import TuneIcon from "@mui/icons-material/Tune";
 import SubcategoryAuthorFiltering from "./SubcategoryAuthorFiltering";
-import "./SubcategoryPage.css";
 import SubcategoryPriceFiltering from "./SubcategoryPriceFiltering";
+import SubcategoryYearFiltering from "./SubcategoryYearFiltering";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import "./SubcategoryPage.css";
 
 const SubcategoryPage = () => {
     const params = useParams();
@@ -20,16 +23,19 @@ const SubcategoryPage = () => {
             .then(response => response.json())
             .then(data => {
                 let subName = params.subcategoryId.split("&");
+                let path = window.location.href.split("&");
 
                 for (let subcategory of data) {
-                    if (subcategory.name.toLowerCase() === subName[0] && subName.length === 1) {
+                    if (subcategory.name.toLowerCase() === subName[0] && path.length === 1) {
                         fetchingCategoryBooks(subcategory.id, "");
-                    } else if (subcategory.name.toLowerCase() === subName[0] && subName.length !== 1) {
+                    } else if (subcategory.name.toLowerCase() === subName[0] && path.length > 1) {
                         fetchingCategoryBooks(subcategory.id, window.location.href);
                     }
                 }
             });
     }
+
+    let subcategoryName = params.subcategoryId.split("&")[0];
 
     useEffect(() => {
         gettingSubcategoryItems();
@@ -37,25 +43,27 @@ const SubcategoryPage = () => {
 
     return (
         <div className="main-wrapper">
-            <h2>{params.subcategoryId.split("&")[0]}</h2>
-            <div className="subcategory-items-container">
+            <h2>{subcategoryName}</h2>
+            <div className="subcategory-items-container" style={{ marginTop: "10px" }}>
                 <div className="searching-page__filtering-box">
                     <div className="filtering-head">
                         <p>Filters</p>
                         <TuneIcon />
                     </div>
                     <div>
-                        <SubcategoryAuthorFiltering subcategory={params.subcategoryId.split("&")[0]} />
-                        {/*<SubcategoryPriceFiltering subcategory={params.subcategoryId.split("&")[0]} />*/}
+                        <SubcategoryAuthorFiltering subcategory={subcategoryName} />
+                        <SubcategoryPriceFiltering subcategory={subcategoryName} />
+                        <SubcategoryYearFiltering subcategory={subcategoryName} />
                     </div>
                 </div>
 
                 {!loading && <BookItemsList booksData={categoryBooks} />}
-                {loading && (
-                    <div className="loading-box">
+                {categoryBooks.length === 0 && <p className="no-items-paragraph" style={{ justifySelf: "center", position: "absolute", left: "50%" }}>Not found books</p>}
+                <Modal open={loading}>
+                    <Box className="searching-modal">
                         <CircularProgress />
-                    </div>
-                )}
+                    </Box>
+                </Modal>
             </div>
         </div>
     );

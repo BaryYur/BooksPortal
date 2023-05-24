@@ -137,40 +137,49 @@ export const ItemsContextProvider = ({ children }) => {
         }
 
         let authorsIds = getAuthorsIds(params);
-        // console.log(authorsIds, 'authors');
 
-        // const getMinMaxPricesFromUrlString = (urlString) => {
-        //     const url = new URL(urlString);
-        //     const searchParams = url.searchParams;
-        //
-        //     const minPrice = searchParams.get("minPrice");
-        //     const maxPrice = searchParams.get("maxPrice");
-        //
-        //     return {
-        //         minPrice: minPrice ? parseFloat(minPrice) : 0,
-        //         maxPrice: maxPrice ? parseFloat(maxPrice) : 0,
-        //     }
-        // }
-        //
-        // const getMinMaxYearsFromUrlString = (urlString) => {
-        //     const url = new URL(urlString);
-        //     const searchParams = url.searchParams;
-        //
-        //     const minYear = searchParams.get("minYear");
-        //     const maxYear = searchParams.get("maxYear");
-        //
-        //     return {
-        //         minYear: minYear ? parseFloat(minYear) : 0,
-        //         maxYear: maxYear ? parseFloat(maxYear) : 0
-        //     }
-        // }
-        //
-        // let prices = getMinMaxPricesFromUrlString(params);
-        // let years = getMinMaxYearsFromUrlString(params);
+        const getMinMaxPricesFromUrlString = (urlString) => {
+            const url = new URL(urlString);
+            const searchParams = url.searchParams;
+
+            const minPrice = searchParams.get("minPrice");
+            const maxPrice = searchParams.get("maxPrice");
+
+            return {
+                minPrice: minPrice ? parseFloat(minPrice) : 0,
+                maxPrice: maxPrice ? parseFloat(maxPrice) : 0,
+            }
+        }
+
+        const getMinMaxYearsFromUrlString = (urlString) => {
+            const url = new URL(urlString);
+            const searchParams = url.searchParams;
+
+            const minYear = searchParams.get("minYear");
+            const maxYear = searchParams.get("maxYear");
+
+            return {
+                minYear: minYear ? parseFloat(minYear) : 0,
+                maxYear: maxYear ? parseFloat(maxYear) : 0
+            }
+        }
+
+        let prices = {
+            minPrice: 0,
+            maxPrice: 0,
+        }
+
+        let years = {
+            minYear: 0,
+            maxYear: 0,
+        }
+
+        if (params) {
+            prices = getMinMaxPricesFromUrlString(params);
+            years = getMinMaxYearsFromUrlString(params);
+        }
 
         if (params !== "") {
-            console.log('ok 1');
-
             fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
                 .then(response => response.json())
                 .then(books => {
@@ -184,30 +193,26 @@ export const ItemsContextProvider = ({ children }) => {
                         booksYears.push(book.publishDate);
                     }
 
-                    console.log(books);
-
                     let minP = 0;
                     let maxP = 0;
                     let minY = 0;
                     let maxY = 0;
 
-                    // if (prices.maxPrice === 0 && prices.minPrice === 0) {
+                    if (prices.maxPrice === 0 && prices.minPrice === 0) {
                         minP = Math.min(...booksPrices);
                         maxP = Math.max(...booksPrices);
-                    // } else {
-                    //     minP = prices.minPrice;
-                    //     maxP = prices.maxPrice;
-                    // }
+                    } else {
+                        minP = prices.minPrice;
+                        maxP = prices.maxPrice;
+                    }
 
-                    // if (years.minYear == 0 && years.maxYear === 0) {
+                    if (years.minYear == 0 && years.maxYear === 0) {
                         minY = Math.min(...booksYears);
                         maxY = Math.max(...booksYears);
-                    // } else {
-                    //     minY = years.minYear;
-                    //     maxY = years.maxYear;
-                    // }
-
-                    // console.log();
+                    } else {
+                        minY = years.minYear;
+                        maxY = years.maxYear;
+                    }
 
                     let filteringPath = `http://localhost:8081/book/filter?authors=${authorsIds}&books=${booksIds}&category=${categoriesIds}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`;
 
@@ -227,8 +232,6 @@ export const ItemsContextProvider = ({ children }) => {
                     alert("Oops...", `Something went wrong!` , "error");
                 });
         } else if (params === "") {
-            console.log('ok 2');
-
             fetch(`http://localhost:8081/book/category/${categoryId}/GOOD`)
                 .then(response => response.json())
                 .then(data => {

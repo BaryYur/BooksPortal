@@ -6,16 +6,16 @@ import Slider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
 import {Button} from "@mui/material";
 
-const SubcategoryPriceFiltering = ({ subcategory }) => {
+const SubcategoryYearFiltering = ({ subcategory }) => {
     const { searchingFilteringItems, fetchingCategoryBooks } = useContext(ItemsContext);
-    const [minPrice, setMinPrice] = useState(0);
-    const [maxPrice, setMaxPrice] = useState(0);
-    const [minCurrentPrice, setMinCurrentPrice] = useState(0);
-    const [maxCurrentPrice, setMaxCurrentPrice] = useState(0);
+    const [minYear, setMinYear] = useState(0);
+    const [maxYear, setMaxYear] = useState(0);
+    const [minCurrentYear, setMinCurrentYear] = useState(0);
+    const [maxCurrentYear, setMaxCurrentYear] = useState(0);
 
     const [catId, setCatId] = useState("");
 
-    const gettingPrices = () => {
+    const gettingYears = () => {
         fetch(`http://localhost:8081/category`)
             .then(response => response.json())
             .then(data => {
@@ -26,17 +26,17 @@ const SubcategoryPriceFiltering = ({ subcategory }) => {
                         fetch(`http://localhost:8081/book/category/${cat.id}/GOOD`)
                             .then(response => response.json())
                             .then(books => {
-                                let prices = [];
+                                let years = [];
 
                                 for (let book of books) {
-                                    prices.push(book.price);
+                                    years.push(book.publishDate);
                                 }
 
-                                let min = Math.min(...prices);
-                                let max = Math.max(...prices);
+                                let min = Math.min(...years);
+                                let max = Math.max(...years);
 
-                                setMinPrice(min);
-                                setMaxPrice(max);
+                                setMinYear(min);
+                                setMaxYear(max);
                             })
                             .catch(error => {
                                 alert("Oops...");
@@ -49,23 +49,23 @@ const SubcategoryPriceFiltering = ({ subcategory }) => {
             const url = new URL(urlString);
             const searchParams = url.searchParams;
 
-            const minPrice = searchParams.get("minPrice");
-            const maxPrice = searchParams.get("maxPrice");
+            const minYear = searchParams.get("minYear");
+            const maxYear = searchParams.get("maxYear");
 
             return {
-                minPrice: minPrice ? parseFloat(minPrice) : 0,
-                maxPrice: maxPrice ? parseFloat(maxPrice) : 0
+                minYear: minYear ? parseFloat(minYear) : 0,
+                maxYear: maxYear ? parseFloat(maxYear) : 0
             }
         }
 
-        let prices = getMinMaxPricesFromUrlString(window.location.href);
+        let years = getMinMaxPricesFromUrlString(window.location.href);
 
-        setMinCurrentPrice(prices.minPrice);
-        setMaxCurrentPrice(prices.maxPrice);
-        setValue([prices.minPrice, prices.maxPrice]);
+        setMinCurrentYear(years.minYear);
+        setMaxCurrentYear(years.maxYear);
+        setValue([years.minYear, years.maxYear]);
     }
 
-    const [value, setValue] = useState([minCurrentPrice, maxCurrentPrice]);
+    const [value, setValue] = useState([minCurrentYear, maxCurrentYear]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -73,8 +73,8 @@ const SubcategoryPriceFiltering = ({ subcategory }) => {
         const currentUrl = new URL(window.location.href);
         const searchParams = currentUrl.searchParams;
 
-        searchParams.set("minPrice", newValue[0]);
-        searchParams.set("maxPrice", newValue[1]);
+        searchParams.set("minYear", newValue[0]);
+        searchParams.set("maxYear", newValue[1]);
 
         currentUrl.search = searchParams.toString();
         const updatedUrl = currentUrl.toString();
@@ -86,20 +86,20 @@ const SubcategoryPriceFiltering = ({ subcategory }) => {
         return `${value}`;
     }
 
-    const submitPrices = () => {
+    const submitYears = () => {
         setTimeout(() => {
             fetchingCategoryBooks(catId, window.location.href);
         }, 200);
     }
 
     useEffect(() => {
-        gettingPrices();
+        gettingYears();
     }, [searchingFilteringItems]);
 
     return (
         <div className="range-input-controller">
             {<div>
-                <p style={{ fontWeight: "600" }}>By price:</p>
+                <p style={{ fontWeight: "600" }}>By year:</p>
                 <Box sx={{ width: "100%" }}>
                     <Slider
                         getAriaLabel={() => "price"}
@@ -107,20 +107,20 @@ const SubcategoryPriceFiltering = ({ subcategory }) => {
                         onChange={handleChange}
                         valueLabelDisplay="auto"
                         getAriaValueText={valuetext}
-                        min={minPrice}
-                        max={maxPrice}
+                        min={minYear}
+                        max={maxYear}
                     />
                 </Box>
                 <div className="max-min-numbers-box">
-                    <p>{minPrice}$</p>
-                    <p>{maxPrice}$</p>
+                    <p>{minYear}</p>
+                    <p>{maxYear}</p>
                 </div>
             </div>}
             <div style={{ display: "flex", justifyContent: "center", paddingTop: "5px", paddingBottom: "5px" }}>
-                <Button onClick={submitPrices} variant="contained">ok</Button>
+                <Button onClick={submitYears} variant="contained">ok</Button>
             </div>
         </div>
     );
 }
 
-export default SubcategoryPriceFiltering;
+export default SubcategoryYearFiltering;
