@@ -45,7 +45,7 @@ const SubcategoryYearFiltering = ({ subcategory }) => {
                 }
             });
 
-        const getMinMaxPricesFromUrlString = (urlString) => {
+        const getMinMaxYearsFromUrlString = (urlString) => {
             const url = new URL(urlString);
             const searchParams = url.searchParams;
 
@@ -58,7 +58,7 @@ const SubcategoryYearFiltering = ({ subcategory }) => {
             }
         }
 
-        let years = getMinMaxPricesFromUrlString(window.location.href);
+        let years = getMinMaxYearsFromUrlString(window.location.href);
 
         setMinCurrentYear(years.minYear);
         setMaxCurrentYear(years.maxYear);
