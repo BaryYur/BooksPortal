@@ -31,7 +31,7 @@ export const CartContextProvider = ({ children }) => {
                         .then(response => response.json())
                         .then(data => {
                             setCartItems(data);
-                        })
+                        });
                 }
 
                 setCartItemsCounter(0);

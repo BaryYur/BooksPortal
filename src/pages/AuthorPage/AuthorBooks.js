@@ -27,6 +27,9 @@ const AuthorBooks = ({ books, status, fetchingAuthorBooksData }) => {
                         publishers={book.publishers}
                         likes={book.likes}
                         dislikes={book.dislikes}
+                        authorId={book.authorId}
+                        publisherId={book.publisherId}
+                        demoFile1={book.demoFile1}
                     />
                 ))}
             </ul>

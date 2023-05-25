@@ -13,7 +13,7 @@ const CategoryItemCard = ({ title, img, subcategories }) => {
 
     return (
         <li className="category-link-card">
-            {subcategories ? <Link to={`${title.toLowerCase()}`}>
+            {subcategories ? <Link to={`/home/shop/subcategories/${title.toLowerCase()}`}>
                 <img src={img} title={title} />
                 <div className="bottom-box">{changedTitle}</div>
                 <div className="category-card-wrapper"></div>

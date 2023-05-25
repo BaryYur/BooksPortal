@@ -1,9 +1,15 @@
-.purchased-books-container ul {
-    /*width: 500px;*/
+.purchased-books-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.purchased-books-container ul,
+.liked-books-container ul{
+    width: 500px;
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
 }
 
 .purchased-book-item {
@@ -15,7 +21,7 @@
     padding: 8px;
     box-shadow: var(--main-shadow);
     border-radius: 5px;
-    min-height: 70px;
+    min-height: 106px;
 }
 
 .purchased-book-item .book-name {
@@ -42,9 +48,31 @@
 .purchased-book-item div button {
     align-self: flex-end;
     font-weight: normal;
-    margin-top: 13px;
+    margin-top: 33px;
 }
 
 .purchased-book-item button span {
     margin-left: 5px;
+}
+
+.liked-books-container ul .liked-book-item {
+    width: 500px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 8px;
+    box-shadow: var(--main-shadow);
+    border-radius: 5px;
+    min-height: 90px;
+}
+
+.liked-books-container ul .liked-book-item img {
+    width: 60px;
+    height: 90px;
+    object-fit: cover;
+}
+
+.liked-books-container ul .liked-book-item div:first-child {
+    display: flex;
 }

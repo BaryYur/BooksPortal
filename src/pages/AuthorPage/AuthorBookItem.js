@@ -51,6 +51,9 @@ const AuthorBookItem = (props) => {
             publishers: props.publishers,
             likes: props.likes,
             dislikes: props.dislikes,
+            authorId: props.authorId,
+            publisherId: props.publisherId,
+            demoFile1: props.demoFile1,
         }
 
         setBookFields(bookBody);

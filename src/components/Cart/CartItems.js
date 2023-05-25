@@ -20,6 +20,7 @@ const CartItems = () => {
                         img={cartItem.file}
                         pagesCount={cartItem.pagesCount}
                         language={cartItem.language}
+                        category={cartItem.categories[0]}
                     />
                 ))}
                 {/*<div className="cart-bottom">*/}

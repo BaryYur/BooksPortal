@@ -296,6 +296,22 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
         let date = publishDateInput[0] + publishDateInput[1] + publishDateInput[2] + publishDateInput[3];
 
+        let coverImage;
+        let demoFile;
+
+        if (isAuthor || isPublisher) {
+            if (authorModal && image === "") {
+                coverImage = bookFields.file;
+            }
+
+            if (authorModal && bookPreviewPagesInput !== "") {
+                demoFile = bookFields.demoFile1;
+            }
+        } else {
+            coverImage = image;
+            demoFile = bookPreviewPagesInput;
+        }
+
         let body = {
             name: bookNameInput,
             authors: selectedAuthors,
@@ -304,10 +320,10 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             description: descriptionInput,
             publishDate: Number(date),
             language: languageInput,
-            file: image,
+            file: coverImage,
             pagesCount: Number(pagesCountInput),
             price: Number(priceInput),
-            demoFile1: bookPreviewPagesInput,
+            demoFile1: demoFile,
             status: bookStatus,
             likes: likes,
             dislikes: dislikes,
@@ -377,16 +393,20 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     }
 
     useEffect(() => {
-        if (
-            bookNameInput !== "" &&
-            publishDateInput !== "" && bookPreviewPagesInput !== "" &&
-            languageInput !== "" && image !== "" &&
-            pagesCountInput !== "" && priceInput !== "" &&
-            descriptionInput !== "" && chosenCategories.length > 0
-        ) {
+        if (!isAuthor && !isPublisher) {
+            if (
+                bookNameInput !== "" && priceInput !== "" &&
+                publishDateInput !== "" && bookPreviewPagesInput !== "" &&
+                languageInput !== "" && pagesCountInput !== "" &&
+                descriptionInput !== "" && chosenCategories.length > 0 &&
+                image !== ""
+            ) {
+                setDisabledAddingBtn(false);
+            } else {
+                setDisabledAddingBtn(true);
+            }
+        } else if (isAuthor || isPublisher) {
             setDisabledAddingBtn(false);
-        } else {
-            setDisabledAddingBtn(true);
         }
 
         if (authorNameInput.length <= 3) {
@@ -437,7 +457,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         pagesCountInput,
         priceInput,
         image,
-        descriptionInput
+        descriptionInput,
     ]);
 
     useEffect(() => {
@@ -449,6 +469,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 setLanguageInput(bookFields.language);
                 setPriceInput(bookFields.price);
                 setPagesCountInput(bookFields.pagesCount);
+                // console.log(bookFields);
             }
         }
     }, []);

@@ -39,7 +39,7 @@ const MainPage = () => {
                     {isLoggedIn && <Route path="/profile" element={<ProfilePage />} />}
                     <Route path="/shop/*" element={<ShopPage />} />
                     <Route path="/shop/categories/:category" element={<CategoryPage />} />
-                    <Route path="/shop/categories/:category/:subcategoryId" element={<SubcategoryPage />} />
+                    <Route path="/shop/subcategories/:subcategoryId" element={<SubcategoryPage />} />
                     <Route path="/shop/books/:category/:id" element={<BookItemPage />} />
                     <Route path="/author-info/:id" element={<AuthorInfoPage />} />
                     <Route path="*" element={<NotFoundPage />} />

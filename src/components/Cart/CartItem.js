@@ -36,6 +36,8 @@ const CartItem = ({ name, id, price, category, img, pagesCount, language }) => {
             password: userData.password,
             role: userData.role,
             status: userData.status,
+            likes: userData.likes,
+            dislikes: userData.dislikes,
         }
 
         cartCtx.deleteFromCart(userData.id, userBody);
@@ -52,11 +54,11 @@ const CartItem = ({ name, id, price, category, img, pagesCount, language }) => {
         <li>
             <Card className="book-card">
                 <div className="cart-item-box">
-                    <Link onClick={cartCtx.closeCart} to={`/home/shop/categories/${category}/${id}`}>
+                    <Link onClick={cartCtx.closeCart} to={`/home/shop/books/${category}/${id}`}>
                         <img src={img} alt={name} />
                     </Link>
                     <div>
-                        <Link onClick={cartCtx.closeCart} to={`/home/shop/categories/${category}/${id}`}>{name}</Link>
+                        <Link onClick={cartCtx.closeCart} to={`/home/shop/books/${category}/${id}`}>{name}</Link>
                         <p>Pages: <span>{pagesCount}</span></p>
                         <p>Language: <span>{language}</span></p>
                         {/*<div className="names-list">*/}

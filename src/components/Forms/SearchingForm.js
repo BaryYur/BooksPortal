@@ -38,8 +38,6 @@ const SearchingForm = () => {
         } else {
             setSearchingInput("");
         }
-
-        console.log('render');
     }, []);
 
     return (
