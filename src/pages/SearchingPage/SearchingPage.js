@@ -21,14 +21,14 @@ const SearchingPage = () => {
     // const itemsLength = useMemo(() => searchingFilteringItems.length, [searchingFilteringItems]);
 
     useEffect(() => {
-        let searching = window.location.href.split("?text=")[1].split("/")[0].replace(/%20/g, ' ');
+        let searching = decodeURIComponent(window.location.href.split("?text=")[1].split("/")[0].replace(/%20/g, ' '));
         setSearchingText(searching);
 
         if (location.search.length < 7) navigate("/home");
-    }, []);
+    }, [window.location.href]);
 
     return (
-        <div>
+        <div data-testid="searching-page-component">
             <div className="searching-page-header">
                 <h2>
                     Search: "<span>{searchingText}</span>"
@@ -49,7 +49,7 @@ const SearchingPage = () => {
                             <YearFiltering />
                         </div>
                     </div>:
-                    <p className="no-items-paragraph" style={{ marginTop: "10px" }}>No items</p>}
+                    <p className="no-items-paragraph" style={{ marginTop: "10px" }}>No filters</p>}
                 </div>
                 <Routes>
                     <Route path="/" element={<SearchingItemsPage search={location.search} />} />

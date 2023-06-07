@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -64,13 +64,13 @@ const Cart = () => {
                         </button>
                     </div>
                     <div className="line"></div>
-                    {cartItems.length === 0 ?
+                    {cartItems?.length === 0 ?
                         <p className="no-items-paragraph">
                             Your cart is empty
                         </p> : <CartItems />
                     }
 
-                    {cartItems.length > 0 && <Link onClick={closeCart} to="/home/order" className="order-box">
+                    {cartItems?.length > 0 && <Link onClick={closeCart} to="/home/order" className="order-box">
                         <Button
                             variant="contained"
                             color="success"

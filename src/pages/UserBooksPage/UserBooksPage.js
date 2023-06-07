@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
 
+import { Link } from "react-router-dom";
+
 import ItemsContext from "../../context/items-context";
 import AuthContext from "../../context/auth-context";
 
 import PurchasedBookItem from "./PurchasedBookItem";
-import {Link} from "react-router-dom";
 
 const UserBooksPage = () => {
     const { purchasedBooks, fetchingPurchasedBooks } = useContext(ItemsContext);
@@ -18,7 +19,6 @@ const UserBooksPage = () => {
                 fetch(`http://localhost:8081/book/ids?ids=${user.likes}`)
                     .then(response => response.json())
                     .then(likedBooks => {
-                        console.log(likedBooks);
                         setUserLikedBooks(likedBooks);
                     });
             });
@@ -51,13 +51,18 @@ const UserBooksPage = () => {
                     {userLikedBooks.map(book => (
                         <li key={book.id} className="liked-book-item">
                             <div>
-                                <img src={book.file} />
+                                <Link to={`/home/shop/books/${book.categories[0]}/${book.id}`}>
+                                    <img src={book.file} />
+                                </Link>
                                 <div>
                                     <Link to={`/home/shop/books/${book.categories[0]}/${book.id}`}>{book.name}</Link>
-                                    <p>{book.price}$</p>
+                                    <p>Pages: {book.pagesCount}</p>
+                                    <p>Language: {book.language}</p>
                                 </div>
                             </div>
-                            <div></div>
+                            <div className="box">
+                                <p>{book.price}$</p>
+                            </div>
                         </li>
                     ))}
                     {userLikedBooks.length === 0 && <p className="no-items-paragraph">Nothing here yet</p>}

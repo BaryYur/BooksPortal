@@ -214,7 +214,28 @@ export const ItemsContextProvider = ({ children }) => {
                         maxY = years.maxYear;
                     }
 
-                    let filteringPath = `http://localhost:8081/book/filter?authors=${authorsIds}&books=${booksIds}&category=${categoriesIds}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`;
+                    let authorsIds2 = [];
+
+                    if (authorsIds.length === 0) {
+                        let arr = [];
+
+                        for (let book of books) {
+                            arr.push(...book.authors);
+                        }
+
+                        authorsIds2 = [...new Set(arr)];
+                    } else {
+                        authorsIds2 = authorsIds;
+                    }
+
+                    console.log(
+                        'minP', minP, 'maxP', maxP,
+                        'minY', minY, 'maxY', maxY,
+                        'authors', authorsIds2, 'categories', categoriesIds,
+                        'booksIds', booksIds,
+                    );
+
+                    let filteringPath = `http://localhost:8081/book/filter?authors=${authorsIds2}&books=${booksIds}&category=${categoriesIds}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`;
 
                     fetch(filteringPath)
                         .then(response => response.json())
@@ -382,9 +403,35 @@ export const ItemsContextProvider = ({ children }) => {
                         }
 
                         setSearchingItems(data);
-                        console.log(maxY, minY);
 
-                        let path = `http://localhost:8081/book/filter?authors=${authorsIds}&books=${ids}&category=${categoriesIds}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`;
+                        let authorsIds2 = [];
+                        let categoriesIds2 = [];
+
+                        if (authorsIds.length === 0) {
+                            let arr = [];
+
+                            for (let book of data) {
+                                arr.push(...book.authors);
+                            }
+
+                            authorsIds2 = [...new Set(arr)];
+                        } else {
+                            authorsIds2 = authorsIds;
+                        }
+
+                        if (categoriesIds.length === 0) {
+                            let arr = [];
+
+                            for (let book of data) {
+                                arr.push(...book.categories);
+                            }
+
+                            categoriesIds2 = [...new Set(arr)];
+                        } else {
+                            categoriesIds2 = categoriesIds;
+                        }
+
+                        let path = `http://localhost:8081/book/filter?authors=${authorsIds2}&books=${ids}&category=${categoriesIds2}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`;
 
                         fetch(path)
                             .then(response => response.json())

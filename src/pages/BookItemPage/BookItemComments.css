@@ -17,7 +17,7 @@
     align-self: flex-end;
 }
 
-.book-comments-container form textarea {
+.book-comments-container .adding-comment-form textarea {
     min-height: 80px;
     max-height: 300px;
     min-width: 100%;
@@ -31,7 +31,7 @@
 }
 
 
-.book-comments-container form textarea:focus {
+.book-comments-container .adding-comment-form textarea:focus {
     transition: all 0.2s ease-in-out;
     border: 1px solid var(--main-input-border);
     box-shadow: var(--main-input-box-shadow);
@@ -79,4 +79,32 @@
 .comment-item__text {
     font-size: 15px;
     color: #4f4e4e;
+}
+
+.comment-item form div {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 10px;
+}
+
+.comment-item form div button {
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.comment-input {
+    font-size: 15px;
+    color: #4f4e4e;
+    border: none;
+    min-width: 100%;
+    max-width: 100%;
+    resize: none;
+}
+
+.comment-input::-webkit-scrollbar {
+    display: none;
 }

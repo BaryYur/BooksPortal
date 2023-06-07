@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 import ItemsContext from "../../context/items-context";
 import CartContext from "../../context/cart-context";
@@ -18,7 +18,7 @@ import BookItemComments from "./BookItemComments";
 import "./BookItemPage.css";
 
 const BookItemPage = ({ isAdmin }) => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const itemId = useParams().id;
     const {
         bookItem,
@@ -36,27 +36,28 @@ const BookItemPage = ({ isAdmin }) => {
     const [isActiveLikeBtn, setIsActiveLikeBtn] = useState(false);
     const [isActiveDislikeBtn, setIsActiveDislikeBtn] = useState(false);
     const [bookRating, setBookRating] = useState(0);
-    const [bookLikes, setBookLikes] = useState(bookItem.likes);
-    const [bookDislikes, setBookDislikes] = useState(bookItem.dislikes);
+    const [bookLikes, setBookLikes] = useState(0);
+    const [bookDislikes, setBookDislikes] = useState(0);
 
     let tabsInfo = [
         {
             name: "description",
-            description: bookItem.description,
+            description: bookItem?.description,
         },
         {
             name: "comments",
             description: <BookItemComments
                 bookId={itemId}
-                userName={user.name}
-                userId={user.id}
+                userName={user?.name}
+                userId={user?.id}
             />,
         }
     ];
 
     const addToCartHandler = (id) => {
         if (!isLoggedIn) {
-            navigate("/home/auth");
+            alert("You need authenticated first");
+            // navigate("/home/auth");
         } else {
             let newBasket = user.basket;
             newBasket.push(id);
@@ -169,12 +170,6 @@ const BookItemPage = ({ isAdmin }) => {
 
         let rounded = 0;
         rounded = rating.toFixed(1);
-
-        // if (rating.toFixed(2) % 2 === 0) {
-        //     rounded = rating;
-        // } else {
-            // rounded = rating.toFixed(1);
-        // }
 
         setBookRating(rounded);
     }
@@ -326,10 +321,10 @@ const BookItemPage = ({ isAdmin }) => {
                 <div className="book-item-main-container">
                     <div className="book-item__image-container">
                         <div className="book-cover-wrapper">
-                            <img src={bookItem.file} alt="book-image" />
+                            <img src={bookItem?.file} alt="book-image" />
                         </div>
                         <div>
-                            <p>Price: {bookItem.price} $</p>
+                            <p>Price: {bookItem?.price} $</p>
                             <p>Rating: {bookRating}/10</p>
                             {user &&<div className="book-likes-box">
                                 <Button onClick={() => likeBookHandler(true)}>
@@ -343,7 +338,7 @@ const BookItemPage = ({ isAdmin }) => {
                                     <span>{bookDislikes}</span>
                                 </Button>
                             </div>}
-                            {!isAdmin && bookItem.price !== 0 && <Button
+                            {!isAdmin && bookItem?.price !== 0 && <Button
                                 variant="contained"
                                 disabled={disabledAddingBtn}
                                 className="add-cart-btn"
@@ -352,7 +347,7 @@ const BookItemPage = ({ isAdmin }) => {
                                 <ShoppingCartIcon />
                                 <span>Add to cart</span>
                             </Button>}
-                            {(isAdmin || bookItem.price === 0) && (
+                            {(isAdmin || bookItem?.price === 0) && (
                                 <Button
                                     variant="contained"
                                     className="download-btn"
@@ -366,20 +361,19 @@ const BookItemPage = ({ isAdmin }) => {
                     </div>
                     <div className="book-item__main-info">
                         <div className="book-title-box">
-                            <h1>{bookItem.name}</h1>
-
+                            <h1>{bookItem?.name}</h1>
                             <div>
                                 {isAdmin && <Button
                                     title="Block this book"
                                     variant="contained"
                                     color="error"
-                                    disabled={bookItem.status === "BAD"}
+                                    disabled={bookItem?.status === "BAD"}
                                     onClick={() => blockBookHandler("BAD")}
                                 >Block</Button>}
                                 {isAdmin && <Button
                                     title="Unlock this book"
                                     variant="contained"
-                                    disabled={bookItem.status === "GOOD"}
+                                    disabled={bookItem?.status === "GOOD"}
                                     onClick={() => blockBookHandler("GOOD")}
                                 >Unblock</Button>}
                             </div>
@@ -388,15 +382,15 @@ const BookItemPage = ({ isAdmin }) => {
                             <ul>
                                 <li>
                                     <p>Publish Date</p>
-                                    <p>{bookItem.publishDate}</p>
+                                    <p>{bookItem?.publishDate}</p>
                                 </li>
                                 <li>
                                     <p>Language</p>
-                                    <p>{bookItem.language}</p>
+                                    <p>{bookItem?.language}</p>
                                 </li>
                                 <li>
                                     <p>Pages</p>
-                                    <p>{bookItem.pagesCount}</p>
+                                    <p>{bookItem?.pagesCount}</p>
                                 </li>
                             </ul>
                         </div>
@@ -407,7 +401,7 @@ const BookItemPage = ({ isAdmin }) => {
                                 <ul>
                                     <li>
                                         <span>Authors:</span>
-                                        {bookItemAuthorsList.map((author => (
+                                        {bookItemAuthorsList?.map((author => (
                                             <span key={author.id} className="item">
                                                 <Link to={`/home/author-info/${author.id}`}>{author.name}</Link>
                                             </span>
@@ -415,16 +409,18 @@ const BookItemPage = ({ isAdmin }) => {
                                     </li>
                                     <li>
                                         <span>Categories:</span>
-                                        {bookItemCategoriesList.map((category => (
-                                            <span key={category.id} className="item">{category.name}</span>
+                                        {bookItemCategoriesList?.map((category => (
+                                            <span key={category.id} className="item">
+                                                <Link to={`/home/shop/subcategories/${category.name.toLowerCase()}`}>{category.name}</Link>
+                                            </span>
                                         )))}
                                     </li>
                                     <li>
                                         <span>Publishers:</span>
-                                        {bookItemPublishersList.map((publisher => (
+                                        {bookItemPublishersList?.map((publisher => (
                                             <span key={publisher.id} className="item">{publisher.name}</span>
                                         )))}
-                                        {bookItemPublishersList.length === 0 && <span>-</span>}
+                                        {bookItemPublishersList?.length === 0 && <span>-</span>}
                                     </li>
                                     <li>
                                         <span>Read preview:</span>

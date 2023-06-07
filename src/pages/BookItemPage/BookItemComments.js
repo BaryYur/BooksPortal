@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
-
 import BookItemComment from "./BookItemComment";
 import { Button } from "@mui/material";
 import "./BookItemComments.css";
 
 const BookItemComments = ({ bookId, userId, userName}) => {
-    const navigate = useNavigate();
     const [commentInput, setCommentInput] = useState("");
     const [comments, setComments] = useState([]);
 
@@ -35,8 +32,8 @@ const BookItemComments = ({ bookId, userId, userName}) => {
         e.preventDefault();
 
         if (userName) {
-            if (commentInput.length < 4) {
-                alert("Message is to short");
+            if (commentInput === "") {
+                alert("Comment should not be empty");
 
                 return;
             }
@@ -50,12 +47,21 @@ const BookItemComments = ({ bookId, userId, userName}) => {
             const seconds = now.getSeconds().toString().padStart(2, "0");
             const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
+            let index;
+
+            if (comments.length !== 0) {
+                index = comments[0].commentIndex + 1;
+            } else {
+                index = 1;
+            }
+
             let commentBody = {
                 bookId: bookId,
                 dateTime: formattedDate,
                 name: userName,
                 text: commentInput,
                 userId: userId,
+                commentIndex: index,
             }
 
             fetchingAddingComment(commentBody);
@@ -63,9 +69,9 @@ const BookItemComments = ({ bookId, userId, userName}) => {
             setTimeout(() => {
                 fetchingBookComments();
                 setCommentInput("");
-            }, 500);
+            }, 200);
         } else {
-            navigate("/home/auth");
+            alert("You need authenticate first");
         }
     }
 
@@ -87,7 +93,7 @@ const BookItemComments = ({ bookId, userId, userName}) => {
 
     return (
       <div className="book-comments-container">
-          <form onSubmit={submitCommentHandler}>
+          <form onSubmit={submitCommentHandler} className="adding-comment-form">
               <div className="control">
                   <label htmlFor="comment-textarea">Add comment for this book</label>
                   <textarea
@@ -107,7 +113,11 @@ const BookItemComments = ({ bookId, userId, userName}) => {
                       userName={comment.name}
                       commentText={comment.text}
                       commentDate={comment.dateTime}
+                      commentIndex={comment.commentIndex}
                       onDeleteComment={() => deleteCommentHandler(comment.id)}
+                      userId={comment.userId}
+                      bookId={bookId}
+                      onFetchComments={fetchingBookComments}
                   />
               ))}
           </ul>

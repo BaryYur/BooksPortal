@@ -1,17 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 
 import AdminMainContext from "../../admin-context/admin-main-context";
 
 import BlockIcon from "@mui/icons-material/Block";
 
-const UserItem = ({ id, name, email, userStatus, password, role }) => {
+const UserItem = ({ id, name, email, userStatus }) => {
     const { fetchingUpdateUserStatus } = useContext(AdminMainContext);
 
     const updateUserStatus = () => {
         if (userStatus === "ACTIVE") {
-            fetchingUpdateUserStatus(id, "BANNED", email, name, password, role);
+            fetchingUpdateUserStatus(id, "BANNED");
         } else {
-            fetchingUpdateUserStatus(id, "ACTIVE", email, name, password, role);
+            fetchingUpdateUserStatus(id, "ACTIVE");
         }
     }
 

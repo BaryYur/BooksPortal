@@ -209,25 +209,35 @@ export const AdminMainContextProvider = ({ children }) => {
             })
     }
 
-    const fetchingUpdateUserStatus = async (id, status, email, name, password, role) => {
-        await fetch(`http://localhost:8081/user/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email,
-                name: name,
-                password: password,
-                role: role,
-                status: status,
-            }),
-        })
-            .then(response => {
-                if (response.ok) fetchingUsersList();
-            })
-            .catch(error => {
-                alert("Oops...", "Something went wrong!", "error");
+    const fetchingUpdateUserStatus = async (id, status) => {
+        await fetch(`http://localhost:8081/user/${id}`)
+            .then(response => response.json())
+            .then(user => {
+                let body = {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    password: user.password,
+                    role: user.role,
+                    status: status,
+                    basket: user.basket,
+                    likes: user.likes,
+                    dislikes: user.dislikes,
+                }
+
+                fetch(`http://localhost:8081/user/${user.id}`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(body),
+                })
+                    .then(response => {
+                        if (response.ok) fetchingUsersList();
+                    })
+                    .catch(error => {
+                        alert("Oops...", "Something went wrong!", "error");
+                    })
             })
     }
 

@@ -16,7 +16,6 @@ const AdminStartingPage = () => {
     const { usersList } = useContext(AdminMainContext);
     const [currentUsers, setCurrentUsers] = useState([]);
     const [userPagesCounter, setUserPagesCounter] = useState(1);
-
     const [counter, setCounter] = useState(0);
 
     const currentUsersHandler = () => {

@@ -48,10 +48,10 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const changeAuthorNameInputHandler = (event) => setAuthorNameInput(event.target.value);
     const changePublisherNameInputHandler = (event) => setPublisherNameInput(event.target.value);
 
-    const checkingExisting = (author, publisher) => {
+    const checkingExisting = (currentAuthor) => {
         let counter = 0;
 
-        if (author) {
+        if (currentAuthor) {
             if (chosenAuthors.length > 0) {
                 for (let author of chosenAuthors) {
                     if (author.name === authorNameInput) counter++;
@@ -69,8 +69,16 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             if (authorNameInput === author.name) counter++;
         }
 
+        if (isPublisher) {
+            if (publisherNameInput === publisher.name) counter++;
+        }
+
         if (counter > 0) {
-            alert("You already add this author");
+            if (currentAuthor) {
+                alert("You already add this author");
+            } else {
+                alert("You already add this publisher");
+            }
 
             return false;
         } else return true;
@@ -98,7 +106,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         }
 
         if (event.key === "Enter" && authorNameInput.length <= 3) {
-            alert("Author Name is to short");
+            alert("Author name is to short");
             setCreateAuthorBtn(false);
         }
     }
@@ -125,7 +133,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         }
 
         if (event.key === "Enter" && publisherNameInput.length <= 3) {
-            alert("Publisher Name is to short");
+            alert("Publisher name is to short");
             setCreatePublisherBtn(false);
         }
     }
@@ -306,6 +314,11 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
             if (authorModal && bookPreviewPagesInput !== "") {
                 demoFile = bookFields.demoFile1;
+            }
+
+            if (!authorModal) {
+                coverImage = image;
+                demoFile = bookPreviewPagesInput;
             }
         } else {
             coverImage = image;

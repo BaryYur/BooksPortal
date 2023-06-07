@@ -2,7 +2,7 @@ import BookItemPage from "./BookItemPage/BookItemPage";
 
 const AdminBookPage = ({ isAdmin }) => {
     return (
-        <div className="admin-main-wrapper">
+        <div>
             <BookItemPage isAdmin={isAdmin} />
         </div>
     );

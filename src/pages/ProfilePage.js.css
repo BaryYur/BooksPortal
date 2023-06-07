@@ -1,6 +1,6 @@
 .user-wrapper,
 .admin-wrapper {
-    width: 1100px;
+    width: 1000px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -68,6 +68,27 @@
     padding: 20px;
 }
 
+.profile-box__bottom p span:first-child {
+    font-weight: 500;
+    color: black;
+}
+
+.profile-box__bottom p:first-child span:last-child {
+    color: #1976d2;
+}
+
+.profile-box__bottom span:last-child {
+    margin-left: 10px;
+}
+
+.profile-box__bottom p:last-child .active {
+    color: forestgreen;
+}
+
+.profile-box__bottom p:last-child .inactive {
+    color: orange;
+}
+
 .main-box-profile {
     min-height: 800px;
     width: 72%;
@@ -75,28 +96,34 @@
     background-color: white;
     border-radius: 4px;
     box-shadow: 0px 1px 2px 0px rgb(0 0 0 / 20%), 0px 0px 1px 0px rgb(0 0 0 / 20%);
+    position: relative;
 }
 
-.change-password-form {
+.update-user-form {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 10px;
     margin: 10px 0;
+    width: 300px;
 }
 
-.change-password-form input {
+.update-user-form input {
     width: 300px;
     padding: 7px;
     border: 1px solid lightgrey;
     border-radius: 3px;
     background-color: whitesmoke;
+    font-size: 15px;
 }
 
-.change-password-form button {
-    margin-left: 10px;
-}
-
-.change-password-form input:focus {
+.update-user-form input:focus {
     transition: all 0.2s ease-in;
     border-color: var(--main-input-border);
     box-shadow: var(--main-input-box-shadow);
+}
+
+.main-box-profile .logout-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
 }

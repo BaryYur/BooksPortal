@@ -71,7 +71,7 @@ const AuthForm = () => {
     }
 
     return (
-        <div className="login-form-container">
+        <div data-testid="auth-form-component" className="login-form-container">
             <h1>{isLogin ? "Login" : "Sign Up"}</h1>
             <form onSubmit={handleSubmit(submitHandler)}>
                 {!isLogin && <div className="control">

@@ -32,7 +32,7 @@ const SearchingForm = () => {
 
     useEffect(() => {
         if (location.pathname === "/home/shop/search/" && location.search.split("").includes("=")) {
-             let searching = window.location.href.split("?text=")[1].split("/")[0].replace(/%20/g, ' ');
+             let searching = decodeURIComponent(window.location.href.split("?text=")[1].split("/")[0].replace(/%20/g, ' '));
 
              setSearchingInput(searching);
         } else {

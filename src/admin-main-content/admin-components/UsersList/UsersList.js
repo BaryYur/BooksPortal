@@ -1,5 +1,5 @@
-import "./UsersList.css";
 import UserItem from "./UserItem";
+import "./UsersList.css";
 
 const UsersList = ({ usersData }) => {
     return (
@@ -7,7 +7,7 @@ const UsersList = ({ usersData }) => {
             <div className="users-list-container__head">
                 <div>User name:</div>
                 <div>Email:</div>
-                <div></div>
+                <div>Status:</div>
             </div>
             <ul>
                 {usersData.length !== 0 && usersData.map(userInfo => (
@@ -19,6 +19,9 @@ const UsersList = ({ usersData }) => {
                             userStatus ={userInfo.status}
                             password={userInfo.password}
                             role={userInfo.role}
+                            basket={userInfo.basket}
+                            likes={userInfo.likes}
+                            dislikes={userInfo.dislikes}
                         />
                     ))
                 }

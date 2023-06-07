@@ -78,6 +78,7 @@ export const AuthContextProvider = ({ children }) => {
         localStorage.removeItem("expirationTime");
         localStorage.removeItem("userId");
         localStorage.removeItem("userData");
+        setUser({});
         setUserInfo({});
         setIsUserIsAdmin(false);
         setIsUserIsAuthor(false);
