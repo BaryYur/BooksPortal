@@ -228,12 +228,12 @@ export const ItemsContextProvider = ({ children }) => {
                         authorsIds2 = authorsIds;
                     }
 
-                    console.log(
-                        'minP', minP, 'maxP', maxP,
-                        'minY', minY, 'maxY', maxY,
-                        'authors', authorsIds2, 'categories', categoriesIds,
-                        'booksIds', booksIds,
-                    );
+                    // console.log(
+                    //     'minP', minP, 'maxP', maxP,
+                    //     'minY', minY, 'maxY', maxY,
+                    //     'authors', authorsIds2, 'categories', categoriesIds,
+                    //     'booksIds', booksIds,
+                    // );
 
                     let filteringPath = `http://localhost:8081/book/filter?authors=${authorsIds2}&books=${booksIds}&category=${categoriesIds}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`;
 

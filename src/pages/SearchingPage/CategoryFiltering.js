@@ -66,6 +66,17 @@ const CategoryFiltering = () => {
         fetchingCategories();
     }, [searchingFilteringItems]);
 
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const authorsParam = urlParams.get("category");
+
+        if (authorsParam) {
+            const ids = authorsParam.split(",");
+
+            setCIds(ids);
+        }
+    }, []);
+
     return (
         <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey", marginTop: "3px" }}>
             <AccordionSummary

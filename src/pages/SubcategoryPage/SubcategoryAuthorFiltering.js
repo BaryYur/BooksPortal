@@ -68,6 +68,17 @@ const SubcategoryAuthorFiltering = ({ subcategory }) => {
         fetchingAuthors();
     }, [categoryBooks, aIds]);
 
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.href);
+        const authorsParam = urlParams.get("authors");
+
+        if (authorsParam) {
+            const ids = authorsParam.split(",");
+
+            setAIds(ids);
+        }
+    }, []);
+
     return (
         <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey", marginTop: "10px" }}>
             <AccordionSummary

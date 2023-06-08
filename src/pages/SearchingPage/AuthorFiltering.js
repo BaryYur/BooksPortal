@@ -65,6 +65,17 @@ const AuthorFiltering = () => {
         fetchingAuthors();
     }, [searchingFilteringItems, aIds]);
 
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const authorsParam = urlParams.get("authors");
+
+        if (authorsParam) {
+            const ids = authorsParam.split(",");
+
+            setAIds(ids);
+        }
+    }, []);
+
     return (
         <>
             <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey" }}>
