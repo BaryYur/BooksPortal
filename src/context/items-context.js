@@ -394,7 +394,7 @@ export const ItemsContextProvider = ({ children }) => {
                             maxP = prices.maxPrice;
                         }
 
-                        if (years.minYear == 0 && years.maxYear === 0) {
+                        if (years.minYear === 0 && years.maxYear === 0) {
                             minY = Math.min(...booksYears);
                             maxY = Math.max(...booksYears);
                         } else {
@@ -430,6 +430,12 @@ export const ItemsContextProvider = ({ children }) => {
                         } else {
                             categoriesIds2 = categoriesIds;
                         }
+
+                        // console.log(
+                        //     'minP', minP, 'maxP', maxP,
+                        //     'minY', minY, 'maxY', maxY,
+                        //     'authors', authorsIds2, 'categories', categoriesIds2
+                        // );
 
                         let path = `http://localhost:8081/book/filter?authors=${authorsIds2}&books=${ids}&category=${categoriesIds2}&maxPrice=${maxP}&maxYear=${maxY}&minPrice=${minP}&minYear=${minY}`;
 

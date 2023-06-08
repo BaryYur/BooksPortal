@@ -46,7 +46,8 @@ const PriceFiltering = () => {
                 setMaxPrice(max);
             })
             .catch(error => {
-                alert("Oops...");
+                console.log('price error');
+                // alert("Oops...");
             });
 
         const getMinMaxPricesFromUrlString = (urlString) => {
@@ -74,22 +75,16 @@ const PriceFiltering = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
 
-        const currentUrl = window.location.href;
-        const url = new URL(currentUrl);
+        const currentUrl = new URL(window.location.href);
+        const params = new URLSearchParams(currentUrl.search);
 
-        let params = new URLSearchParams(url.search);
+        params.set("minPrice", newValue[0]);
+        params.set("maxPrice", newValue[1]);
 
-        if (!params.has("minPrice") || !params.has("maxPrice")) {
-            params.set("minPrice", newValue[0]);
-            params.set("maxPrice", newValue[1]);
-        } else {
-            params.set("minPrice", newValue[0]);
-            params.set("maxPrice", newValue[1]);
-        }
+        const updatedSearch = params.toString().replace(/\+/g, "%20").replace(/\//g, "%2F");
+        currentUrl.search = updatedSearch;
 
-        const updatedParams = params.toString();
-        const updatedUrl = `${url.origin}${url.pathname}${updatedParams ? `?${updatedParams}` : ""}`.replace(/%2F/g, "/");
-
+        const updatedUrl = decodeURIComponent(currentUrl.toString());
         window.history.replaceState(null, "", updatedUrl);
     }
 

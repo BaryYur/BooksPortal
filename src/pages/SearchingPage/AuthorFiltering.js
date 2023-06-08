@@ -30,7 +30,8 @@ const AuthorFiltering = () => {
                 fetchingAuthorsList(ids);
             })
             .catch(error => {
-                alert("Oops...");
+                console.log('authors error');
+                // alert("Oops...");
             });
     }
 
@@ -65,16 +66,16 @@ const AuthorFiltering = () => {
         fetchingAuthors();
     }, [searchingFilteringItems, aIds]);
 
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const authorsParam = urlParams.get("authors");
-
-        if (authorsParam) {
-            const ids = authorsParam.split(",");
-
-            setAIds(ids);
-        }
-    }, []);
+    // useEffect(() => {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const authorsParam = urlParams.get("authors");
+    //
+    //     if (authorsParam) {
+    //         const ids = authorsParam.split(",");
+    //
+    //         setAIds(ids);
+    //     }
+    // }, []);
 
     return (
         <>

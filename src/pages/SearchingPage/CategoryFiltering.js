@@ -31,7 +31,8 @@ const CategoryFiltering = () => {
                 fetchingCategoriesList(ids);
             })
             .catch(error => {
-                alert("Oops...");
+                console.log('categories error');
+                // alert("Oops...");
             });
     }
 
@@ -66,16 +67,16 @@ const CategoryFiltering = () => {
         fetchingCategories();
     }, [searchingFilteringItems]);
 
-    useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const authorsParam = urlParams.get("category");
-
-        if (authorsParam) {
-            const ids = authorsParam.split(",");
-
-            setCIds(ids);
-        }
-    }, []);
+    // useEffect(() => {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const authorsParam = urlParams.get("category");
+    //
+    //     if (authorsParam) {
+    //         const ids = authorsParam.split(",");
+    //
+    //         setCIds(ids);
+    //     }
+    // }, []);
 
     return (
         <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey", marginTop: "3px" }}>

@@ -46,7 +46,8 @@ const YearFiltering = () => {
                 setMaxYear(max);
             })
             .catch(error => {
-                alert("Oops...");
+                console.log('year error');
+                // alert("Oops...");
             });
 
         const getMinMaxYearsFromUrlString = (urlString) => {
@@ -72,22 +73,16 @@ const YearFiltering = () => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
 
-        const currentUrl = window.location.href;
-        const url = new URL(currentUrl);
+        const currentUrl = new URL(window.location.href);
+        const params = new URLSearchParams(currentUrl.search);
 
-        let params = new URLSearchParams(url.search);
+        params.set("minYear", newValue[0]);
+        params.set("maxYear", newValue[1]);
 
-        if (!params.has("minYear") || !params.has("maxYear")) {
-            params.set("minYear", newValue[0]);
-            params.set("maxYear", newValue[1]);
-        } else {
-            params.set("minYear", newValue[0]);
-            params.set("maxYear", newValue[1]);
-        }
+        const updatedSearch = params.toString().replace(/\+/g, "%20").replace(/\//g, "%2F");
+        currentUrl.search = updatedSearch;
 
-        const updatedParams = params.toString();
-        const updatedUrl = `${url.origin}${url.pathname}${updatedParams ? `?${updatedParams}` : ""}`.replace(/%2F/g, "/");
-
+        const updatedUrl = decodeURIComponent(currentUrl.toString());
         window.history.replaceState(null, "", updatedUrl);
     }
 
