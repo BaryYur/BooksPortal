@@ -36,22 +36,19 @@ const CategoryFiltering = () => {
             });
     }
 
-    const [cIds, setCIds] = useState([]);
+    const urlParams = new URLSearchParams(window.location.href.substring(window.location.href.indexOf("?") + 1));
+    const categoriesIds = urlParams.getAll("category");
 
     const getCategories = (id) => {
-        if (!cIds.includes(id)) {
-            setCIds(prevId => {
-                return [...prevId, id];
-            });
-
+        if (!categoriesIds.includes(id)) {
             const currentUrl = window.location.href;
             const updatedUrl = `${currentUrl}&category=${id}`;
+
             navigate("?" + updatedUrl.split("?")[1]);
         } else {
-            setCIds(cIds.filter(cid => cid !== id));
-
             const currentUrl = window.location.href;
             const updatedUrl = currentUrl.replace(`&category=${id}`, "").replace("?&", "?");
+
             navigate("?" + updatedUrl.split("?")[1]);
         }
 
@@ -60,23 +57,9 @@ const CategoryFiltering = () => {
         }, 200);
     }
 
-    const urlParams = new URLSearchParams(window.location.href.substring(window.location.href.indexOf("?") + 1));
-    const categoriesIds = urlParams.getAll("category");
-
     useEffect(() => {
         fetchingCategories();
     }, [searchingFilteringItems]);
-
-    // useEffect(() => {
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     const authorsParam = urlParams.get("category");
-    //
-    //     if (authorsParam) {
-    //         const ids = authorsParam.split(",");
-    //
-    //         setCIds(ids);
-    //     }
-    // }, []);
 
     return (
         <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey", marginTop: "3px" }}>

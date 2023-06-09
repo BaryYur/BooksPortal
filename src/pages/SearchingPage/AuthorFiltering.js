@@ -35,22 +35,19 @@ const AuthorFiltering = () => {
             });
     }
 
-    const [aIds, setAIds] = useState([]);
+    const urlParams = new URLSearchParams(window.location.href.substring(window.location.href.indexOf("?") + 1));
+    const authorsIds = urlParams.getAll("authors");
 
     const getAuthors = (id) => {
-        if (!aIds.includes(id)) {
-            setAIds(prevId => {
-                return [...prevId, id];
-            });
-
+        if (!authorsIds.includes(id)) {
             const currentUrl = window.location.href;
             const updatedUrl = `${currentUrl}&authors=${id}`;
+
             navigate("?" + updatedUrl.split("?")[1]);
         } else {
-            setAIds(aIds.filter(aid => aid !== id));
-
             const currentUrl = window.location.href;
             const updatedUrl = currentUrl.replace(`&authors=${id}`, "").replace("?&", "?");
+
             navigate("?" + updatedUrl.split("?")[1]);
         }
 
@@ -59,23 +56,9 @@ const AuthorFiltering = () => {
         }, 200);
     }
 
-    const urlParams = new URLSearchParams(window.location.href.substring(window.location.href.indexOf("?") + 1));
-    const authorsIds = urlParams.getAll("authors");
-
     useEffect(() => {
         fetchingAuthors();
-    }, [searchingFilteringItems, aIds]);
-
-    // useEffect(() => {
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     const authorsParam = urlParams.get("authors");
-    //
-    //     if (authorsParam) {
-    //         const ids = authorsParam.split(",");
-    //
-    //         setAIds(ids);
-    //     }
-    // }, []);
+    }, [searchingFilteringItems]);
 
     return (
         <>

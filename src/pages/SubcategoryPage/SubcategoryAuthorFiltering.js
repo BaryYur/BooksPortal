@@ -40,22 +40,19 @@ const SubcategoryAuthorFiltering = ({ subcategory }) => {
             });
     }
 
-    const [aIds, setAIds] = useState([]);
+    const urlParams = new URLSearchParams(window.location.href);
+    const authorsIds = urlParams.getAll("authors");
 
     const getAuthors = (id) => {
-        if (!aIds.includes(id)) {
-            setAIds(prevId => {
-                return [...prevId, id];
-            });
-
+        if (!authorsIds.includes(id)) {
             const currentUrl = window.location.href;
             const updatedUrl = `${currentUrl}&authors=${id}`;
+
             window.history.replaceState(null, "", updatedUrl);
         } else {
-            setAIds(aIds.filter(aid => aid !== id));
-
             const currentUrl = window.location.href;
             const updatedUrl = currentUrl.replace(`&authors=${id}`, "").replace("?&", "?");
+
             window.history.replaceState(null, "", updatedUrl);
         }
 
@@ -66,18 +63,7 @@ const SubcategoryAuthorFiltering = ({ subcategory }) => {
 
     useEffect(() => {
         fetchingAuthors();
-    }, [categoryBooks, aIds]);
-
-    // useEffect(() => {
-    //     const urlParams = new URLSearchParams(window.location.href);
-    //     const authorsParam = urlParams.get("authors");
-    //
-    //     if (authorsParam) {
-    //         const ids = authorsParam.split(",");
-    //
-    //         setAIds(ids);
-    //     }
-    // }, []);
+    }, [categoryBooks]);
 
     return (
         <Accordion style={{ boxShadow: "none", border: "1px solid lightgrey", marginTop: "10px" }}>
