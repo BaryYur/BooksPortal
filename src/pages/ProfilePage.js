@@ -10,6 +10,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
+import PaidIcon from "@mui/icons-material/Paid";
 import "./ProfilePage.js.css";
 
 const ProfilePage = ({ isAdmin }) => {
@@ -19,8 +20,11 @@ const ProfilePage = ({ isAdmin }) => {
     const [nameInput, setNameInput] = useState("");
     const [emailInput, setEmailInput] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
+    const [withdrawInput, setWithdrawInput] = useState("");
+    const [cardNumberInput, setCardNumberInput] = useState("");
     const [activeBtn, setActiveBtn] = useState(true);
     const [userLoading, setUserLoading] = useState(false);
+    const [authorData, setAuthorData] = useState(0);
 
     const logoutHandler = () => {
         logout();
@@ -77,6 +81,104 @@ const ProfilePage = ({ isAdmin }) => {
         fetchingUpdateUser(userBody);
     }
 
+    const fetchingScore = () => {
+        if (user.role === "AUTHOR") {
+            fetch(`http://localhost:8081/author/all/${user.name}`)
+                .then(response => response.json())
+                .then(authors => {
+                    if (authors.length !== 0) {
+                        setAuthorData(authors[0]);
+                    }
+                });
+        } else if (user.role === "PUBLISHING") {
+            fetch(`http://localhost:8081/publishing/all/${user.name}`)
+                .then(response => response.json())
+                .then(publishers => {
+                    if (publishers.length !== 0) {
+                        setAuthorData(publishers[0]);
+                    }
+                });
+        }
+    }
+
+    const fetchingUpdateScore = (score) => {
+        let authorScore = authorData.score - score;
+
+        let body = {
+            id: authorData.id,
+            name: authorData.name,
+            email: authorData.email,
+            description: authorData.description,
+            score: authorScore,
+            userId: authorData.userId,
+            active: authorData.active,
+        }
+
+        if (user.role === "AUTHOR") {
+            fetch(`http://localhost:8081/author/${authorData.id}`, {
+                method: "PUT",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(response => response.json())
+                .then(authors => {
+                    fetchingScore();
+                });
+        } else if (user.role === "PUBLISHING") {
+            fetch(`http://localhost:8081/publishing/${authorData.id}`, {
+                method: "PUT",
+                body: JSON.stringify(body),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then(response => response.json())
+                .then(authors => {
+                    fetchingScore();
+                });
+        }
+    }
+
+    const handleInputChange = (e) => {
+        let { value } = e.target;
+        value = value.replace(/\s/g, "");
+        value = value.slice(0, 16);
+
+        const formattedValue = formatCardNumber(value);
+
+        setCardNumberInput(formattedValue);
+    }
+
+    const formatCardNumber = (cardNumber) => {
+        const regex = /(\d{1,4})/g;
+        const parts = cardNumber.match(regex);
+
+        if (parts) {
+            return parts.join(" ");
+        }
+
+        return cardNumber;
+    }
+
+    const submitScoreHandler = (e) => {
+        e.preventDefault();
+
+        if (withdrawInput === "" && cardNumberInput === "") return;
+
+        setUserLoading(true);
+
+        setTimeout(() => {
+            fetchingUpdateScore(withdrawInput);
+
+            setUserLoading(false);
+        }, 800);
+
+        setWithdrawInput("");
+        setCardNumberInput("");
+    }
+
     useEffect(() => {
         if (nameInput !== "" && emailInput !== "" && passwordInput.length > 3) {
             setActiveBtn(false);
@@ -92,6 +194,8 @@ const ProfilePage = ({ isAdmin }) => {
             setNameInput(user.name);
             setEmailInput(user.email);
             setPasswordInput(atob(user.password));
+
+            fetchingScore();
         }
     }, [user.name]);
 
@@ -117,9 +221,9 @@ const ProfilePage = ({ isAdmin }) => {
                 </div>
             </div>
             <div className="main-box-profile">
-                <h2>Account data</h2>
-
                 <form onSubmit={updateUserPassword} className="update-user-form">
+                    <h2>Account data</h2>
+
                     <div className="control">
                         <label htmlFor="user-name-input">User name</label>
                         <input
@@ -149,6 +253,44 @@ const ProfilePage = ({ isAdmin }) => {
                     </div>
                     <Button type="submit" variant="contained" disabled={activeBtn}>Change</Button>
                 </form>
+
+                {(user.role === "AUTHOR" || user.role === "PUBLISHING") &&
+                    (<div className="author-score-box">
+                        <h2>Your score: <span>{authorData.score}$</span></h2>
+
+                        <form onSubmit={submitScoreHandler}>
+                            <div className="control">
+                                <label htmlFor="user-email-input">Want to withdraw</label>
+                                <input
+                                    id="user-email-input"
+                                    type="number"
+                                    min={0}
+                                    max={authorData.score}
+                                    value={withdrawInput}
+                                    onChange={(e) => setWithdrawInput(e.target.value)}
+                                />
+                            </div>
+                            <div className="control">
+                                <label htmlFor="user-password-input">Your card number</label>
+                                <input
+                                    id="user-password-input"
+                                    type="text"
+                                    value={cardNumberInput}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+
+                            <Button
+                                variant="contained"
+                                color="success"
+                                type="submit"
+                            >
+                                <PaidIcon />
+                                <span>withdraw money</span>
+                            </Button>
+                        </form>
+                    </div>)
+                }
 
                 <Button
                     variant="contained"

@@ -99,7 +99,8 @@
     position: relative;
 }
 
-.update-user-form {
+.update-user-form,
+.main-box-profile .author-score-box form {
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -107,7 +108,8 @@
     width: 300px;
 }
 
-.update-user-form input {
+.update-user-form input,
+.main-box-profile .author-score-box form input {
     width: 300px;
     padding: 7px;
     border: 1px solid lightgrey;
@@ -116,7 +118,8 @@
     font-size: 15px;
 }
 
-.update-user-form input:focus {
+.update-user-form input:focus,
+.main-box-profile .author-score-box form input:focus {
     transition: all 0.2s ease-in;
     border-color: var(--main-input-border);
     box-shadow: var(--main-input-box-shadow);
@@ -126,4 +129,21 @@
     position: absolute;
     bottom: 20px;
     right: 20px;
+}
+
+.main-box-profile .author-score-box form {
+    margin-top: 10px;
+}
+
+.main-box-profile .author-score-box h2 {
+    margin-top: 10px;
+}
+
+/*.main-box-profile .author-score-box h2 span {*/
+/*    color: #0e5394;*/
+/*}*/
+
+.main-box-profile .author-score-box button span {
+    margin-left: 5px;
+    font-weight: normal;
 }
