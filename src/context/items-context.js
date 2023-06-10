@@ -595,13 +595,13 @@ export const ItemsContextProvider = ({ children }) => {
     }
 
     const fetchingUnlockBook = (body) => {
-        if (body.authorId !== null) {
+        if (body.authorId !== null && body.status === "GOOD") {
             fetch(`http://localhost:8081/author/${body.authorId}`)
                 .then(response => response.json())
                 .then(author => {
                     fetchingSendMessage(body.authorId, author.name);
                 })
-        } else if (body.publisherId !== null) {
+        } else if (body.publisherId !== null && body.status === "GOOD") {
             fetch(`http://localhost:8081/publishing/${body.publisherId}`)
                 .then(response => response.json())
                 .then(publisher => {
