@@ -14,6 +14,7 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LoginIcon from "@mui/icons-material/Login";
 // import MenuIcon from "@mui/icons-material/Menu";
 
+// import SubscribtionsList from "./SubscribtionsList";
 import Cart from "../Cart/Cart";
 import "./Header.css";
 import bookLogoIcon from "../../images/book-icon.png";
@@ -63,6 +64,9 @@ const Header = () => {
                         </li>
                         <li>
                             <Link to="/home/shop">Categories</Link>
+                        </li>
+                        <li>
+                            {/*{isLoggedIn && <SubscribtionsList />}*/}
                         </li>
                         <li>
                             {(isUserIsAuthor || isUserIsPublisher) && <Link to="/home/notifications">

@@ -575,7 +575,40 @@ export const ItemsContextProvider = ({ children }) => {
             });
     }
 
+    const fetchingSendMessage = (ownerId, ownerName) => {
+        let body = {
+            id: ownerId,
+            name: ownerName,
+        }
+
+        fetch(`http://localhost:8081/mail/sendMessage/${ownerId}`, {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+            .then(response => console.log(response))
+            .then(data => {
+                console.log("data");
+            });
+    }
+
     const fetchingUnlockBook = (body) => {
+        if (body.authorId !== null) {
+            fetch(`http://localhost:8081/author/${body.authorId}`)
+                .then(response => response.json())
+                .then(author => {
+                    fetchingSendMessage(body.authorId, author.name);
+                })
+        } else if (body.publisherId !== null) {
+            fetch(`http://localhost:8081/publishing/${body.publisherId}`)
+                .then(response => response.json())
+                .then(publisher => {
+                    fetchingSendMessage(body.publisherId, publisher.name);
+                })
+        }
+
         fetch(`http://localhost:8081/book/${body.id}`, {
             method: "PUT",
             body: JSON.stringify(body),
