@@ -9,7 +9,7 @@ import NewsPage from "./NewsPage/NewsPage";
 import OrderPage from "./OrderPage/OrderPage";
 import UserBooksPage from "./UserBooksPage/UserBooksPage";
 import AuthorInfoPage from "./AuthorInfoPage";
-// import PublishingPage from "./PublishingPage";
+import PublisherInfoPage from "./PublisherInfoPage";
 import AuthorPage from "./AuthorPage/AuthorPage";
 import AuthPage from "./AuthPage";
 import ProfilePage from "./ProfilePage";
@@ -42,6 +42,7 @@ const MainPage = () => {
                     <Route path="/shop/subcategories/:subcategoryId" element={<SubcategoryPage />} />
                     <Route path="/shop/books/:category/:id" element={<BookItemPage />} />
                     <Route path="/author-info/:id" element={<AuthorInfoPage />} />
+                    <Route path="/publisher-info/:id" element={<PublisherInfoPage />} />
                     <Route path="*" element={<NotFoundPage />} />
                 </Routes>
             </Layout>

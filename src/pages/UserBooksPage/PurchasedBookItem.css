@@ -17,7 +17,6 @@
     background-color: white;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
     padding: 8px;
     box-shadow: var(--main-shadow);
     border-radius: 5px;
@@ -40,15 +39,23 @@
     margin-left: 10px;
 }
 
+.purchased-book-item div {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
 .purchased-book-item div p {
     color: grey;
+    width: 140px;
     font-size: 14px;
 }
 
 .purchased-book-item div button {
     align-self: flex-end;
     font-weight: normal;
-    margin-top: 33px;
+    /*margin-top: 33px;*/
 }
 
 .purchased-book-item button span {

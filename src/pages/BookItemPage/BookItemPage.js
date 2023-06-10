@@ -71,6 +71,8 @@ const BookItemPage = ({ isAdmin }) => {
                 status: user.status,
                 likes: user.likes,
                 dislikes: user.dislikes,
+                subscriptionOnAuthors: user.subscriptionOnAuthors,
+                subscriptionOnPublishers: user.subscriptionOnPublishers
             }
 
             addToCart(user.id, userBody);
@@ -239,6 +241,8 @@ const BookItemPage = ({ isAdmin }) => {
                 status: user.status,
                 likes: userLikes,
                 dislikes: userDislikes,
+                subscriptionOnAuthors: user.subscriptionOnAuthors,
+                subscriptionOnPublishers: user.subscriptionOnPublishers
             }
 
             fetch(`http://localhost:8081/user/${user.id}`, {
@@ -418,7 +422,9 @@ const BookItemPage = ({ isAdmin }) => {
                                     <li>
                                         <span>Publishers:</span>
                                         {bookItemPublishersList?.map((publisher => (
-                                            <span key={publisher.id} className="item">{publisher.name}</span>
+                                            <span key={publisher.id} className="item">
+                                                <Link to={`/home/publisher-info/${publisher.id}`}>{publisher.name}</Link>
+                                            </span>
                                         )))}
                                         {bookItemPublishersList?.length === 0 && <span>-</span>}
                                     </li>

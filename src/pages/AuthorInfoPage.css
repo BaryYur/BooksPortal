@@ -27,6 +27,29 @@
     color: #5d5c5c;
 }
 
+.author-info-container button {
+    background-color: #5d5c5c;
+    width: 100%;
+    margin-top: 10px;
+    font-weight: normal;
+}
+
+.author-info-container .sub-btn {
+    background-color: #cccccc;
+    box-shadow: none;
+    color: grey
+}
+
+.author-info-container .sub-btn:hover {
+    background-color: #cccccc;
+    box-shadow: none;
+    color: grey
+}
+
+.author-info-container button:hover {
+    background-color: #4f4e4e;
+}
+
 .author-info-container-books {
     flex: 4;
     margin-left: 5px;

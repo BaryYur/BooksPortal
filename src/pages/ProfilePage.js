@@ -59,6 +59,7 @@ const ProfilePage = ({ isAdmin }) => {
 
         setTimeout(() => {
             fetchingUserData();
+
             setUserLoading(false);
         }, 800);
     }
@@ -76,6 +77,8 @@ const ProfilePage = ({ isAdmin }) => {
             password: passwordInput,
             role: user.role,
             status: user.status,
+            subscriptionOnAuthors: user.subscriptionOnAuthors,
+            subscriptionOnPublishers: user.subscriptionOnPublishers
         }
 
         fetchingUpdateUser(userBody);

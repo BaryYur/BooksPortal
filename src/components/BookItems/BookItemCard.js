@@ -72,6 +72,10 @@ const BookItemCard = ({
                 password: userData.password,
                 role: userData.role,
                 status: userData.status,
+                likes: userData.likes,
+                dislikes: userData.dislikes,
+                subscriptionOnAuthors: userData.subscriptionOnAuthors,
+                subscriptionOnPublishers: userData.subscriptionOnPublishers
             }
 
             addToCart(userData.id, userBody);

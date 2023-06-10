@@ -38,6 +38,8 @@ const CartItem = ({ name, id, price, category, img, pagesCount, language }) => {
             status: userData.status,
             likes: userData.likes,
             dislikes: userData.dislikes,
+            subscriptionOnAuthors: userData.subscriptionOnAuthors,
+            subscriptionOnPublishers: userData.subscriptionOnPublishers
         }
 
         cartCtx.deleteFromCart(userData.id, userBody);
