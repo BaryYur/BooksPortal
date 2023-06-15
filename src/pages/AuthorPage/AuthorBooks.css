@@ -114,3 +114,108 @@
     flex-direction: column;
     align-items: flex-end;
 }
+
+.purchase-messages-container ul {
+    width: 600px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.purchase-messages-container ul li {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: white;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: var(--main-shadow);
+    min-height: 140px;
+}
+
+.purchase-messages-container ul li div h4 {
+    font-size: 20px;
+}
+
+.purchase-messages-container ul li h4 span {
+    color: royalblue;
+}
+
+.purchase-message-info-box {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.purchase-message-info-box p {
+    font-weight: 500;
+}
+
+.purchase-message-info-box p span {
+    font-weight: 400;
+    color: #4f4e4e;
+}
+
+.purchase-messages-container ul li .message-btns-box {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-left: 20px;
+}
+
+.purchase-messages-container ul li .message-btns-box .agree-btns button {
+    padding: 10px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.purchase-messages-container ul li .message-btns-box .agree-btns button:first-child {
+    background-color: rgb(82, 168, 255);
+    color: white;
+} 
+
+.purchase-messages-container ul li .message-btns-box .agree-btns button:last-child {
+    background-color: indianred;
+    color: white;
+} 
+
+.purchase-messages-container ul li .message-btns-box div {
+    display: flex;
+    gap: 5px;
+}
+
+.purchase-messages-container ul li .message-btns-box div .delete-message-btn {
+    color: indianred;
+    border: 1px solid indianred;
+    background-color: transparent;
+    padding: 3px 7px 0px 7px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+
+.purchase-messages-container ul li .message-btns-box div .delete-message-btn:hover {
+    color: #E62020;
+    border: 1px solid #E62020;
+    transition: 0.2s all;
+}
+
+.purchase-messages-container ul li .message-answer-btn {
+    width: 140px;
+    align-self: flex-end;
+}
+
+.buying-rules-modal textarea {
+    max-width: 100%;
+    min-width: 100%;
+}
+
+.buying-rules-modal button {
+    font-weight: normal;
+}
+
+.buying-rules-modal button span {
+    margin-left: 5px;
+}

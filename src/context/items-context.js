@@ -21,6 +21,7 @@ const ItemsContext = React.createContext({
     fetchingPublishersList: (ids) => {},
     fetchingCategoriesList: (ids) => {},
     fetchingPurchasedBooks: () => {},
+    fetchingPurchaseMessages: (authorData) => {},
 });
 
 export const ItemsContextProvider = ({ children }) => {
@@ -37,6 +38,8 @@ export const ItemsContextProvider = ({ children }) => {
     const [bookItem, setBookItem] = useState({});
     const [adminBooks, setAdminBooks] = useState([]);
     const [categoriesForSelect, setCategoriesForSelect] = useState([]);
+    const [counterPurchaseMessages,setCounterPurchaseMessages] = useState(0);
+    const [purchaseMessages, setPurchaseMessages] = useState([]);
     const [newsItems, setNewsItems] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -704,6 +707,33 @@ export const ItemsContextProvider = ({ children }) => {
             });
     }
 
+    // fetching author messages
+    const fetchingPurchaseMessages = (authorData) => {
+        if (authorData.role === "PUBLISHING") {
+            fetch(`http://localhost:8081/publishing/user/${authorData.id}`)
+                .then(response => response.json())
+                .then(publisher => {
+                    fetch(`http://localhost:8081/purchaseRequest/publisher/${publisher.id}`)
+                        .then(response => response.json())
+                        .then(purchaseReqs => {
+                            setPurchaseMessages(purchaseReqs.reverse());
+                            setCounterPurchaseMessages(purchaseReqs.length);
+                        });
+                });
+        } else if (authorData.role === "AUTHOR") {
+            fetch(`http://localhost:8081/author/user/${authorData.id}`)
+                .then(response => response.json())
+                .then(publisher => {
+                    fetch(`http://localhost:8081/purchaseRequest/author/${publisher.id}`)
+                        .then(response => response.json())
+                        .then(purchaseReqs => {
+                            setPurchaseMessages(purchaseReqs.reverse());
+                            setCounterPurchaseMessages(purchaseReqs.length);
+                        });
+                });
+        }
+    }
+
     const [purchasedBooks, setPurchasedBooks] = useState([]);
 
     const fetchingPurchasedBooks = () => {
@@ -749,6 +779,9 @@ export const ItemsContextProvider = ({ children }) => {
                 bookItemPublishersList: bookItemPublishersList,
                 fetchingAuthorBooks: fetchingAuthorBooks,
                 fetchingPurchasedBooks: fetchingPurchasedBooks,
+                fetchingPurchaseMessages: fetchingPurchaseMessages,
+                counterPurchaseMessages: counterPurchaseMessages,
+                purchaseMessages: purchaseMessages,
                 purchasedBooks: purchasedBooks,
                 authorConsiderationBooks: authorConsiderationBooks,
                 authorGoodBooks: authorGoodBooks,

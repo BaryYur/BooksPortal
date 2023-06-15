@@ -15,10 +15,13 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import DownloadIcon from "@mui/icons-material/Download";
 import TabsPanel from "../../components/Tabs/TabsPanel";
 import BookItemComments from "./BookItemComments";
+import PaidIcon from "@mui/icons-material/Paid";
+import Box from "@mui/material/Box";
+import CloseIcon from "@mui/icons-material/Close";
+import Modal from "@mui/material/Modal";
 import "./BookItemPage.css";
 
 const BookItemPage = ({ isAdmin }) => {
-    // const navigate = useNavigate();
     const itemId = useParams().id;
     const {
         bookItem,
@@ -38,6 +41,10 @@ const BookItemPage = ({ isAdmin }) => {
     const [bookRating, setBookRating] = useState(0);
     const [bookLikes, setBookLikes] = useState(0);
     const [bookDislikes, setBookDislikes] = useState(0);
+    const [openRulesModal, setOpenRulesModal] = useState(false);
+
+    const [purchasePriceInput, setPurchasePriceInput] = useState(0);
+    const [purchaseTextInput, setPurchaseTextInput] = useState("");
 
     let tabsInfo = [
         {
@@ -57,7 +64,6 @@ const BookItemPage = ({ isAdmin }) => {
     const addToCartHandler = (id) => {
         if (!isLoggedIn) {
             alert("You need authenticated first");
-            // navigate("/home/auth");
         } else {
             let newBasket = user.basket;
             newBasket.push(id);
@@ -143,6 +149,7 @@ const BookItemPage = ({ isAdmin }) => {
             status: bookItem.status,
             publisherId: bookItem.publisherId,
             authorId: bookItem.authorId,
+            demoFile1: bookItem.demoFile1,
         }
 
         fetch(`http://localhost:8081/book/${itemId}`, {
@@ -303,6 +310,71 @@ const BookItemPage = ({ isAdmin }) => {
         window.open(url, "_blank");
     }
 
+    // Buying rules
+    const openBuyingRulesModalHandler = () => setOpenRulesModal(true);
+    const closeBuyingRulesModalHandler = () => setOpenRulesModal(false);
+
+    const submitBuyingRulesHandler = (e) => {
+        e.preventDefault();
+
+        fetch(`http://localhost:8081/publishing/user/${user.id}`)
+            .then(response => response.json())
+            .then(publisher => {
+                let purchaseRulesBody = {
+                    authorId: bookItem.authorId,
+                    bookId: bookItem.id,
+                    bookName: bookItem.name,
+                    price: purchasePriceInput,
+                    publisherId: publisher.id,
+                    reviewed: false,
+                    text: purchaseTextInput,
+                    name: user.name,
+                }
+
+                fetch("http://localhost:8081/purchaseRequest", {
+                    method: "POST",
+                    body: JSON.stringify(purchaseRulesBody),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(response => {
+                        console.log(response);
+
+                        if (response.ok) {
+                            setActivePurchaseBtn(true);
+                        }
+                    });
+            });
+
+        setOpenRulesModal(false);
+    }
+
+    const [activePurchaseBtn, setActivePurchaseBtn] = useState(false);
+
+    const checkingBuyingRules = () => {
+        fetch(`http://localhost:8081/publishing/user/${user.id}`)
+            .then(response => response.json())
+            .then(publisher => {
+                fetch(`http://localhost:8081/purchaseRequest/publisher/${publisher.id}`)
+                    .then(response => response.json())
+                    .then(purchasedReqs => {
+                        let arr = [];
+
+                        for (let req of purchasedReqs) {
+                            arr.push(req.bookId);
+                        }
+
+                        if (arr.includes(bookItem.id)) {
+                            setActivePurchaseBtn(true);
+                        } else {
+                            setActivePurchaseBtn(false);
+                        }
+                    });
+            });
+    }
+
+
     useEffect(() => {
         btnIsActive();
         fetchingBookItem(itemId);
@@ -311,8 +383,9 @@ const BookItemPage = ({ isAdmin }) => {
     }, [itemId, disabledAddingBtn, cartItems, isActiveDislikeBtn, isActiveLikeBtn, bookLikes, bookDislikes]);
 
     useEffect(() => {
-        if (user) {
+        if (user.name) {
             checkingLikes();
+            checkingBuyingRules();
         }
 
         setBookLikes(bookItem.likes);
@@ -380,6 +453,17 @@ const BookItemPage = ({ isAdmin }) => {
                                     disabled={bookItem?.status === "GOOD"}
                                     onClick={() => blockBookHandler("GOOD")}
                                 >Unblock</Button>}
+                                {user.role === "PUBLISHING" && bookItem.authorId !== null &&
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        disabled={activePurchaseBtn}
+                                        onClick={openBuyingRulesModalHandler}
+                                    >
+                                        <PaidIcon />
+                                        <span style={{ marginLeft: "5px", fontWeight: "normal" }}>Buy rights</span>
+                                    </Button>
+                                }
                             </div>
                         </div>
                         <div className="main-info__top">
@@ -447,6 +531,46 @@ const BookItemPage = ({ isAdmin }) => {
                     <TabsPanel tabsInfo={tabsInfo} />
                 </div>
             </div>
+
+            <Modal
+                open={openRulesModal}
+                onClose={closeBuyingRulesModalHandler}
+            >
+                <Box className="delete-modal buying-rules-modal">
+                   <form onSubmit={submitBuyingRulesHandler}>
+                       <div className="control">
+                           <label>Purchase price ($)</label>
+                           <input
+                               type="text"
+                               value={purchasePriceInput}
+                               onChange={(e) => setPurchasePriceInput(Number(e.target.value))}
+                           />
+                       </div>
+                       <div className="control">
+                           <label>Accompanying text</label>
+                           <input
+                               type="text"
+                               value={purchaseTextInput}
+                               onChange={(e) => setPurchaseTextInput(e.target.value)}
+                           />
+                       </div>
+                       <div>
+                           <Button type="submit" variant="contained">Send</Button>
+                       </div>
+                   </form>
+
+                    <div>
+                        <button
+                            className="close-btn"
+                            variant="contained"
+                            color="secondary"
+                            onClick={closeBuyingRulesModalHandler}
+                        >
+                            <CloseIcon />
+                        </button>
+                    </div>
+                </Box>
+            </Modal>
         </div>
     );
 }

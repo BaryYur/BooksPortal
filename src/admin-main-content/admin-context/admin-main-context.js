@@ -223,6 +223,8 @@ export const AdminMainContextProvider = ({ children }) => {
                     basket: user.basket,
                     likes: user.likes,
                     dislikes: user.dislikes,
+                    subscriptionOnAuthors: user.subscriptionOnAuthors,
+                    subscriptionOnPublishers: user.subscriptionOnPublishers
                 }
 
                 fetch(`http://localhost:8081/user/${user.id}`, {

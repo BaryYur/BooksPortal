@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Modal from "@mui/material/Modal";
 import PaidIcon from "@mui/icons-material/Paid";
+import CloseIcon from "@mui/icons-material/Close";
 import "./ProfilePage.js.css";
 
 const ProfilePage = ({ isAdmin }) => {
@@ -22,9 +23,13 @@ const ProfilePage = ({ isAdmin }) => {
     const [passwordInput, setPasswordInput] = useState("");
     const [withdrawInput, setWithdrawInput] = useState("");
     const [cardNumberInput, setCardNumberInput] = useState("");
+    const [selfCardNumberInput, setSelfCardNumberInput] = useState("");
+    const [selfCodeInput, setSelfCodeInput] = useState("");
+    const [selfMoneyInput, setSelfMoneyInput] = useState("");
     const [activeBtn, setActiveBtn] = useState(true);
     const [userLoading, setUserLoading] = useState(false);
     const [authorData, setAuthorData] = useState(0);
+    const [openAddMoneyModal, setOpenAddMoneyModal] = useState(false);
 
     const logoutHandler = () => {
         logout();
@@ -42,7 +47,7 @@ const ProfilePage = ({ isAdmin }) => {
                 "Content-Type": "application/json",
             }
         })
-            .then(response => console.log(response))
+            .then(response => console.log(response)) 
             .catch(() => console.log("user error"));
 
         setTimeout(() => {
@@ -86,26 +91,27 @@ const ProfilePage = ({ isAdmin }) => {
 
     const fetchingScore = () => {
         if (user.role === "AUTHOR") {
-            fetch(`http://localhost:8081/author/all/${user.name}`)
+            fetch(`http://localhost:8081/author/user/${user.id}`)
                 .then(response => response.json())
-                .then(authors => {
-                    if (authors.length !== 0) {
-                        setAuthorData(authors[0]);
-                    }
+                .then(author => {
+                    setAuthorData(author);
                 });
         } else if (user.role === "PUBLISHING") {
-            fetch(`http://localhost:8081/publishing/all/${user.name}`)
+            fetch(`http://localhost:8081/publishing/user/${user.id}`)
                 .then(response => response.json())
-                .then(publishers => {
-                    if (publishers.length !== 0) {
-                        setAuthorData(publishers[0]);
-                    }
+                .then(publisher => {
+                    setAuthorData(publisher);
                 });
         }
     }
 
-    const fetchingUpdateScore = (score) => {
-        let authorScore = authorData.score - score;
+    const fetchingUpdateScore = (score, addMoney) => {
+        let authorScore
+        if (!addMoney) {
+            authorScore = authorData.score - score;
+        } else {
+            authorScore = authorData.score + score;
+        }
 
         let body = {
             id: authorData.id,
@@ -144,7 +150,7 @@ const ProfilePage = ({ isAdmin }) => {
         }
     }
 
-    const handleInputChange = (e) => {
+    const cardNumberHandler = (e) => {
         let { value } = e.target;
         value = value.replace(/\s/g, "");
         value = value.slice(0, 16);
@@ -152,6 +158,16 @@ const ProfilePage = ({ isAdmin }) => {
         const formattedValue = formatCardNumber(value);
 
         setCardNumberInput(formattedValue);
+    }
+
+    const selfCardNumberHandler = (e) => {
+        let { value } = e.target;
+        value = value.replace(/\s/g, "");
+        value = value.slice(0, 16);
+
+        const formattedValue = formatCardNumber(value);
+
+        setSelfCardNumberInput(formattedValue);
     }
 
     const formatCardNumber = (cardNumber) => {
@@ -168,18 +184,40 @@ const ProfilePage = ({ isAdmin }) => {
     const submitScoreHandler = (e) => {
         e.preventDefault();
 
-        if (withdrawInput === "" && cardNumberInput === "") return;
+        if (withdrawInput === "" || cardNumberInput === "") return;
 
         setUserLoading(true);
 
         setTimeout(() => {
-            fetchingUpdateScore(withdrawInput);
+            fetchingUpdateScore(withdrawInput, false);
 
             setUserLoading(false);
         }, 800);
 
         setWithdrawInput("");
         setCardNumberInput("");
+    }
+
+    const openAddMoneyModalHandler = () => setOpenAddMoneyModal(true);
+    const closeAddMoneyModalHandler = () => setOpenAddMoneyModal(false);
+
+    const submitAddMoneyHandler = (e) => {
+        e.preventDefault();
+
+        if (selfCardNumberInput === "" || selfMoneyInput === "" || selfCodeInput === "") return;
+
+        setUserLoading(true);
+
+        setTimeout(() => {
+            fetchingUpdateScore(selfMoneyInput, true);
+
+            setUserLoading(false);
+        }, 800);
+
+        setSelfCardNumberInput("");
+        setSelfMoneyInput("");
+        setSelfCodeInput("");
+        setOpenAddMoneyModal(false);
     }
 
     useEffect(() => {
@@ -259,7 +297,19 @@ const ProfilePage = ({ isAdmin }) => {
 
                 {(user.role === "AUTHOR" || user.role === "PUBLISHING") &&
                     (<div className="author-score-box">
-                        <h2>Your score: <span>{authorData.score}$</span></h2>
+                        <h2>
+                            Your score: <span>{authorData.score}$</span>
+                        </h2>
+
+                        {user.role === "PUBLISHING" && (
+                            <Button 
+                                variant="contained"
+                                onClick={openAddMoneyModalHandler}
+                            >
+                                <PaidIcon />
+                                <span>Top up the account</span>
+                            </Button>
+                        )}
 
                         <form onSubmit={submitScoreHandler}>
                             <div className="control">
@@ -279,7 +329,7 @@ const ProfilePage = ({ isAdmin }) => {
                                     id="user-password-input"
                                     type="text"
                                     value={cardNumberInput}
-                                    onChange={handleInputChange}
+                                    onChange={cardNumberHandler}
                                 />
                             </div>
 
@@ -289,7 +339,7 @@ const ProfilePage = ({ isAdmin }) => {
                                 type="submit"
                             >
                                 <PaidIcon />
-                                <span>withdraw money</span>
+                                <span>Withdraw money</span>
                             </Button>
                         </form>
                     </div>)
@@ -307,6 +357,59 @@ const ProfilePage = ({ isAdmin }) => {
             <Modal open={userLoading}>
                 <Box className="searching-modal">
                     <CircularProgress />
+                </Box>
+            </Modal>
+
+            <Modal
+                open={openAddMoneyModal}
+                onClose={closeAddMoneyModalHandler}
+            >
+                <Box className="delete-modal buying-rules-modal">
+                   <form onSubmit={submitAddMoneyHandler}>
+                       <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <div className="control">
+                                <label>Card number</label>
+                                <input
+                                    type="text"
+                                    style={{ width: "285px" }}
+                                    value={selfCardNumberInput}
+                                    onChange={selfCardNumberHandler}
+                                />
+                            </div>
+                            <div className="control">
+                                <label>Code</label>
+                                <input
+                                    type="text"
+                                    style={{ width: "130px" }}
+                                    maxLength={3}
+                                    value={selfCodeInput}
+                                    onChange={(e) => setSelfCodeInput(e.target.value)}
+                                />
+                            </div>
+                       </div>
+                       <div className="control">
+                           <label>How much ($)</label>
+                           <input
+                               type="number"
+                               value={selfMoneyInput}
+                               onChange={(e) => setSelfMoneyInput(Number(e.target.value))}
+                           />
+                       </div>
+                       <div>
+                           <Button type="submit" variant="contained">Top up</Button>
+                       </div>
+                   </form>
+
+                    <div>
+                        <button
+                            className="close-btn"
+                            variant="contained"
+                            color="secondary"
+                            onClick={closeAddMoneyModalHandler}
+                        >
+                            <CloseIcon />
+                        </button>
+                    </div>
                 </Box>
             </Modal>
         </div>

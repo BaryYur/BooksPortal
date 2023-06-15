@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
@@ -38,10 +38,16 @@ const a11yProps = (index) => {
     }
 }
 
-export default function BasicTabs({ tabsInfo }) {
+export default function BasicTabs({ tabsInfo, isAuthor, fetchingAuthorBooks }) {
     const [value, setValue] = useState(0);
 
-    const handleChange = (event, newValue) => setValue(newValue);
+    const handleChange = (event, newValue) => {
+        if (isAuthor && newValue === 0) {
+            fetchingAuthorBooks();
+        }
+
+        setValue(newValue);
+    }
 
     return (
         <Box sx={{ width: "100%", minHeight: "250px"}}>

@@ -10,17 +10,16 @@ import PersonIcon from "@mui/icons-material/Person";
 
 import { Button, Badge } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LoginIcon from "@mui/icons-material/Login";
 // import MenuIcon from "@mui/icons-material/Menu";
 
-// import SubscribtionsList from "./SubscribtionsList";
+import SubscriptionsList from "./SubscriptionsList";
 import Cart from "../Cart/Cart";
 import "./Header.css";
 import bookLogoIcon from "../../images/book-icon.png";
 
 const Header = () => {
-    const { isLoggedIn, isUserIsAdmin, isUserIsAuthor, isUserIsPublisher } = useContext(AuthContext);
+    const { isLoggedIn, isUserIsAdmin } = useContext(AuthContext);
     const cartCtx = useContext(CartContext);
     // const [activeMenu, setActiveMenu] = useState(false);
 
@@ -66,14 +65,14 @@ const Header = () => {
                             <Link to="/home/shop">Categories</Link>
                         </li>
                         <li>
-                            {/*{isLoggedIn && <SubscribtionsList />}*/}
+                            {isLoggedIn && <SubscriptionsList />}
                         </li>
-                        <li>
-                            {(isUserIsAuthor || isUserIsPublisher) && <Link to="/home/notifications">
-                                <Button 
-                                    className="header__cart-btn" 
-                                    title="Notifications"
-                                >
+                        {/*<li>*/}
+                            {/*{(isUserIsAuthor || isUserIsPublisher) && <Link to="/home/notifications">*/}
+                            {/*    <Button */}
+                            {/*        className="header__cart-btn" */}
+                            {/*        title="Notifications"*/}
+                            {/*    >*/}
                                     {/* <Badge
                                         badgeContent={cartCtx.cartItemsCounter}
                                         sx={{
@@ -84,11 +83,11 @@ const Header = () => {
                                         }}
                                         max={99}
                                     > */}
-                                        <NotificationsNoneIcon />
+                                        {/*<NotificationsNoneIcon />*/}
                                     {/* </Badge> */}
-                                </Button>
-                            </Link>}
-                        </li>
+                            {/*    </Button>*/}
+                            {/*</Link>}*/}
+                        {/*</li>*/}
                         <li>
                             <Button 
                                 className="header__cart-btn" 

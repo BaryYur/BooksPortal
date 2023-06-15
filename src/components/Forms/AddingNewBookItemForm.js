@@ -429,31 +429,33 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         if (isAuthor) {
             let authorData = JSON.parse(localStorage.getItem("userData"));
 
-            fetch(`http://localhost:8081/user/${authorData.id}`)
-                .then(response => response.json())
-                .then(data => {
-                    fetch(`http://localhost:8081/author/all/${data.name}`)
+            // fetch(`http://localhost:8081/user/${authorData.id}`)
+            //     .then(response => response.json())
+            //     .then(data => {
+                    fetch(`http://localhost:8081/author/user/${authorData.id}`)
                         .then(response => response.json())
                         .then(author => {
-                            if (author.length !== 0) {
-                                setAuthor(author[0]);
-                            }
+                            // if (author.length !== 0) {
+                                // CHANGE+
+                                setAuthor(author);
+                            // }
                         });
-                });
+                // });
         }
 
         if (isPublisher) {
             let publisherData = JSON.parse(localStorage.getItem("userData"));
 
-            fetch(`http://localhost:8081/user/${publisherData.id}`)
-                .then(response => response.json())
-                .then(data => {
-                    fetch(`http://localhost:8081/publishing/all/${data.name}`)
+            // fetch(`http://localhost:8081/user/${publisherData.id}`)
+            //     .then(response => response.json())
+            //     .then(data => {
+                    fetch(`http://localhost:8081/publishing/user/${publisherData.id}`)
                         .then(response => response.json())
                         .then(publisher => {
-                            setPublisher(publisher[0]);
+                            // CHANGE+
+                            setPublisher(publisher);
                         });
-                });
+                // });
         }
 
         fetchingExistingAuthors();

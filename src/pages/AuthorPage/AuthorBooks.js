@@ -1,7 +1,7 @@
 import AuthorBookItem from "./AuthorBookItem";
 import "./AuthorBooks.css";
 
-const AuthorBooks = ({ books, status, fetchingAuthorBooksData }) => {
+const AuthorBooks = ({ books, status, fetchingAuthorBooks }) => {
     return (
         <div className="author-books-container">
             {status === "GOOD" && <h2>Approved books</h2>}
@@ -16,7 +16,7 @@ const AuthorBooks = ({ books, status, fetchingAuthorBooksData }) => {
                         img={book.file}
                         price={book.price}
                         books={books}
-                        fetchingAuthorBooksData={fetchingAuthorBooksData}
+                        fetchingAuthorBooksData={fetchingAuthorBooks}
                         status={book.status}
                         description={book.description}
                         publishDate={book.publishDate}

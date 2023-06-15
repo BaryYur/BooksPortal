@@ -3,6 +3,7 @@ import {useContext, useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 
 import AuthContext from "../context/auth-context";
+import ItemsContext from "../context/items-context";
 
 import OtherHousesIcon from "@mui/icons-material/OtherHouses";
 import BookItemsList from "../components/BookItems/BookItemsList";
@@ -11,7 +12,8 @@ import "./AuthorInfoPage.css";
 
 const PublisherInfoPage = () => {
     const params = useParams();
-    const { user, fetchingUserData } = useContext(AuthContext);
+    const { user, fetchingUserData, isLoggedIn } = useContext(AuthContext);
+    const { fetchingPublishersList, fetchingAuthorsList } = useContext(ItemsContext);
     const [books, setBooks] = useState([]);
     const [publisher, setPublisher] = useState({});
 
@@ -32,41 +34,48 @@ const PublisherInfoPage = () => {
     }
 
     const subscribeOnPublisherHandler = ()  => {
-        let subPublishers = user.subscriptionOnPublishers;
+        if (isLoggedIn) {
+            let subPublishers = user.subscriptionOnPublishers;
 
-        if (!subPublishers.includes(publisher.id)) {
-            subPublishers.push(publisher.id);
-        } else {
-            subPublishers = subPublishers.filter(publisherId => publisherId !== publisher.id);
-        }
-
-        let userBody = {
-            id: user.id,
-            name: user.name,
-            basket: user.basket,
-            dislikes: user.dislikes,
-            email: user.email,
-            likes: user.likes,
-            password: user.password,
-            role: user.role,
-            status: user.status,
-            subscriptionOnAuthors: user.subscriptionOnAuthors,
-            subscriptionOnPublishers: subPublishers
-        }
-
-        fetch(`http://localhost:8081/user/${user.id}`, {
-            method: "PUT",
-            body: JSON.stringify(userBody),
-            headers: {
-                "Content-Type": "application/json",
+            if (!subPublishers.includes(publisher.id)) {
+                subPublishers.push(publisher.id);
+            } else {
+                subPublishers = subPublishers.filter(publisherId => publisherId !== publisher.id);
             }
-        })
-            .then(response => {
-                if (response.ok) {
-                    fetchingUserData();
+
+            let userBody = {
+                id: user.id,
+                name: user.name,
+                basket: user.basket,
+                dislikes: user.dislikes,
+                email: user.email,
+                likes: user.likes,
+                password: user.password,
+                role: user.role,
+                status: user.status,
+                subscriptionOnAuthors: user.subscriptionOnAuthors,
+                subscriptionOnPublishers: subPublishers
+            }
+
+            fetch(`http://localhost:8081/user/${user.id}`, {
+                method: "PUT",
+                body: JSON.stringify(userBody),
+                headers: {
+                    "Content-Type": "application/json",
                 }
             })
-            .catch(() => console.log("user error"));
+                .then(response => {
+                    if (response.ok) {
+                        fetchingUserData();
+
+                        fetchingAuthorsList(user.subscriptionOnAuthors);
+                        fetchingPublishersList(subPublishers);
+                    }
+                })
+                .catch(() => console.log("user error"));
+        } else {
+            alert("You need authenticated first");
+        }
     }
 
     useEffect(() => {
@@ -82,7 +91,7 @@ const PublisherInfoPage = () => {
                     <OtherHousesIcon />
                     <span>{publisher.name}</span>
                 </p>
-                {publisher.active &&
+                {publisher.active && isLoggedIn &&
                     <Button
                         className={user.subscriptionOnPublishers.includes(publisher.id) ? "sub-btn" : "not-sub-btn"}
                         variant="contained"
@@ -91,6 +100,13 @@ const PublisherInfoPage = () => {
                         {user.subscriptionOnPublishers.includes(publisher.id) ? <span>Unsubscribe</span> : <span>Subscribe</span>}
                     </Button>
                 }
+                {!isLoggedIn && <Button
+                    className="not-sub-btn"
+                    variant="contained"
+                    onClick={subscribeOnPublisherHandler}
+                >
+                    <span>Subscribe</span>
+                </Button>}
             </div>
             <div className="author-info-container-books">
                 <BookItemsList booksData={books} />

@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import AuthContext from "../context/auth-context";
+import ItemsContext from "../context/items-context";
 
 import EmailIcon from "@mui/icons-material/Email";
 import Person4Icon from "@mui/icons-material/Person4";
@@ -12,7 +13,8 @@ import {Button} from "@mui/material";
 
 const AuthorInfoPage = () => {
     const params = useParams();
-    const { user, fetchingUserData } = useContext(AuthContext);
+    const { user, fetchingUserData, isLoggedIn } = useContext(AuthContext);
+    const { fetchingPublishersList, fetchingAuthorsList } = useContext(ItemsContext);
     const [books, setBooks] = useState([]);
     const [author, setAuthor] = useState({});
 
@@ -33,41 +35,48 @@ const AuthorInfoPage = () => {
     }
 
     const subscribeOnAuthorHandler = ()  => {
-        let subAuthors = user.subscriptionOnAuthors;
+       if (isLoggedIn) {
+           let subAuthors = user.subscriptionOnAuthors;
 
-        if (!subAuthors.includes(author.id)) {
-            subAuthors.push(author.id);
-        } else {
-            subAuthors = subAuthors.filter(authorId => authorId !== author.id);
-        }
+           if (!subAuthors.includes(author.id)) {
+               subAuthors.push(author.id);
+           } else {
+               subAuthors = subAuthors.filter(authorId => authorId !== author.id);
+           }
 
-        let userBody = {
-            id: user.id,
-            name: user.name,
-            basket: user.basket,
-            dislikes: user.dislikes,
-            email: user.email,
-            likes: user.likes,
-            password: user.password,
-            role: user.role,
-            status: user.status,
-            subscriptionOnAuthors: subAuthors,
-            subscriptionOnPublishers: user.subscriptionOnPublishers
-        }
+           let userBody = {
+               id: user.id,
+               name: user.name,
+               basket: user.basket,
+               dislikes: user.dislikes,
+               email: user.email,
+               likes: user.likes,
+               password: user.password,
+               role: user.role,
+               status: user.status,
+               subscriptionOnAuthors: subAuthors,
+               subscriptionOnPublishers: user.subscriptionOnPublishers
+           }
 
-        fetch(`http://localhost:8081/user/${user.id}`, {
-            method: "PUT",
-            body: JSON.stringify(userBody),
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    fetchingUserData();
-                }
-            })
-            .catch(() => console.log("user error"));
+           fetch(`http://localhost:8081/user/${user.id}`, {
+               method: "PUT",
+               body: JSON.stringify(userBody),
+               headers: {
+                   "Content-Type": "application/json",
+               }
+           })
+               .then(response => {
+                   if (response.ok) {
+                       fetchingUserData();
+
+                       fetchingAuthorsList(subAuthors);
+                       fetchingPublishersList(user.subscriptionOnPublishers);
+                   }
+               })
+               .catch(() => console.log("user error"));
+       } else {
+           alert("You need authenticated first");
+       }
     }
 
      useEffect(() => {
@@ -87,12 +96,19 @@ const AuthorInfoPage = () => {
                   <EmailIcon />
                   <span>{author.email}</span>
               </p>}
-              {author.active && <Button
+              {author.active && isLoggedIn && <Button
                   className={user.subscriptionOnAuthors.includes(author.id) ? "sub-btn" : "not-sub-btn"}
                   variant="contained"
                   onClick={subscribeOnAuthorHandler}
               >
                   {user.subscriptionOnAuthors.includes(author.id) ? <span>Unsubscribe</span> : <span>Subscribe</span>}
+              </Button>}
+              {!isLoggedIn && <Button
+                  className="not-sub-btn"
+                  variant="contained"
+                  onClick={subscribeOnAuthorHandler}
+              >
+                  <span>Subscribe</span>
               </Button>}
           </div>
           <div className="author-info-container-books">

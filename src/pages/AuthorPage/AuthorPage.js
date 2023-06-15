@@ -2,15 +2,25 @@ import React, {useContext, useEffect, useState} from "react";
 
 import ItemsContext from "../../context/items-context";
 
+import { Badge } from "@mui/material";
 import TabsPanel from "../../components/Tabs/TabsPanel";
 import AuthorBooks from "./AuthorBooks";
 import AddingNewBookItemForm from "../../components/Forms/AddingNewBookItemForm";
+import AuthorNotifications from "./AuthorNotifications";
 
 const AuthorPage = ({ publisher, author }) => {
+    const {
+        fetchingAuthorBooks,
+        authorConsiderationBooks,
+        authorGoodBooks,
+        authorBadBooks,
+        fetchingPurchaseMessages,
+        counterPurchaseMessages
+    } = useContext(ItemsContext);
     const [authorData, setAuthorData] = useState(
         JSON.parse(localStorage.getItem("userData")) || ""
     );
-    const { fetchingAuthorBooks, authorConsiderationBooks, authorGoodBooks, authorBadBooks } = useContext(ItemsContext);
+
     const fetchingAllBooks = (name, user) => {
         let user1 = user;
 
@@ -38,8 +48,24 @@ const AuthorPage = ({ publisher, author }) => {
                 } else {
                     fetchingAllBooks(data.name, "author");
                 }
-            })
+            });
     }
+
+    const messagesHeader = <div>
+        <Badge
+            badgeContent={counterPurchaseMessages}
+            sx={{
+                "& .MuiBadge-badge": {
+                    color: "white",
+                    backgroundColor: "#197",
+                    marginTop: "-5px",
+                }
+            }}
+            max={99}
+        >
+            <span style={{ fontWeight: "normal" }}>Messages</span>
+        </Badge>
+    </div>;
 
     let tabsInfo = [
         {
@@ -49,17 +75,17 @@ const AuthorPage = ({ publisher, author }) => {
                     <AuthorBooks
                         books={authorGoodBooks}
                         status="GOOD"
-                        fetchingAuthorBooksData={fetchingAuthorBooksData}
+                        fetchingAuthorBooks={fetchingAuthorBooksData}
                     />
                     <AuthorBooks
                         books={authorConsiderationBooks}
                         status="CONSIDERATION"
-                        fetchingAuthorBooksData={fetchingAuthorBooksData}
+                        fetchingAuthorBooks={fetchingAuthorBooksData}
                     />
                     <AuthorBooks
                         books={authorBadBooks}
                         status="BAD"
-                        fetchingAuthorBooksData={fetchingAuthorBooksData}
+                        fetchingAuthorBooks={fetchingAuthorBooksData}
                     />
                 </div>
             )
@@ -68,18 +94,23 @@ const AuthorPage = ({ publisher, author }) => {
             name: "Add book",
             description: <AddingNewBookItemForm isAuthor={author} isPublisher={publisher} />
         },
+        {
+            name: messagesHeader,
+            description: <AuthorNotifications />,
+        }
     ];
 
     useEffect(() => {
         if (authorData) {
             fetchingAuthorBooksData();
+            fetchingPurchaseMessages(authorData);
         }
     }, [authorData]);
 
     return (
         <div className="main-wrapper">
-            <h1>Here you can add your new book</h1>
-            <TabsPanel tabsInfo={tabsInfo} />
+            <h1 style={{ marginBottom: "30px" }}>Here you can add your new book</h1>
+            <TabsPanel tabsInfo={tabsInfo} isAuthor={true} fetchingAuthorBooks={fetchingAuthorBooksData} />
         </div>
     );
 }
