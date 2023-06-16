@@ -138,7 +138,7 @@
 }
 
 .purchase-messages-container ul li h4 span {
-    color: royalblue;
+    color: #318CE7;
 }
 
 .purchase-message-info-box {
@@ -162,6 +162,7 @@
     flex-direction: column;
     justify-content: space-between;
     padding-left: 20px;
+    align-items: flex-end;
 }
 
 .purchase-messages-container ul li .message-btns-box .agree-btns button {
@@ -172,13 +173,15 @@
 }
 
 .purchase-messages-container ul li .message-btns-box .agree-btns button:first-child {
-    background-color: rgb(82, 168, 255);
+    background-color: #5d5c5c;
     color: white;
+    text-transform: uppercase;
 } 
 
 .purchase-messages-container ul li .message-btns-box .agree-btns button:last-child {
     background-color: indianred;
     color: white;
+    text-transform: uppercase;
 } 
 
 .purchase-messages-container ul li .message-btns-box div {

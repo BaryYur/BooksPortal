@@ -41,7 +41,7 @@ const BookItemPage = ({ isAdmin }) => {
     const [bookRating, setBookRating] = useState(0);
     const [bookLikes, setBookLikes] = useState(0);
     const [bookDislikes, setBookDislikes] = useState(0);
-    const [openRulesModal, setOpenRulesModal] = useState(false);
+    const [openRightsModal, setOpenRightsModal] = useState(false);
 
     const [purchasePriceInput, setPurchasePriceInput] = useState(0);
     const [purchaseTextInput, setPurchaseTextInput] = useState("");
@@ -310,44 +310,52 @@ const BookItemPage = ({ isAdmin }) => {
         window.open(url, "_blank");
     }
 
-    // Buying rules
-    const openBuyingRulesModalHandler = () => setOpenRulesModal(true);
-    const closeBuyingRulesModalHandler = () => setOpenRulesModal(false);
+    // Buying rights
+    const openBuyingRightsModalHandler = () => setOpenRightsModal(true);
+    const closeBuyingRightsModalHandler = () => setOpenRightsModal(false);
 
-    const submitBuyingRulesHandler = (e) => {
+    const submitBuyingRightsHandler = (e) => {
         e.preventDefault();
+
+        if (purchasePriceInput === 0 || purchaseTextInput === "") return;
 
         fetch(`http://localhost:8081/publishing/user/${user.id}`)
             .then(response => response.json())
             .then(publisher => {
-                let purchaseRulesBody = {
-                    authorId: bookItem.authorId,
-                    bookId: bookItem.id,
-                    bookName: bookItem.name,
-                    price: purchasePriceInput,
-                    publisherId: publisher.id,
-                    reviewed: false,
-                    text: purchaseTextInput,
-                    name: user.name,
+                if (purchasePriceInput > publisher.score) {
+                    alert("You not have much money");
+
+                    return;
+                } else {
+                    let purchaseRightsBody = {
+                        authorId: bookItem.authorId,
+                        bookId: bookItem.id,
+                        bookName: bookItem.name,
+                        price: purchasePriceInput,
+                        publisherId: publisher.id,
+                        reviewed: false,
+                        text: purchaseTextInput,
+                        name: user.name,
+                    }
+
+                    fetch("http://localhost:8081/purchaseRequest", {
+                        method: "POST",
+                        body: JSON.stringify(purchaseRightsBody),
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                    })
+                        .then(response => {
+                            console.log(response);
+
+                            if (response.ok) {
+                                setActivePurchaseBtn(true);
+                            }
+                        });
+
+                    setOpenRightsModal(false);
                 }
-
-                fetch("http://localhost:8081/purchaseRequest", {
-                    method: "POST",
-                    body: JSON.stringify(purchaseRulesBody),
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                })
-                    .then(response => {
-                        console.log(response);
-
-                        if (response.ok) {
-                            setActivePurchaseBtn(true);
-                        }
-                    });
             });
-
-        setOpenRulesModal(false);
     }
 
     const [activePurchaseBtn, setActivePurchaseBtn] = useState(false);
@@ -458,7 +466,7 @@ const BookItemPage = ({ isAdmin }) => {
                                         variant="contained"
                                         color="success"
                                         disabled={activePurchaseBtn}
-                                        onClick={openBuyingRulesModalHandler}
+                                        onClick={openBuyingRightsModalHandler}
                                     >
                                         <PaidIcon />
                                         <span style={{ marginLeft: "5px", fontWeight: "normal" }}>Buy rights</span>
@@ -533,11 +541,11 @@ const BookItemPage = ({ isAdmin }) => {
             </div>
 
             <Modal
-                open={openRulesModal}
-                onClose={closeBuyingRulesModalHandler}
+                open={openRightsModal}
+                onClose={closeBuyingRightsModalHandler}
             >
                 <Box className="delete-modal buying-rules-modal">
-                   <form onSubmit={submitBuyingRulesHandler}>
+                   <form onSubmit={submitBuyingRightsHandler}>
                        <div className="control">
                            <label>Purchase price ($)</label>
                            <input
@@ -564,7 +572,7 @@ const BookItemPage = ({ isAdmin }) => {
                             className="close-btn"
                             variant="contained"
                             color="secondary"
-                            onClick={closeBuyingRulesModalHandler}
+                            onClick={closeBuyingRightsModalHandler}
                         >
                             <CloseIcon />
                         </button>

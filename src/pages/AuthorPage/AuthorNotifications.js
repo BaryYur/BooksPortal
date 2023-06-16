@@ -33,14 +33,65 @@ const AuthorNotifications = () => {
             });
     }
 
+    const fetchingUpdateUserScore = (message) => {
+        fetch(`http://localhost:8081/publishing/${message.publisherId}`)
+            .then(response => response.json())
+            .then(publisher => {
+                let body = {
+                    id: publisher.id,
+                    name: publisher.name,
+                    email: publisher.email,
+                    description: publisher.description,
+                    score: publisher.score - message.price,
+                    userId: publisher.userId,
+                    active: publisher.active,
+                }
+
+                fetch(`http://localhost:8081/publishing/${message.publisherId}`, {
+                    method: "PUT",
+                    body: JSON.stringify(body),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(response => response.json())
+            });
+
+        fetch(`http://localhost:8081/author/${message.authorId}`)
+            .then(response => response.json())
+            .then(author => {
+                let body = {
+                    id: author.id,
+                    name: author.name,
+                    email: author.email,
+                    description: author.description,
+                    score: author.score + message.price,
+                    userId: author.userId,
+                    active: author.active,
+                }
+
+                fetch(`http://localhost:8081/author/${message.authorId}`, {
+                    method: "PUT",
+                    body: JSON.stringify(body),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                })
+                    .then(response => response.json())
+            });
+    }
+
     const approveProposalHandler = (message) => {
         fetchingUpdatingMessage(message, message.id);
 
-        // update book
+        // update book and users status
         setTimeout(() => {
             fetch(`http://localhost:8081/book/${message.bookId}`)
             .then(response => response.json())
             .then(bookItem => {
+                let bookPublishers = bookItem.publishers;
+                bookPublishers.push(message.publisherId);
+
                 let bookBody = {
                     authors: bookItem.authors,
                     categories: bookItem.categories,
@@ -53,9 +104,9 @@ const AuthorNotifications = () => {
                     pagesCount: bookItem.pagesCount,
                     price: bookItem.price,
                     publishDate: bookItem.publishDate,
-                    publishers: bookItem.publishers,
+                    publishers: bookPublishers,
                     status: bookItem.status,
-                    publisherId: message.publisherId, // new
+                    publisherId: message.publisherId,
                     authorId: null,
                     demoFile1: bookItem.demoFile1,
                 }
@@ -67,7 +118,9 @@ const AuthorNotifications = () => {
                         "Content-Type": "application/json",
                     },
                 })
-                    .then(response => response.json())
+                    .then(response => response.json());
+
+                fetchingUpdateUserScore(message);
             });
         }, 200);
     }
@@ -114,12 +167,15 @@ const AuthorNotifications = () => {
                             {purchaseMessage.text === "Author is agreed" &&
                                 <h4 style={{ color: "#197" }}>The author has agreed</h4>
                             }
-                            {(purchaseMessage.text !== "Author is agreed" && !purchaseMessage.reviewed) && <h4><span>{purchaseMessage.name}</span> want to buy rights on your book</h4>}
-                            {(purchaseMessage.text !== "Author is agreed" && purchaseMessage.reviewed) && <h4>Answer from author</h4>}
+                            {purchaseMessage.text === "Author is disagreed" &&
+                                <h4 style={{ color: "indianred" }}>The author has not agreed</h4>
+                            }
+                            {((purchaseMessage.text !== "Author is agreed" && purchaseMessage.text !== "Author is disagreed") && !purchaseMessage.reviewed) && <h4><span>{purchaseMessage.name}</span> want to buy rights on your book</h4>}
+                            {((purchaseMessage.text !== "Author is agreed" && purchaseMessage.text !== "Author is disagreed") && purchaseMessage.reviewed) && <h4>Answer from author</h4>}
                             <div>
                                 <p>Book name: <span>{purchaseMessage.bookName}</span></p>
                                 <p>Proposal price: <span>{purchaseMessage.price} $</span></p>
-                                {purchaseMessage.text !== "Author is agreed" && <p>Message: <span>{purchaseMessage.text}</span></p>}
+                                {purchaseMessage.text !== "Author is agreed" && purchaseMessage.text !== "Author is disagreed" && <p>Message: <span>{purchaseMessage.text}</span></p>}
                             </div>
                         </div>
                         <div className="message-btns-box">
@@ -127,19 +183,19 @@ const AuthorNotifications = () => {
                                 {!purchaseMessage.reviewed && <div className="agree-btns">
                                     <button
                                        onClick={() => {
-                                        let message = {
-                                            id: purchaseMessage.id,
-                                            authorId: purchaseMessage.authorId,
-                                            bookId: purchaseMessage.bookId,
-                                            bookName: purchaseMessage.bookName,
-                                            price: purchaseMessage.price,
-                                            publisherId: purchaseMessage.publisherId,
-                                            reviewed: true,
-                                            text: "Author is agreed",
-                                            name: purchaseMessage.name,
-                                        }
+                                            let message = {
+                                                id: purchaseMessage.id,
+                                                authorId: purchaseMessage.authorId,
+                                                bookId: purchaseMessage.bookId,
+                                                bookName: purchaseMessage.bookName,
+                                                price: purchaseMessage.price,
+                                                publisherId: purchaseMessage.publisherId,
+                                                reviewed: true,
+                                                text: "Author is agreed",
+                                                name: purchaseMessage.name,
+                                            }
 
-                                        approveProposalHandler(message);
+                                            approveProposalHandler(message);
                                        }}
                                     >Agree</button>
                                     <button
@@ -157,18 +213,18 @@ const AuthorNotifications = () => {
                                             }
     
                                             disapproveProposalHandler(message);
-                                           }}
+                                       }}
                                     >Disagree</button>
                                 </div>}
 
-                                {(purchaseMessage.text === "Author is agreed" ||  purchaseMessage.text === "Author is disagreed") && <button
+                                {(purchaseMessage.text === "Author is agreed" ||  purchaseMessage.text === "Author is disagreed" || purchaseMessage.reviewed) && <button
                                     className="delete-message-btn"
                                     onClick={() => fetchingDeletingMessage(purchaseMessage.id)}
                                 >
                                     <DeleteIcon />
                                 </button>}
                             </div>
-                            {purchaseMessage.text !== "Author is agreed" && (
+                            {purchaseMessage.text !== "Author is agreed" && purchaseMessage.text !== "Author is disagreed" && (
                                 <Button
                                     variant="contained"
                                     className="message-answer-btn"
@@ -218,7 +274,7 @@ const AuthorNotifications = () => {
                        </div>
                        <div>
                            <Button type="submit" variant="contained">
-                                <SendIcon />
+                                <SendIcon style={{ fontSize: "16px" }} />
                                 <span>Send</span>
                             </Button>
                        </div>

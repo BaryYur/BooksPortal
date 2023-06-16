@@ -109,7 +109,7 @@ const AuthorPage = ({ publisher, author }) => {
 
     return (
         <div className="main-wrapper">
-            <h1 style={{ marginBottom: "30px" }}>Here you can add your new book</h1>
+            <h1 style={{ marginBottom: "30px" }}>Here you can manage your books</h1>
             <TabsPanel tabsInfo={tabsInfo} isAuthor={true} fetchingAuthorBooks={fetchingAuthorBooksData} />
         </div>
     );

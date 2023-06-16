@@ -106,7 +106,8 @@ const ProfilePage = ({ isAdmin }) => {
     }
 
     const fetchingUpdateScore = (score, addMoney) => {
-        let authorScore
+        let authorScore;
+
         if (!addMoney) {
             authorScore = authorData.score - score;
         } else {
