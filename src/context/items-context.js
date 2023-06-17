@@ -641,7 +641,7 @@ export const ItemsContextProvider = ({ children }) => {
             .then(response => response.json())
             .then(data => {
                 setBookItemAuthorsList(data);
-            })
+            });
     }
 
     const fetchingPublishersList = (publishers) => {

@@ -3,21 +3,21 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import AuthContext from "../../context/auth-context";
-import ItemsContext from "../../context/items-context";
 
 import Modal from "@mui/material/Modal";
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import Person4Icon from "@mui/icons-material/Person4";
-import "./SubscriptionsList.css";
 import OtherHousesIcon from "@mui/icons-material/OtherHouses";
+import "./SubscriptionsList.css";
 
 const SubscriptionsList = () => {
     const { user, fetchingUserData } = useContext(AuthContext);
-    const { bookItemAuthorsList, bookItemPublishersList, fetchingPublishersList, fetchingAuthorsList } = useContext(ItemsContext);
     const [openSubsModal, setOpenSubsModal] = useState(false);
     const [userSubscriptions, setUserSubscriptions] = useState([]);
+    const [subAuthorsList, setSubAuthorsList] = useState([]);
+    const [subPublishersList, setSubPublishersList] = useState([]);
 
     const openSubsModalHandler = () => {
         setOpenSubsModal(true);
@@ -27,15 +27,31 @@ const SubscriptionsList = () => {
 
     const closeSubsModalHandler = () => setOpenSubsModal(false);
 
+    const fetchingSubAuthorsList = (authors) => {
+        fetch(`http://localhost:8081/author/ids?ids=${authors}`)
+            .then(response => response.json())
+            .then(authors => {
+                setSubAuthorsList(authors);
+            });
+    }
+
+    const fetchingSubPublishersList = (publishers) => {
+        fetch(`http://localhost:8081/publishing/ids?ids=${publishers}`)
+            .then(response => response.json())
+            .then(publishers => {
+                setSubPublishersList(publishers);
+            });
+    }
+
     const userSubs = (authorSubs, publisherSubs) => {
         fetchingUserData();
 
-        fetchingAuthorsList(authorSubs);
-        fetchingPublishersList(publisherSubs);
+        fetchingSubAuthorsList(authorSubs);
+        fetchingSubPublishersList(publisherSubs);
 
         let subsList = [];
 
-        for (let author of bookItemAuthorsList) {
+        for (let author of subAuthorsList) {
             let sub = {
                 subId: author.id,
                 subRole: "AUTHOR",
@@ -45,7 +61,7 @@ const SubscriptionsList = () => {
             subsList.push(sub);
         }
 
-        for (let publisher of bookItemPublishersList) {
+        for (let publisher of subPublishersList) {
             let sub = {
                 subId: publisher.id,
                 subRole: "PUBLISHER",
@@ -64,8 +80,8 @@ const SubscriptionsList = () => {
 
     useEffect(() => {
         if (user.name) {
-            fetchingAuthorsList(user.subscriptionOnAuthors);
-            fetchingPublishersList(user.subscriptionOnPublishers);
+            fetchingSubAuthorsList(user.subscriptionOnAuthors);
+            fetchingSubPublishersList(user.subscriptionOnPublishers);
         }
     }, [user.name]);
 
