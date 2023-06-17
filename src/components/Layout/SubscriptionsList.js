@@ -16,8 +16,7 @@ const SubscriptionsList = () => {
     const { user, fetchingUserData } = useContext(AuthContext);
     const [openSubsModal, setOpenSubsModal] = useState(false);
     const [userSubscriptions, setUserSubscriptions] = useState([]);
-    const [subAuthorsList, setSubAuthorsList] = useState([]);
-    const [subPublishersList, setSubPublishersList] = useState([]);
+    const [subsLoading, setSubsLoading] = useState(false);
 
     const openSubsModalHandler = () => {
         setOpenSubsModal(true);
@@ -27,63 +26,48 @@ const SubscriptionsList = () => {
 
     const closeSubsModalHandler = () => setOpenSubsModal(false);
 
-    const fetchingSubAuthorsList = (authors) => {
-        fetch(`http://localhost:8081/author/ids?ids=${authors}`)
-            .then(response => response.json())
-            .then(authors => {
-                setSubAuthorsList(authors);
-            });
-    }
-
-    const fetchingSubPublishersList = (publishers) => {
-        fetch(`http://localhost:8081/publishing/ids?ids=${publishers}`)
-            .then(response => response.json())
-            .then(publishers => {
-                setSubPublishersList(publishers);
-            });
-    }
-
     const userSubs = (authorSubs, publisherSubs) => {
         fetchingUserData();
+        setSubsLoading(true);
 
-        fetchingSubAuthorsList(authorSubs);
-        fetchingSubPublishersList(publisherSubs);
+        fetch(`http://localhost:8081/publishing/ids?ids=${publisherSubs}`)
+            .then(response => response.json())
+            .then(publishers => {
+                fetch(`http://localhost:8081/author/ids?ids=${authorSubs}`)
+                    .then(response => response.json())
+                    .then(authors => {
+                        let subsList = [];
 
-        let subsList = [];
+                        for (let author of authors) {
+                            let sub = {
+                                subId: author.id,
+                                subRole: "AUTHOR",
+                                subName: author.name,
+                            }
 
-        for (let author of subAuthorsList) {
-            let sub = {
-                subId: author.id,
-                subRole: "AUTHOR",
-                subName: author.name,
-            }
+                            subsList.push(sub);
+                        }
 
-            subsList.push(sub);
-        }
+                        for (let publisher of publishers) {
+                            let sub = {
+                                subId: publisher.id,
+                                subRole: "PUBLISHER",
+                                subName: publisher.name,
+                            }
 
-        for (let publisher of subPublishersList) {
-            let sub = {
-                subId: publisher.id,
-                subRole: "PUBLISHER",
-                subName: publisher.name,
-            }
+                            subsList.push(sub);
+                        }
 
-            subsList.push(sub);
-        }
-
-        setUserSubscriptions([...subsList]);
+                        setUserSubscriptions([...subsList]);
+                        setSubsLoading(false);
+                        console.log(subsList);
+                    });
+            });
     }
 
     useEffect(() => {
         fetchingUserData();
     }, []);
-
-    useEffect(() => {
-        if (user.name) {
-            fetchingSubAuthorsList(user.subscriptionOnAuthors);
-            fetchingSubPublishersList(user.subscriptionOnPublishers);
-        }
-    }, [user.name]);
 
     return (
         <div className="subs-list">
@@ -106,7 +90,8 @@ const SubscriptionsList = () => {
                                 </Link>
                             </li>)
                         )}
-                        {userSubscriptions.length === 0 && <p className="no-items-paragraph" style={{ margin: "10px auto" }}>No subscriptions yet</p>}
+                        {!subsLoading && userSubscriptions.length === 0 && <p className="no-items-paragraph" style={{ margin: "10px auto" }}>No subscriptions yet</p>}
+                        {subsLoading && userSubscriptions.length === 0 && <p className="no-items-paragraph" style={{ margin: "10px auto" }}>Loading...</p>}
                     </ul>
 
                     <div>
