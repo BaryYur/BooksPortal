@@ -4,12 +4,9 @@ import { useParams } from "react-router-dom";
 
 import ItemsContext from "../../context/items-context";
 
-import BookItemsList from "../../components/BookItems/BookItemsList";
 import CircularProgress from "@mui/material/CircularProgress";
-import TuneIcon from "@mui/icons-material/Tune";
-import SubcategoryAuthorFiltering from "../SubcategoryPage/SubcategoryAuthorFiltering";
-import "./CategoryPage.css";
 import CategoryItem from "../ShopPage/CategoryItemCard";
+import "./CategoryPage.css";
 
 const CategoryPage = () => {
     const { fetchingSubcategories, categorySubcategories, loading } = useContext(ItemsContext);
@@ -25,8 +22,6 @@ const CategoryPage = () => {
 
         return null;
     }
-
-    const categoryName = extractCategory(window.location.href);
 
     const fetchingCategoryItems = () => {
         fetch(`http://localhost:8081/genre`)
@@ -47,7 +42,7 @@ const CategoryPage = () => {
 
     return (
         <div className="main-wrapper">
-            <h2>{params.category} subcategories</h2>
+            <h2 style={{ textAlign: "center", margin: "20px 0", fontSize: "25px" }}><span style={{ color: "#318CE7", textTransform: "capitalize" }}>{params.category}</span> subcategories</h2>
             <div className="category-main-container">
                 <ul className="shop-categories-list">
                     {categorySubcategories.map(genre => (
@@ -63,6 +58,7 @@ const CategoryPage = () => {
                 {loading && <div className="loading-box">
                     <CircularProgress />
                 </div>}
+                {categorySubcategories.length === 0 && !loading && <p className="no-items-paragraph" style={{ margin: "30px auto" }}>Nothing found</p>}
             </div>
         </div>
     );

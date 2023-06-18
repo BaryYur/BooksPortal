@@ -10,7 +10,7 @@ const ShopPageCategories = () => {
 
     useEffect(() => {
         fetchingCategories();
-    }, [])
+    }, []);
 
     return (
         <div className="shop-categories">
