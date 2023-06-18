@@ -16,6 +16,7 @@ const AuthorNotifications = () => {
     const [openAnswerModal, setOpenAnswerModal] = useState(false);
     const [pubName, setPubName] = useState("");
     const [answerInput, setAnswerInput] = useState("");
+    const [answerPriceInput, setAnswerPriceInput] = useState(0);
     const [answerBody, setAnswerBody] = useState({});
 
     const fetchingUpdatingMessage = (body, messageId) => {
@@ -125,6 +126,14 @@ const AuthorNotifications = () => {
         }, 200);
     }
 
+    const changeAnswerPriceHandler = (event) => {
+        const input = event.target;
+        const value = input.value;
+        const filteredValue = value.replace(/\D/g, "");
+
+        setAnswerPriceInput(Number(filteredValue));
+    }
+
     const disapproveProposalHandler = (message) => {
         fetchingUpdatingMessage(message, message.id);
     }
@@ -132,12 +141,27 @@ const AuthorNotifications = () => {
     const giveAnswerHandler = (e) => {
         e.preventDefault();
 
-        let message = {
-            ...answerBody,
+        if (answerInput === "") return;
+
+        let purchasePrice = answerBody.price;
+
+        if (answerBody.price !== answerPriceInput) {
+            purchasePrice = answerPriceInput;
+        }
+
+        let answer = {
+            id: answerBody.id,
+            authorId: answerBody.authorId,
+            bookId: answerBody.bookId,
+            bookName: answerBody.bookName,
+            price: purchasePrice,
+            publisherId: answerBody.publisherId,
+            name: answerBody.name,
+            reviewed: answerBody.reviewed,
             text: answerInput,
         }
 
-        fetchingUpdatingMessage(message, message.id);
+        fetchingUpdatingMessage(answer, answer.id);
     }
 
     const openAnswerModalHandler = (publisherName) => {
@@ -237,6 +261,8 @@ const AuthorNotifications = () => {
                                             rew = false;
                                         }
 
+                                        setAnswerPriceInput(purchaseMessage.price);
+
                                         setAnswerBody({
                                             id: purchaseMessage.id,
                                             authorId: purchaseMessage.authorId,
@@ -264,8 +290,18 @@ const AuthorNotifications = () => {
             >
                 <Box className="delete-modal buying-rules-modal">
                    <form onSubmit={giveAnswerHandler}>
+                       {user.role === "PUBLISHING" && <div className="control">
+                           <label>Change price</label>
+                           <input
+                               type="text"
+                               value={answerPriceInput}
+                               // not max then you have
+                               onChange={changeAnswerPriceHandler}
+                           />
+                       </div>}
                        <div className="control">
-                           <label>Message for ({pubName})</label>
+                           {user.role === "PUBLISHING" && <label>Give answer</label>}
+                           {user.role === "AUTHOR" && <label>Message for ({pubName})</label>}
                            <textarea
                                type="text"
                                value={answerInput}
