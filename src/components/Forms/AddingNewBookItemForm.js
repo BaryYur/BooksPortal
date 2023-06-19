@@ -28,7 +28,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const [publisherNameInput, setPublisherNameInput] = useState("");
     const [pagesCountInput, setPagesCountInput] = useState(0);
     const [priceInput, setPriceInput] = useState(0);
-    const [bookPreviewPagesInput, setBookPreviewPagesInput] = useState(0);
+    const [bookPreviewPagesInput, setBookPreviewPagesInput] = useState("");
     const [descriptionInput, setDescriptionInput] = useState("");
     const [publishDateInput, setPublishDateInput] = useState("");
     const [languageInput, setLanguageInput] = useState("");
@@ -234,9 +234,14 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const bookFileHandler = (e) => setBookFileInput(e.target.files[0]);
 
     const handlePreviewUpload = async (event) => {
-        const file = event.target.files[0];
-        const parsedString = await parsePDFToString(file);
-        setBookPreviewPagesInput(parsedString);
+        setBookPreviewPagesInput("");
+
+        if (event.target.files) {
+            const file = event.target.files[0];
+            const parsedString = await parsePDFToString(file);
+
+            setBookPreviewPagesInput(parsedString);
+        }
     }
 
     const parsePDFToString = (file) => {
@@ -411,15 +416,15 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 bookNameInput !== "" && priceInput !== "" &&
                 publishDateInput !== "" && bookPreviewPagesInput !== "" &&
                 languageInput !== "" && pagesCountInput !== "" &&
-                descriptionInput !== "" && chosenCategories.length > 0 &&
-                image !== ""
+                descriptionInput !== "" && chosenCategories.length !== 0 &&
+                image !== "" && chosenPublishers.length !== 0 &&
+                chosenAuthors.length !== 0 && bookFileInput !== undefined &&
+                bookPreviewPagesInput !== "" && image !== ""
             ) {
                 setDisabledAddingBtn(false);
             } else {
                 setDisabledAddingBtn(true);
             }
-        } else if (isAuthor || isPublisher) {
-            setDisabledAddingBtn(false);
         }
 
         if (authorNameInput.length <= 3) {
@@ -472,6 +477,8 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         pagesCountInput,
         priceInput,
         image,
+        bookFileInput,
+        bookPreviewPagesInput,
         descriptionInput,
     ]);
 
