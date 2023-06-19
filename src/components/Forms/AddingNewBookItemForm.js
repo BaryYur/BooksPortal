@@ -309,7 +309,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
 
         let date = publishDateInput[0] + publishDateInput[1] + publishDateInput[2] + publishDateInput[3];
 
-        let coverImage;
+        let coverImage = image;
         let demoFile;
 
         if (isAuthor || isPublisher) {
@@ -362,6 +362,8 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         } else {
             newBody = body;
         }
+
+        console.log(newBody);
 
         const authorItems = () => {
             setTimeout(() => {
@@ -419,7 +421,20 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 descriptionInput !== "" && chosenCategories.length !== 0 &&
                 image !== "" && chosenPublishers.length !== 0 &&
                 chosenAuthors.length !== 0 && bookFileInput !== undefined &&
-                bookPreviewPagesInput !== "" && image !== ""
+                bookPreviewPagesInput !== ""
+            ) {
+                setDisabledAddingBtn(false);
+            } else {
+                setDisabledAddingBtn(true);
+            }
+        } else {
+            if (
+                bookNameInput !== "" && priceInput !== "" &&
+                publishDateInput !== "" && bookPreviewPagesInput !== "" &&
+                languageInput !== "" && pagesCountInput !== "" &&
+                descriptionInput !== "" && chosenCategories.length !== 0 &&
+                image !== "" && bookFileInput !== undefined
+                && bookPreviewPagesInput !== ""
             ) {
                 setDisabledAddingBtn(false);
             } else {
@@ -681,7 +696,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                     </div>
                     <div className="form-bottom">
                         {!mainAdminCtx.adminLoading && !authorModal && !publisherModal && <Button type="submit" variant="contained" disabled={disabledAddingBtn}>
-                            Add new item
+                            Add new book
                         </Button>}
                         {/*{mainAdminCtx.adminLoading && <Button variant="contained" disabled={true}>*/}
                         {/*    Loading...*/}
