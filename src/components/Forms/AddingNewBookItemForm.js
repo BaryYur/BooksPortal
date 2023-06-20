@@ -11,7 +11,6 @@ import Modal from "@mui/material/Modal";
 import { Select } from "./Select";
 import Box from "@mui/material/Box";
 import "./AddingNewBookItemForm.css";
-import * as PDFJS from "pdfjs-dist";
 
 const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, publisherModal, bookFields }) => {
     const mainAdminCtx = useContext(AdminMainContext);
