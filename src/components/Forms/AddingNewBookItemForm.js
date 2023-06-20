@@ -433,8 +433,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 publishDateInput !== "" && bookPreviewPagesInput !== "" &&
                 languageInput !== "" && pagesCountInput !== "" &&
                 descriptionInput !== "" && chosenCategories.length !== 0 &&
-                image !== "" && bookFileInput !== undefined
-                && bookPreviewPagesInput !== ""
+                image !== ""
             ) {
                 setDisabledAddingBtn(false);
             } else {
