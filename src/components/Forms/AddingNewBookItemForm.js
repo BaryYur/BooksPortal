@@ -234,14 +234,14 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const bookFileHandler = (e) => setBookFileInput(e.target.files[0]);
 
     const handlePreviewUpload = async (event) => {
-        setBookPreviewPagesInput("");
+        // setBookPreviewPagesInput("");
 
-        if (event.target.files) {
+        // if (event.target.files) {
             const file = event.target.files[0];
             const parsedString = await parsePDFToString(file);
 
             setBookPreviewPagesInput(parsedString);
-        }
+        // }
     }
 
     const parsePDFToString = (file) => {
