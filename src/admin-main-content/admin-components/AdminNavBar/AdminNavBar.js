@@ -86,7 +86,7 @@ const AdminNavBar = () => {
                         style={({ isActive }) => {
                             return { backgroundColor: isActive ? "#52a8ff" : "#1976d2" }
                         }}
-                        title="Add new item"
+                        title="Add new book"
                     >
                         <span>
                             <LibraryAddIcon />
@@ -124,21 +124,21 @@ const AdminNavBar = () => {
                         <span className="link-text">Delete book</span>
                     </NavLink>
                 </li>
-                <li>
-                    <NavLink
-                        to="/admin/main-page-handling"
-                        onClick={scrollToTop}
-                        style={({ isActive }) => {
-                            return { backgroundColor: isActive ? "#52a8ff" : "#1976d2" }
-                        }}
-                        title="Main page handling"
-                    >
-                        <span>
-                            <BrushIcon />
-                        </span>
-                        <span className="link-text">Main page interface</span>
-                    </NavLink>
-                </li>
+                {/*<li>*/}
+                {/*    <NavLink*/}
+                {/*        to="/admin/main-page-handling"*/}
+                {/*        onClick={scrollToTop}*/}
+                {/*        style={({ isActive }) => {*/}
+                {/*            return { backgroundColor: isActive ? "#52a8ff" : "#1976d2" }*/}
+                {/*        }}*/}
+                {/*        title="Main page handling"*/}
+                {/*    >*/}
+                {/*        <span>*/}
+                {/*            <BrushIcon />*/}
+                {/*        </span>*/}
+                {/*        <span className="link-text">Main page interface</span>*/}
+                {/*    </NavLink>*/}
+                {/*</li>*/}
                 <li>
                     <NavLink
                         to="/home"

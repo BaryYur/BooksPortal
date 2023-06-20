@@ -23,6 +23,11 @@
 .admin-nav-bar ul {
     display: flex;
     flex-direction: column;
+    height: 92%;
+}
+
+.admin-nav-bar ul li:nth-child(5) {
+    margin-bottom: auto;
 }
 
 .admin-nav-bar-container ul li a {
