@@ -36,6 +36,7 @@ const BookItemCard = ({
     adminItems,
     authorId,
     publisherId,
+    demoFile1
 }) => {
     const navigate = useNavigate();
     const { addToCart, cartItems } = useContext(CartContext);
@@ -139,6 +140,7 @@ const BookItemCard = ({
             dislikes: dislikes,
             publisherId: publisherId,
             authorId: authorId,
+            demoFile1: demoFile1,
         }
 
         fetchingUnlockBook(body, searchingName);

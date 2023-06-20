@@ -29,6 +29,7 @@ const BookItemsList = ({ booksData, adminItems, searchingName }) => {
                         dislikes={bookItem.dislikes}
                         authorId={bookItem.authorId}
                         publisherId={bookItem.publisherId}
+                        demoFile1={bookItem.demoFile1}
                     />
                 ))}
             </ul>
