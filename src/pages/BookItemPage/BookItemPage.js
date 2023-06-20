@@ -360,8 +360,8 @@ const BookItemPage = ({ isAdmin }) => {
 
     const [activePurchaseBtn, setActivePurchaseBtn] = useState(false);
 
-    const checkingBuyingRules = () => {
-        fetch(`http://localhost:8081/publishing/user/${user.id}`)
+    const checkingBuyingRules = (currentUser) => {
+        fetch(`http://localhost:8081/publishing/user/${currentUser.id}`)
             .then(response => response.json())
             .then(publisher => {
                 fetch(`http://localhost:8081/purchaseRequest/publisher/${publisher.id}`)
@@ -393,7 +393,7 @@ const BookItemPage = ({ isAdmin }) => {
     useEffect(() => {
         if (user.name) {
             checkingLikes();
-            checkingBuyingRules();
+            checkingBuyingRules(user);
         }
 
         setBookLikes(bookItem.likes);

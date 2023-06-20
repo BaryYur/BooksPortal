@@ -343,7 +343,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             file: coverImage,
             pagesCount: Number(pagesCountInput),
             price: Number(priceInput),
-            demoFile1: demoFile,
+            demoFile1:  bookPreviewPagesInput,
             status: bookStatus,
             likes: likes,
             dislikes: dislikes,
