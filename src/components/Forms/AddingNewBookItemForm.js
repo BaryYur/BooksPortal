@@ -363,6 +363,16 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             newBody = body;
         }
 
+        // if (
+        //   newBody.authors.length === 0 || newBody.description === "" ||
+        //   newBody.language === "" || newBody.name === "" ||
+        //   newBody.publishDate === undefined || newBody.file !== ""
+        // ) {
+        //     alert("You missed something");
+        //
+        //     return;
+        // }
+
         console.log(newBody);
 
         const authorItems = () => {
@@ -427,13 +437,12 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             } else {
                 setDisabledAddingBtn(true);
             }
-        } else {
+        } else if (isAuthor || isPublisher) {
             if (
-                bookNameInput !== "" && priceInput !== "" &&
-                publishDateInput !== "" && bookPreviewPagesInput !== "" &&
-                languageInput !== "" && pagesCountInput !== "" &&
-                descriptionInput !== "" && chosenCategories.length !== 0 &&
-                image !== ""
+              bookNameInput !== "" && priceInput !== "" &&
+              publishDateInput !== "" && languageInput !== "" &&
+              pagesCountInput !== "" && descriptionInput !== ""
+              && chosenCategories.length !== 0
             ) {
                 setDisabledAddingBtn(false);
             } else {
@@ -505,7 +514,6 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 setLanguageInput(bookFields.language);
                 setPriceInput(bookFields.price);
                 setPagesCountInput(bookFields.pagesCount);
-                // console.log(bookFields);
             }
         }
     }, []);
