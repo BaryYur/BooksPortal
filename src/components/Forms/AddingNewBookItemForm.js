@@ -310,25 +310,27 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         let date = publishDateInput[0] + publishDateInput[1] + publishDateInput[2] + publishDateInput[3];
 
         let coverImage = image;
-        let demoFile;
+        let demoFile = bookPreviewPagesInput;
 
-        if (isAuthor || isPublisher) {
-            if (authorModal && image === "") {
-                coverImage = bookFields.file;
-            }
+        // if (isAuthor || isPublisher) {
+        //     if (authorModal && image === "") {
+        //         coverImage = bookFields.file;
+        //     }
+        //
+        //     if (authorModal && bookPreviewPagesInput !== "") {
+        //         demoFile = bookFields.demoFile1;
+        //     }
+        //
+        //     if (!authorModal) {
+        //         coverImage = image;
+        //         demoFile = bookPreviewPagesInput;
+        //     }
+        // } else {
+        //     coverImage = image;
+        //     demoFile = bookPreviewPagesInput;
+        // }
 
-            if (authorModal && bookPreviewPagesInput !== "") {
-                demoFile = bookFields.demoFile1;
-            }
-
-            if (!authorModal) {
-                coverImage = image;
-                demoFile = bookPreviewPagesInput;
-            }
-        } else {
-            coverImage = image;
-            demoFile = bookPreviewPagesInput;
-        }
+        console.log(demoFile);
 
         let body = {
             name: bookNameInput,
