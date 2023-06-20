@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 
 import { useParams } from "react-router-dom";
 
@@ -17,6 +17,7 @@ import "./SubcategoryPage.css";
 const SubcategoryPage = () => {
     const params = useParams();
     const { loading, fetchingCategoryBooks, categoryBooks } = useContext(ItemsContext);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const gettingSubcategoryItems = () => {
         fetch("http://localhost:8081/category")
@@ -32,6 +33,9 @@ const SubcategoryPage = () => {
                         fetchingCategoryBooks(subcategory.id, window.location.href);
                     }
                 }
+            })
+            .finally(() => {
+                setIsLoaded(true);
             });
     }
 
@@ -41,9 +45,17 @@ const SubcategoryPage = () => {
         gettingSubcategoryItems();
     }, [params]);
 
+    if (!isLoaded) {
+        return (
+            <div className="loading-box">
+                <CircularProgress />
+            </div>
+        );
+    }
+
     return (
         <div className="main-wrapper">
-            <h2>{subcategoryName}</h2>
+            <h2 style={{ textTransform: "capitalize" }}>{subcategoryName}</h2>
             <div className="subcategory-items-container" style={{ marginTop: "10px" }}>
                 <div className="searching-page__filtering-box">
                     <div className="filtering-head">

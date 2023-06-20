@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import { useParams } from "react-router-dom";
 
@@ -11,6 +11,7 @@ import "./CategoryPage.css";
 const CategoryPage = () => {
     const { fetchingSubcategories, categorySubcategories, loading } = useContext(ItemsContext);
     const params = useParams();
+    const [isLoaded, setIsLoaded] = useState(false);
 
     const extractCategory = (urlString) => {
         const regex = /\/categories\/([^&/]+)/;
@@ -29,10 +30,12 @@ const CategoryPage = () => {
             .then(data => {
                 for (let category of data) {
                     if (params.category === category.name.toLowerCase()) {
-
                         fetchingSubcategories(category.id);
                     }
                 }
+            })
+            .finally(() => {
+                setIsLoaded(true);
             });
     }
 
@@ -40,11 +43,19 @@ const CategoryPage = () => {
         fetchingCategoryItems();
     }, [params.category]);
 
+    if (!isLoaded) {
+        return (
+            <div className="loading-box">
+                <CircularProgress />
+            </div>
+        );
+    }
+
     return (
         <div className="main-wrapper">
-            <h2 style={{ textAlign: "center", margin: "20px 0", fontSize: "25px" }}><span style={{ color: "#318CE7", textTransform: "capitalize" }}>{params.category}</span> subcategories</h2>
+            <h2 style={{ textAlign: "center", margin: "20px 0", fontSize: "32px" }}><span style={{ color: "#318CE7", textTransform: "capitalize" }}>{params.category}</span> subcategories</h2>
             <div className="category-main-container">
-                <ul className="shop-categories-list">
+                {!loading && <ul className="shop-categories-list">
                     {categorySubcategories.map(genre => (
                         <CategoryItem
                             key={genre.id}
@@ -54,7 +65,7 @@ const CategoryPage = () => {
                             subcategories={true}
                         />
                     ))}
-                </ul>
+                </ul>}
                 {loading && <div className="loading-box">
                     <CircularProgress />
                 </div>}

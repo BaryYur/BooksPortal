@@ -7,9 +7,18 @@
     min-height: 355px;
 }
 
-.category-items-container .loading-box {
-    margin: 20px auto;
+.loading-box {
+    margin: 100px auto;
     width: 45px;
+    display: flex;
+    justify-content: center;
+}
+
+.category-items-container .loading-box {
+    margin: 80px auto;
+    width: 45px;
+    display: flex;
+    justify-content: center;
 }
 
 .category-main-container {
