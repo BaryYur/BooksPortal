@@ -11,6 +11,7 @@ import Modal from "@mui/material/Modal";
 import { Select } from "./Select";
 import Box from "@mui/material/Box";
 import "./AddingNewBookItemForm.css";
+import * as PDFJS from "pdfjs-dist";
 
 const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, publisherModal, bookFields }) => {
     const mainAdminCtx = useContext(AdminMainContext);
@@ -28,7 +29,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const [publisherNameInput, setPublisherNameInput] = useState("");
     const [pagesCountInput, setPagesCountInput] = useState(0);
     const [priceInput, setPriceInput] = useState(0);
-    const [bookPreviewPagesInput, setBookPreviewPagesInput] = useState("");
+    const [bookPreviewPagesInput, setBookPreviewPagesInput] = useState([]);
     const [descriptionInput, setDescriptionInput] = useState("");
     const [publishDateInput, setPublishDateInput] = useState("");
     const [languageInput, setLanguageInput] = useState("");
@@ -234,26 +235,25 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const bookFileHandler = (e) => setBookFileInput(e.target.files[0]);
 
     const handlePreviewUpload = async (event) => {
-        // setBookPreviewPagesInput("");
+        // const file = event.target.files[0];
+        // const parsedString = await parsePDFToString(file);
+        //
+        // setBookPreviewPagesInput(parsedString);
 
-        // if (event.target.files) {
-            const file = event.target.files[0];
-            const parsedString = await parsePDFToString(file);
+        const file = event.target.files[0];
+        const byteArray = await convertPDFToByteArray(file);
 
-            setBookPreviewPagesInput(parsedString);
-        // }
+        setBookPreviewPagesInput(byteArray);
     }
 
-    const parsePDFToString = (file) => {
+    const convertPDFToByteArray = (file) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
 
             reader.onload = (event) => {
                 const arrayBuffer = event.target.result;
-                const base64String = btoa(
-                    String.fromCharCode.apply(null, new Uint8Array(arrayBuffer))
-                );
-                resolve(base64String);
+                const byteArray = Array.from(new Uint8Array(arrayBuffer));
+                resolve(byteArray);
             };
 
             reader.onerror = (event) => {
@@ -310,7 +310,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         let date = publishDateInput[0] + publishDateInput[1] + publishDateInput[2] + publishDateInput[3];
 
         let coverImage = image;
-        let demoFile = bookPreviewPagesInput;
+        // let demoFile = bookPreviewPagesInput;
 
         // if (isAuthor || isPublisher) {
         //     if (authorModal && image === "") {
@@ -330,7 +330,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         //     demoFile = bookPreviewPagesInput;
         // }
 
-        console.log(demoFile);
+        console.log(bookPreviewPagesInput);
 
         let body = {
             name: bookNameInput,
@@ -343,7 +343,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             file: coverImage,
             pagesCount: Number(pagesCountInput),
             price: Number(priceInput),
-            demoFile1:  bookPreviewPagesInput,
+            demoFile1: bookPreviewPagesInput,
             status: bookStatus,
             likes: likes,
             dislikes: dislikes,
