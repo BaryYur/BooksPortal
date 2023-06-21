@@ -477,7 +477,7 @@ const BookItemPage = ({ isAdmin }) => {
                         <div className="main-info__top">
                             <ul>
                                 <li>
-                                    <p>Publish Date</p>
+                                    <p>Publish Year</p>
                                     <p>{bookItem?.publishDate}</p>
                                 </li>
                                 <li>
