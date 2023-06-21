@@ -301,8 +301,6 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             dislikes = bookFields.dislikes;
         }
 
-        let date = publishDateInput[0] + publishDateInput[1] + publishDateInput[2] + publishDateInput[3];
-
         let coverImage = image;
         // let demoFile = bookPreviewPagesInput;
 
@@ -332,7 +330,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
             categories: categories,
             publishers: selectedPublishers,
             description: descriptionInput,
-            publishDate: Number(date),
+            publishDate: Number(publishDateInput),
             language: languageInput,
             file: coverImage,
             pagesCount: Number(pagesCountInput),
@@ -369,7 +367,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         //     return;
         // }
 
-        console.log(newBody);
+        // console.log(newBody);
 
         const authorItems = () => {
             setTimeout(() => {
@@ -511,6 +509,8 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 setPriceInput(bookFields.price);
                 setPagesCountInput(bookFields.pagesCount);
             }
+
+            // console.log(bookFields);
         }
     }, []);
 
@@ -609,10 +609,10 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                         </div>}
 
                         <div className="control">
-                            <label htmlFor="">Publish Date</label>
+                            <label htmlFor="">Publish Year</label>
                             <input
                                 id=""
-                                type="date"
+                                type="text"
                                 value={publishDateInput}
                                 onChange={(e) => setPublishDateInput(e.target.value)}
                             />
