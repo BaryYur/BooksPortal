@@ -14,7 +14,7 @@
     background-color: white;
     border: 1px solid grey;
     border-radius: 5px;
-    width: 450px;
+    width: 400px;
     padding: 30px 0 10px 0;
 }
 
@@ -53,6 +53,22 @@
     padding: 5px;
     border-radius: 4px;
     border: 1px solid lightgrey;
+    transition: all 0.2s ease-in-out;
+}
+
+.subscriptions-modal ul li a span:last-child {
+    margin-left: 10px;
+    color: #5d5c5c;
+}
+
+.subscriptions-modal ul li:hover {
+    background-color: rgba(211, 211, 211, 0.53);
+    transition: all 0.2s ease-in-out;
+}
+
+.subscriptions-modal ul li:hover a span {
+    color: #318CE7;
+    transition: all 0.2s ease-in-out;
 }
 
 .subscriptions-modal ul li a {
@@ -61,9 +77,4 @@
 
 .subscriptions-modal ul li a svg {
     color: #318CE7;
-}
-
-.subscriptions-modal ul li a span:last-child {
-    margin-left: 10px;
-    color: #5d5c5c;
 }

@@ -234,11 +234,6 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
     const bookFileHandler = (e) => setBookFileInput(e.target.files[0]);
 
     const handlePreviewUpload = async (event) => {
-        // const file = event.target.files[0];
-        // const parsedString = await parsePDFToString(file);
-        //
-        // setBookPreviewPagesInput(parsedString);
-
         const file = event.target.files[0];
         const byteArray = await convertPDFToByteArray(file);
 
@@ -329,7 +324,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
         //     demoFile = bookPreviewPagesInput;
         // }
 
-        console.log(bookPreviewPagesInput);
+        // console.log(bookPreviewPagesInput);
 
         let body = {
             name: bookNameInput,
@@ -432,7 +427,7 @@ const AddingNewBookItemForm = ({ isAuthor, isPublisher, isAdmin, authorModal, pu
                 descriptionInput !== "" && chosenCategories.length !== 0 &&
                 image !== "" && chosenPublishers.length !== 0 &&
                 chosenAuthors.length !== 0 && bookFileInput !== undefined &&
-                bookPreviewPagesInput !== ""
+                bookPreviewPagesInput !== undefined
             ) {
                 setDisabledAddingBtn(false);
             } else {
