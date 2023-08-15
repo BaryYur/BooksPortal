@@ -15,7 +15,7 @@
     border: 1px solid grey;
     border-radius: 5px;
     width: 400px;
-    padding: 30px 0 10px 0;
+    padding: 35px 0 10px 0;
 }
 
 .subscriptions-modal .close-btn {
@@ -77,4 +77,10 @@
 
 .subscriptions-modal ul li a svg {
     color: #318CE7;
+}
+
+.subscriptions-modal h3 {
+    position: absolute;
+    top: 5px;
+    left: 5px;
 }

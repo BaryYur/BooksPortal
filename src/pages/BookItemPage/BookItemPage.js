@@ -20,6 +20,7 @@ import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import Modal from "@mui/material/Modal";
 import "./BookItemPage.css";
+import Component from "./component";
 
 const BookItemPage = ({ isAdmin }) => {
     const itemId = useParams().id;

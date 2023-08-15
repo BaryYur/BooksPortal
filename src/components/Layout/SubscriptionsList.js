@@ -60,7 +60,6 @@ const SubscriptionsList = () => {
 
                         setUserSubscriptions([...subsList]);
                         setSubsLoading(false);
-                        console.log(subsList);
                     });
             });
     }
@@ -78,6 +77,7 @@ const SubscriptionsList = () => {
                 onClose={closeSubsModalHandler}
             >
                 <Box className="subscriptions-modal">
+                    <h3>Subscriptions list</h3>
                     <ul>
                         {userSubscriptions.map(sub => (
                             <li key={sub.subId}>
